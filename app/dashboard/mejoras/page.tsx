@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useEffect, useState } from "react"
 import { getSupabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
@@ -29,13 +31,13 @@ interface AnalisisRow {
 }
 
 export default function MejorasPage() {
-  const supabase = getSupabase()
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
   const [loading, setLoading] = useState(true)
   const [running, setRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const loadAnalisis = async () => {
+    const supabase = getSupabase()
     setError(null)
     setLoading(true)
     try {

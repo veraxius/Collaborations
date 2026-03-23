@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -8,7 +10,6 @@ import { getSupabase } from "@/lib/supabase"
 import { LexoraLogoAnimated } from "@/components/ui/lexora-logo-animated"
 
 export default function RegisterPage() {
-  const supabase = getSupabase()
   const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -44,6 +45,7 @@ export default function RegisterPage() {
 
     setLoading(true)
     try {
+      const supabase = getSupabase()
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,

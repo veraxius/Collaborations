@@ -44,7 +44,6 @@ const initialData: OnboardingData = {
 }
 
 export default function OnboardingPage() {
-  const supabase = getSupabase()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [userId, setUserId] = useState("")
@@ -55,6 +54,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const checkSession = async () => {
+      const supabase = getSupabase()
       const {
         data: { user },
       } = await supabase.auth.getUser()

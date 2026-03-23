@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -28,12 +30,12 @@ interface AnalisisRow {
 }
 
 export default function DashboardPage() {
-  const supabase = getSupabase()
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadAnalisis = async () => {
+      const supabase = getSupabase()
       const {
         data: { user },
       } = await supabase.auth.getUser()

@@ -47,7 +47,6 @@ function cleanFileName(name: string): string {
 }
 
 export default function DocumentosPage() {
-  const supabase = getSupabase()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const messageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -65,6 +64,7 @@ export default function DocumentosPage() {
   const [deletingPath, setDeletingPath] = useState<string | null>(null)
 
   const loadDocumentos = useCallback(async (currentUserId: string, showRefreshState = false) => {
+    const supabase = getSupabase()
     if (showRefreshState) setRefreshing(true)
     else setLoading(true)
     setError(null)
@@ -103,6 +103,7 @@ export default function DocumentosPage() {
 
   useEffect(() => {
     const bootstrap = async () => {
+      const supabase = getSupabase()
       setLoading(true)
       try {
         const {
@@ -141,6 +142,7 @@ export default function DocumentosPage() {
   }
 
   const onFilesSelected = async (files: FileList | null) => {
+    const supabase = getSupabase()
     if (!files?.length || !userId) return
 
     setUploadError(null)
@@ -213,6 +215,7 @@ export default function DocumentosPage() {
   }
 
   const handleDownload = async (doc: Documento) => {
+    const supabase = getSupabase()
     try {
       const { data, error: downloadError } = await supabase.storage
         .from("documentos")
@@ -238,6 +241,7 @@ export default function DocumentosPage() {
   }
 
   const handleDelete = async (doc: Documento) => {
+    const supabase = getSupabase()
     setDeletingPath(doc.path)
     setError(null)
 
