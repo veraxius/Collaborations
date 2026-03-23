@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Business Analytics Platform
 
-## Getting Started
+Una plataforma de análisis de negocio construida con Next.js, React, TypeScript y shadcn/ui que permite analizar el estado de tu negocio con inteligencia artificial.
 
-First, run the development server:
+## 🚀 Características
+
+### Flujo de Usuario
+
+1. **Login / Register** - Autenticación de usuarios
+2. **Añadir Empresa** - Popup para agregar empresas a analizar
+3. **Dashboard** - Vista principal con:
+   - **Business Score** - Indicador general del estado del negocio (0-10)
+   - **Métricas Principales** - Tarjetas con métricas clave:
+     - Tráfico estimado
+     - Crecimiento mensual
+     - Ranking SEO
+     - Performance del sitio
+   - **Problemas Detectados** - Sección que muestra problemas críticos con nivel de gravedad e impacto
+   - **Oportunidades** - Recomendaciones de IA para crecer
+   - **Competidores** - Resumen de competidores agregados
+   - **Alertas Recientes** - Cambios importantes detectados
+
+4. **Navegación Lateral** con:
+   - Dashboard
+   - Company Analysis
+   - Problems
+   - AI Recommendations
+   - Competitors
+   - Opportunities
+   - Reports
+   - Settings
+
+## 🛠️ Tecnologías
+
+- **Next.js 16** - Framework de React
+- **React 19** - Biblioteca de UI
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Estilos
+- **shadcn/ui** - Componentes UI
+- **Radix UI** - Componentes accesibles
+- **Lucide React** - Iconos
+
+## 📦 Instalación
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Construir para producción
+npm run build
+
+# Iniciar en producción
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🎨 Componentes UI Utilizados
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Card
+- Badge
+- Tabs
+- Table
+- Alert
+- Progress
+- Dialog
+- Input
+- Label
+- Button
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Estructura del Proyecto
 
-## Learn More
+```
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   └── register/
+│   ├── dashboard/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── problems/
+│   │   ├── ai-recommendations/
+│   │   ├── competitors/
+│   │   ├── opportunities/
+│   │   ├── company-analysis/
+│   │   ├── reports/
+│   │   └── settings/
+│   └── page.tsx
+├── components/
+│   ├── dashboard/
+│   │   ├── sidebar.tsx
+│   │   ├── add-company-dialog.tsx
+│   │   ├── business-score.tsx
+│   │   ├── metric-cards.tsx
+│   │   ├── problems-section.tsx
+│   │   ├── opportunities-section.tsx
+│   │   ├── competitors-section.tsx
+│   │   └── alerts-section.tsx
+│   └── ui/
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── badge.tsx
+│       ├── tabs.tsx
+│       ├── table.tsx
+│       ├── alert.tsx
+│       ├── progress.tsx
+│       ├── dialog.tsx
+│       ├── input.tsx
+│       └── label.tsx
+└── lib/
+    └── utils.ts
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🚦 Uso
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Inicia el servidor de desarrollo: `npm run dev`
+2. Abre [http://localhost:3000](http://localhost:3000)
+3. Navega a `/login` o `/register` para autenticarte
+4. Una vez autenticado, serás redirigido al dashboard
+5. Usa el botón "Añadir Empresa" para agregar empresas a analizar
+6. Explora las diferentes secciones desde el menú lateral
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📝 Notas
 
-## Deploy on Vercel
+- La autenticación actual es simulada. En producción, deberías implementar un sistema de autenticación real.
+- Los datos mostrados son de ejemplo. Conecta con APIs reales para obtener datos dinámicos.
+- El proyecto está listo para ser extendido con funcionalidades adicionales.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 Licencia
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este proyecto es privado.
