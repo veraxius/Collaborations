@@ -1,11 +1,13 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params
+
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
@@ -38,7 +40,7 @@ export async function PATCH(
     const { error: updateError } = await supabase
       .from("tareas")
       .update({ completada: body.completada })
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id)
 
     if (updateError) {
