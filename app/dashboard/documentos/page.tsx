@@ -3,13 +3,19 @@
 export const dynamic = "force-dynamic"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 
 interface Documento {
   name: string
   path: string
   size: number
   created_at: string
+}
+
+interface StorageListItem {
+  name: string
+  created_at?: string
+  metadata?: { size?: number }
 }
 
 const MAX_SIZE_BYTES = 20 * 1024 * 1024
@@ -41,6 +47,7 @@ function cleanFileName(name: string): string {
 }
 
 export default function DocumentosPage() {
+  const supabase = getSupabase()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const messageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -74,7 +81,7 @@ export default function DocumentosPage() {
         throw new Error(listError.message)
       }
 
-      const mapped: Documento[] = (data ?? [])
+      const mapped: Documento[] = ((data ?? []) as StorageListItem[])
         .filter((item) => item.name !== ".emptyFolderPlaceholder")
         .map((item) => ({
           name: item.name,

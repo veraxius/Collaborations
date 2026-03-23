@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { StepDocumentosData } from "@/components/onboarding/types"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 
 interface StepDocumentosProps {
   userId: string
@@ -18,6 +18,7 @@ const MAX_SIZE_BYTES = 20 * 1024 * 1024
 const acceptedExtensions = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".csv"]
 
 export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) {
+  const supabase = getSupabase()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [uploading, setUploading] = useState(false)

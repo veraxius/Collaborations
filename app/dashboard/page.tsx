@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 import { ScoreWidget } from "@/components/dashboard/ScoreWidget"
 import { ResumenWidget } from "@/components/dashboard/ResumenWidget"
 import { RecomendacionesWidget } from "@/components/dashboard/RecomendacionesWidget"
@@ -28,6 +28,7 @@ interface AnalisisRow {
 }
 
 export default function DashboardPage() {
+  const supabase = getSupabase()
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -47,10 +48,11 @@ export default function DashboardPage() {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
-        .single<AnalisisRow>()
+        .single()
 
-      if (data?.resultado) {
-        setAnalisis(data.resultado)
+      const row = data as AnalisisRow | null
+      if (row?.resultado) {
+        setAnalisis(row.resultado)
       }
       setLoading(false)
     }

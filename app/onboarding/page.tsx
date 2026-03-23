@@ -12,7 +12,7 @@ import { StepEmpresa } from "@/components/onboarding/StepEmpresa"
 import { StepEquipo } from "@/components/onboarding/StepEquipo"
 import { StepObjetivos } from "@/components/onboarding/StepObjetivos"
 import { OnboardingData } from "@/components/onboarding/types"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 import { LexoraFavicon, LexoraLogo } from "@/components/ui/lexora-logo"
 
 const steps = ["Empresa", "Equipo", "Documentos", "Objetivos", "Confirmación"]
@@ -44,6 +44,7 @@ const initialData: OnboardingData = {
 }
 
 export default function OnboardingPage() {
+  const supabase = getSupabase()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [userId, setUserId] = useState("")

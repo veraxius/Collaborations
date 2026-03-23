@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -29,6 +29,7 @@ interface AnalisisRow {
 }
 
 export default function MejorasPage() {
+  const supabase = getSupabase()
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
   const [loading, setLoading] = useState(true)
   const [running, setRunning] = useState(false)
@@ -53,14 +54,16 @@ export default function MejorasPage() {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
-        .single<AnalisisRow>()
+        .single()
 
-      if (queryError || !data) {
+      const row = data as AnalisisRow | null
+
+      if (queryError || !row) {
         setAnalisis(null)
         return
       }
 
-      setAnalisis(data.resultado)
+      setAnalisis(row.resultado)
     } finally {
       setLoading(false)
     }

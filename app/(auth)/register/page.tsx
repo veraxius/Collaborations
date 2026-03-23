@@ -4,10 +4,11 @@ import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { User, Mail, Lock, ArrowRight } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import { getSupabase } from "@/lib/supabase"
 import { LexoraLogoAnimated } from "@/components/ui/lexora-logo-animated"
 
 export default function RegisterPage() {
+  const supabase = getSupabase()
   const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
