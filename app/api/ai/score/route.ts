@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 import Groq from "groq-sdk"
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+export const dynamic = "force-dynamic"
 
 interface ProfileRow {
   empresa_data: unknown
@@ -84,6 +84,12 @@ export async function GET() {
 
 export async function POST() {
   try {
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json({ error: "Missing GROQ_API_KEY" }, { status: 500 })
+    }
+
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+
     const supabase = await getServerSupabase()
     const {
       data: { user },

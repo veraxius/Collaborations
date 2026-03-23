@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 import Groq from "groq-sdk"
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+export const dynamic = "force-dynamic"
 
 interface TareaIA {
   titulo: string
@@ -15,6 +15,12 @@ interface TareaIA {
 
 export async function POST(request: Request) {
   try {
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json({ error: "Missing GROQ_API_KEY" }, { status: 500 })
+    }
+
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+
     const body = (await request.json().catch(() => ({}))) as { forzar?: boolean }
 
     const cookieStore = await cookies()
