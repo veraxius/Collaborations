@@ -6,11 +6,15 @@ import jwt from "jsonwebtoken";
 import prisma from "./lib/prisma.js";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const port = process.env.PORT || 3001;
 const authRouter = express.Router();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+  })
+);
 
 app.get("/", (_req, res) => {
   res.status(200).send("Backend funcionando");
@@ -75,6 +79,6 @@ authRouter.post("/login", async (req, res) => {
 
 app.use("/api/auth", authRouter);
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor corriendo en puerto ${port}`);
 });
