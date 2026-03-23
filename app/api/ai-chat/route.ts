@@ -1,10 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import Groq from "groq-sdk"
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+export const dynamic = "force-dynamic" // 👈 CLAVE
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json(
+        { error: "Missing GROQ_API_KEY" },
+        { status: 500 }
+      )
+    }
+
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    })
+
     const body = await request.json()
     const { message, conversationHistory } = body
 
@@ -15,16 +26,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Construir el array de mensajes con historial y mensaje actual
     const chatHistory = conversationHistory || []
+
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
         role: "system",
-        content: "Eres un asistente experto en SEO, análisis web y optimización de sitios. Ayudas a los usuarios con recomendaciones sobre SEO, performance, marketing digital y mejoras de sitios web. Responde siempre en español de manera clara, concisa y profesional.",
+        content: "Eres un asistente experto en SEO, análisis web y optimización de sitios. Responde siempre en español de manera clara, concisa y profesional.",
       },
     ]
 
-    // Agregar historial de conversación
     chatHistory.forEach((msg: { role: string; content: string }) => {
       if (msg.role === "user" || msg.role === "assistant") {
         messages.push({
@@ -34,29 +44,26 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Agregar el mensaje actual
     messages.push({
       role: "user",
       content: message,
     })
 
-    // Llamar a la API
     const chatCompletion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 1024,
       messages: messages,
     })
 
-    // Extraer el texto de la respuesta
-    const text = chatCompletion.choices[0]?.message?.content || "No se pudo generar una respuesta."
+    const text =
+      chatCompletion.choices[0]?.message?.content ||
+      "No se pudo generar una respuesta."
 
-    return NextResponse.json(
-      { response: text },
-      { status: 200 }
-    )
+    return NextResponse.json({ response: text }, { status: 200 })
+
   } catch (error) {
     console.error("Error en /api/ai-chat:", error)
-    
+
     return NextResponse.json(
       {
         error: "Error al procesar el mensaje",
