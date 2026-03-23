@@ -63,6 +63,12 @@ export default function TareasProgressWidget() {
 
   const porcentaje = stats?.porcentaje ?? 0
   const completadasEstaSemana = stats?.completadasEstaSemana ?? 0
+  const chartData = (stats?.data ?? []).map((d) => ({
+    semana: d.semana,
+    completadas: d.completadas,
+    pendientes: d.pendientes,
+    total: d.total,
+  }))
 
   const porcentajeColor =
     porcentaje >= 71 ? "#0A7B6B" : porcentaje >= 31 ? "#C9A84C" : "#E8503A"
@@ -212,12 +218,7 @@ export default function TareasProgressWidget() {
       <div style={{ marginTop: "16px" }}>
         <ResponsiveContainer width="100%" height={160}>
           <AreaChart
-            data={stats.data.map((d) => ({
-              semana: d.semana,
-              completadas: d.completadas,
-              pendientes: d.pendientes,
-              total: d.total,
-            }))}
+            data={chartData}
             margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
           >
             <defs>
@@ -257,10 +258,11 @@ export default function TareasProgressWidget() {
                 color: "#F7F6F2",
                 fontFamily: "DM Sans",
               }}
-              formatter={(value: number, name: string) => [
-                value,
-                name === "completadas" ? "Completadas" : "Pendientes",
-              ]}
+              formatter={(value, name) => {
+                const numericValue = typeof value === "number" ? value : 0
+                const label = name === "completadas" ? "Completadas" : "Pendientes"
+                return [numericValue, label]
+              }}
             />
             <Area
               type="monotone"
