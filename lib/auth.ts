@@ -1,5 +1,6 @@
 "use client"
 
+import { AuthChangeEvent, Session } from "@supabase/supabase-js"
 import { getSupabase } from "./supabase"
 
 // Login con Google OAuth
@@ -63,11 +64,15 @@ export async function signOut() {
 }
 
 // Escuchar cambios en la autenticación
-export function onAuthStateChange(callback: (event: string, session: any) => void) {
+export function onAuthStateChange(
+  callback: (event: AuthChangeEvent, session: Session | null) => void
+) {
   const supabase = getSupabase()
-  const { data } = supabase.auth.onAuthStateChange((event, session) => {
-    callback(event, session)
-  })
+  const { data } = supabase.auth.onAuthStateChange(
+    (event: AuthChangeEvent, session: Session | null) => {
+      callback(event, session)
+    }
+  )
 
   return data.subscription
 }
