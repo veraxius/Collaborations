@@ -77,7 +77,7 @@ export function ResumenWidget() {
     if (estado === "regular") {
       return {
         text: "En desarrollo",
-        style: { background: "rgba(201,168,76,0.12)", color: "#8a6d1e" },
+        style: { background: "rgba(59,130,246,0.12)", color: "#2563EB" },
       }
     }
     if (estado === "bueno") {
@@ -147,7 +147,7 @@ export function ResumenWidget() {
           OPORTUNIDAD ESTA SEMANA
         </p>
         <p className="mt-[6px] text-[13px] font-medium text-[var(--teal)]">
-          <span className="mr-1 text-[var(--gold)]">→</span>
+          <span className="mr-1 text-[var(--primary-600)]">→</span>
           {data.oportunidad}
         </p>
       </div>

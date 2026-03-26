@@ -18,7 +18,7 @@ const metricLabels = ["SEO", "Marketing", "Rendimiento Web", "Conversión"]
 export function BusinessScore({ score, metrics }: BusinessScoreProps) {
   const getScoreColor = (s: number) => {
     if (s >= 8) return "#0A7B6B"
-    if (s >= 6) return "#C9A84C"
+    if (s >= 6) return "#2563EB"
     return "#E8503A"
   }
 
@@ -33,12 +33,12 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
     <Card className="mb-6">
       <CardHeader>
         <CardTitle
-          style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: "16px" }}
+          style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: "16px" }}
         >
           Business Score
         </CardTitle>
         <CardDescription
-          style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px" }}
+          style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px" }}
         >
           Indicador general del estado del negocio
         </CardDescription>
@@ -49,7 +49,7 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
             <div className="flex items-baseline gap-2">
               <span
                 style={{
-                  fontFamily: "'Outfit', sans-serif",
+                  fontFamily: "'Inter', sans-serif",
                   fontSize: "40px",
                   fontWeight: 500,
                   color: getScoreColor(score),
@@ -60,7 +60,7 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
               </span>
               <span
                 style={{
-                  fontFamily: "'Outfit', sans-serif",
+                  fontFamily: "'Inter', sans-serif",
                   fontSize: "20px",
                   color: "rgba(13,13,15,0.4)",
                 }}
@@ -70,7 +70,7 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
             </div>
             <p
               className="mt-1"
-              style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}
+              style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}
             >
               Basado en SEO, Marketing, Rendimiento Web y Conversión
             </p>
@@ -81,12 +81,12 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
               <div key={label}>
                 <div className="mb-2 flex items-center justify-between">
                   <span
-                    style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px", fontWeight: 500 }}
+                    style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", fontWeight: 500 }}
                   >
                     {label}
                   </span>
                   <span
-                    style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}
+                    style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}
                   >
                     {metricValues[i]}/10
                   </span>

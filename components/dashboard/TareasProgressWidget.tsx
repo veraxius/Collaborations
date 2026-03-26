@@ -71,7 +71,7 @@ export default function TareasProgressWidget() {
   }))
 
   const porcentajeColor =
-    porcentaje >= 71 ? "#0A7B6B" : porcentaje >= 31 ? "#C9A84C" : "#E8503A"
+    porcentaje >= 71 ? "#0A7B6B" : porcentaje >= 31 ? "#2563EB" : "#E8503A"
 
   const interpretativo = useMemo(() => {
     if (!stats) return { text: "", color: "#0A7B6B" }
@@ -81,7 +81,7 @@ export default function TareasProgressWidget() {
     if (stats.completadasEstaSemana >= 2) {
       return {
         text: "Buen ritmo, seguí completando las tareas pendientes.",
-        color: "#C9A84C",
+        color: "#2563EB",
       }
     }
     return {
@@ -189,7 +189,7 @@ export default function TareasProgressWidget() {
               fontWeight: 500,
               letterSpacing: "-0.02em",
               color: "#0D0D0F",
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Inter', sans-serif",
             }}
           >
             Progreso operativo de tu empresa
@@ -203,7 +203,7 @@ export default function TareasProgressWidget() {
               fontSize: "32px",
               fontWeight: 500,
               color: porcentajeColor,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'Inter', sans-serif",
               lineHeight: 1,
             }}
           >

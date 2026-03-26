@@ -12,7 +12,7 @@ interface MetricCardProps {
   description?: string
 }
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 function MetricCard({ title, value, change, icon, description }: MetricCardProps) {
   const isPositive = change >= 0

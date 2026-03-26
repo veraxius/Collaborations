@@ -17,7 +17,7 @@ const problems: Problem[] = [
   { title: "Abandono de Carrito Alto", severity: "high", impact: "Alto", description: "Tasa de abandono del 68%, principalmente en el proceso de checkout." },
 ]
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 export function ProblemsSection() {
   const getSeverityColor = (severity: string) => {

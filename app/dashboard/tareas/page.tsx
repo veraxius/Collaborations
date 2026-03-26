@@ -94,7 +94,7 @@ export default function TareasPage() {
   const badgeUrgencia = (u: string) => {
     const base = { padding: "3px 8px", borderRadius: "999px", fontSize: "11px", fontWeight: 600 }
     if (u === "alta") return { ...base, background: "rgba(232,80,58,0.12)", color: "#E8503A" }
-    if (u === "media") return { ...base, background: "rgba(201,168,76,0.12)", color: "#8a6d1e" }
+    if (u === "media") return { ...base, background: "rgba(59,130,246,0.12)", color: "#2563EB" }
     return { ...base, background: "rgba(13,13,15,0.08)", color: "rgba(13,13,15,0.6)" }
   }
 
@@ -108,7 +108,7 @@ export default function TareasPage() {
   })
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", color: "#0D0D0F" }}>
+    <div style={{ fontFamily: "'Inter', sans-serif", color: "#0D0D0F" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", gap: "12px" }}>
         <div>
           <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 500, letterSpacing: "-0.02em" }}>Tareas de esta semana</h1>

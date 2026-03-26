@@ -10,7 +10,7 @@ interface Message {
   content: string
 }
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 export function AIChat() {
   const [messages, setMessages] = useState<Message[]>([
@@ -88,7 +88,7 @@ export function AIChat() {
           className="flex items-center gap-2"
           style={{ ...sans, fontSize: "16px", fontWeight: 500 }}
         >
-          <Sparkles className="h-5 w-5" style={{ color: "#C9A84C" }} />
+          <Sparkles className="h-5 w-5" style={{ color: "#2563EB" }} />
           Chat con Lexora
         </CardTitle>
       </CardHeader>
@@ -127,10 +127,10 @@ export function AIChat() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontFamily: "'Instrument Serif', serif",
+                      fontFamily: "'Inter', sans-serif",
                       fontSize: "14px",
                       fontStyle: "italic",
-                      color: "#C9A84C",
+                      color: "#2563EB",
                       flexShrink: 0,
                       marginRight: "8px",
                       marginTop: "2px",
@@ -174,10 +174,10 @@ export function AIChat() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontFamily: "'Instrument Serif', serif",
+                    fontFamily: "'Inter', sans-serif",
                     fontSize: "14px",
                     fontStyle: "italic",
-                    color: "#C9A84C",
+                    color: "#2563EB",
                     flexShrink: 0,
                     marginRight: "8px",
                   }}

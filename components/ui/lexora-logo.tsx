@@ -2,40 +2,83 @@
 
 interface LexoraLogoProps {
   size?: "hero" | "large" | "medium" | "small"
-  theme?: "light" | "dark" | "gold"
+  theme?: "light" | "dark"
 }
 
-export function LexoraLogo({ size = "medium", theme = "light" }: LexoraLogoProps) {
-  const sizes = {
-    hero: { fontSize: "42px", letterSpacing: "-0.04em" },
-    large: { fontSize: "34px", letterSpacing: "-0.04em" },
-    medium: { fontSize: "28px", letterSpacing: "-0.04em" },
-    small: { fontSize: "20px", letterSpacing: "-0.03em" },
+function LexoraIcon({ size = 32, color = "#0D0D0F" }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Barra izquierda — más baja */}
+      <rect x="2" y="28" width="8" height="16" fill={color} rx="1" />
+
+      {/* Barra del medio — mediana */}
+      <rect x="14" y="20" width="8" height="24" fill={color} rx="1" />
+
+      {/* Barra derecha — más alta */}
+      <rect x="26" y="12" width="8" height="32" fill={color} rx="1" />
+
+      {/* Línea diagonal de la flecha */}
+      <path
+        d="M8 32 L36 6"
+        stroke={color}
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+
+      {/* Punta de la flecha */}
+      <path
+        d="M28 4 L38 4 L38 14"
+        stroke={color}
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  )
+}
+
+export function LexoraLogo({ size = "medium", theme = "dark" }: LexoraLogoProps) {
+  const config = {
+    hero: { iconSize: 52, fontSize: "42px", gap: "16px" },
+    large: { iconSize: 40, fontSize: "34px", gap: "14px" },
+    medium: { iconSize: 30, fontSize: "26px", gap: "10px" },
+    small: { iconSize: 22, fontSize: "20px", gap: "8px" },
   }
 
-  const colors = {
-    light: { base: "#F7F6F2", accent: "#C9A84C" },
-    dark: { base: "#0D0D0F", accent: "#C9A84C" },
-    gold: { base: "#0D0D0F", accent: "#0D0D0F" },
-  }
-
-  const { fontSize, letterSpacing } = sizes[size]
-  const { base, accent } = colors[theme]
+  const iconColor = theme === "light" ? "#0D0D0F" : "#F7F6F2"
+  const textColor = theme === "light" ? "#0D0D0F" : "#F7F6F2"
+  const { iconSize, fontSize, gap } = config[size]
 
   return (
-    <span
+    <div
       style={{
-        fontFamily: "'Instrument Serif', Georgia, serif",
-        fontSize,
-        fontWeight: 400,
-        letterSpacing,
-        lineHeight: 1,
-        color: base,
+        display: "flex",
+        alignItems: "center",
+        gap,
         userSelect: "none",
       }}
     >
-      Lex<span style={{ color: accent }}>o</span>ra
-    </span>
+      <LexoraIcon size={iconSize} color={iconColor} />
+      <span
+        style={{
+          fontFamily: "'Inter', -apple-system, sans-serif",
+          fontSize,
+          fontWeight: 600,
+          letterSpacing: "-0.02em",
+          lineHeight: 1,
+          color: textColor,
+        }}
+      >
+        Lexora
+      </span>
+    </div>
   )
 }
 
@@ -43,30 +86,17 @@ export function LexoraFavicon() {
   return (
     <div
       style={{
-        background: "#0D0D0F",
+        background: "#2563EB",
         width: "32px",
         height: "32px",
-        borderRadius: "8px",
+        borderRadius: "7px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexShrink: 0,
+        padding: "6px",
       }}
     >
-      <span
-        style={{
-          fontFamily: "'Instrument Serif', Georgia, serif",
-          fontSize: "20px",
-          fontWeight: 400,
-          color: "#C9A84C",
-          fontStyle: "italic",
-          lineHeight: 1,
-          marginTop: "2px",
-        }}
-      >
-        L
-      </span>
+      <LexoraIcon size={20} color="#FFFFFF" />
     </div>
   )
 }
-

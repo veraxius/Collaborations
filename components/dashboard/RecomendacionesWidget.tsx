@@ -77,7 +77,7 @@ export function RecomendacionesWidget() {
 
   const impactClass = (impacto: Recomendacion["impacto"]) => {
     if (impacto === "alto") return "bg-[rgba(10,123,107,0.1)] text-[var(--teal)]"
-    if (impacto === "medio") return "bg-[rgba(201,168,76,0.12)] text-[#8a6d1e]"
+    if (impacto === "medio") return "bg-[rgba(59,130,246,0.12)] text-[#2563EB]"
     return "bg-[var(--paper-2)] text-[rgba(13,13,15,0.5)]"
   }
 
@@ -89,8 +89,8 @@ export function RecomendacionesWidget() {
   const priorityStyle = useMemo(
     () => [
       {
-        border: "border-l-[3px] border-l-[var(--gold)] rounded-r-[10px]",
-        num: "bg-[rgba(201,168,76,0.12)] text-[#8a6d1e]",
+        border: "border-l-[3px] border-l-[var(--primary-500)] rounded-r-[10px]",
+        num: "bg-[rgba(59,130,246,0.12)] text-[#2563EB]",
       },
       {
         border: "border-l-[3px] border-l-[var(--teal)] rounded-r-[10px]",

@@ -19,7 +19,7 @@ const competitors: Competitor[] = [
   { name: "Competidor C", traffic: "65K", seo: "Bueno", trend: "down", notes: "Similar a tu negocio, oportunidad de superar" },
 ]
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 export function CompetitorsSection() {
   return (

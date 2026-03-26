@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find app:*)",
+      "Bash(find . -maxdepth 3 -name globals.css -o -name tailwind.config*)"
+    ]
+  }
+}

@@ -100,13 +100,13 @@ export default function MejorasPage() {
 
   const impactoBadge = (impacto: Recomendacion["impacto"]) => {
     if (impacto === "alto") return "bg-[rgba(10,123,107,0.1)] text-[var(--teal)]"
-    if (impacto === "medio") return "bg-[rgba(201,168,76,0.12)] text-[#8a6d1e]"
+    if (impacto === "medio") return "bg-[rgba(59,130,246,0.12)] text-[#2563EB]"
     return "bg-[var(--paper-2)] text-[var(--ink-60)]"
   }
 
   const esfuerzoClass = (esfuerzo: Recomendacion["esfuerzo"]) => {
     if (esfuerzo === "alto") return "bg-[rgba(232,80,58,0.1)] text-[var(--red-soft)]"
-    if (esfuerzo === "medio") return "bg-[rgba(201,168,76,0.12)] text-[#8a6d1e]"
+    if (esfuerzo === "medio") return "bg-[rgba(59,130,246,0.12)] text-[#2563EB]"
     return "bg-[rgba(10,123,107,0.1)] text-[var(--teal)]"
   }
 

@@ -18,7 +18,7 @@ const opportunities: Opportunity[] = [
   { title: "Mejorar Conversión", category: "Marketing", potential: "Alto", description: "A/B testing en CTA puede aumentar conversión en un 25%." },
 ]
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 export function OpportunitiesSection() {
   return (

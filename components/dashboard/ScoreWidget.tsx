@@ -96,19 +96,19 @@ export function ScoreWidget() {
       <section
         className="animate-pulse p-[28px_32px] opacity-60"
         style={{
-          background: "rgba(255, 245, 225, 0.6)",
+          background: "rgba(239, 246, 255, 0.6)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(255, 200, 100, 0.25)",
+          border: "1px solid rgba(59, 130, 246, 0.25)",
           borderRadius: "16px",
         }}
       >
         <div className="flex items-center gap-8">
-          <div className="h-20 w-20 rounded-full" style={{ background: "rgba(201,168,76,0.2)" }} />
+          <div className="h-20 w-20 rounded-full" style={{ background: "rgba(37, 99, 235, 0.2)" }} />
           <div className="space-y-3">
-            <div className="h-3 w-52 rounded" style={{ background: "rgba(92,61,0,0.2)" }} />
-            <div className="h-5 w-64 rounded" style={{ background: "rgba(92,61,0,0.2)" }} />
-            <div className="h-3 w-80 rounded" style={{ background: "rgba(92,61,0,0.2)" }} />
+            <div className="h-3 w-52 rounded" style={{ background: "rgba(30, 58, 138, 0.2)" }} />
+            <div className="h-5 w-64 rounded" style={{ background: "rgba(30, 58, 138, 0.2)" }} />
+            <div className="h-3 w-80 rounded" style={{ background: "rgba(30, 58, 138, 0.2)" }} />
           </div>
         </div>
       </section>
@@ -120,14 +120,14 @@ export function ScoreWidget() {
       <section
         className="rounded-2xl p-[28px_32px]"
         style={{
-          background: "rgba(255, 245, 225, 0.6)",
+          background: "rgba(239, 246, 255, 0.6)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(255, 200, 100, 0.25)",
+          border: "1px solid rgba(59, 130, 246, 0.25)",
           borderRadius: "16px",
         }}
       >
-        <p className="mb-3 text-sm" style={{ color: "#5C3D00" }}>
+        <p className="mb-3 text-sm" style={{ color: "#1e3a8a" }}>
           No pudimos calcular el score
         </p>
         <Button variant="outline" onClick={fetchScore}>
@@ -142,14 +142,14 @@ export function ScoreWidget() {
       <section
         className="rounded-2xl p-[28px_32px]"
         style={{
-          background: "rgba(255, 245, 225, 0.6)",
+          background: "rgba(239, 246, 255, 0.6)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(255, 200, 100, 0.25)",
+          border: "1px solid rgba(59, 130, 246, 0.25)",
           borderRadius: "16px",
         }}
       >
-        <p className="mb-3 text-sm" style={{ color: "rgba(92,61,0,0.5)" }}>
+        <p className="mb-3 text-sm" style={{ color: "rgba(30, 58, 138, 0.5)" }}>
           Todavía no hay score disponible.
         </p>
         <Button onClick={runAnalisis} disabled={running}>
@@ -172,16 +172,16 @@ export function ScoreWidget() {
           }
         : {
             label: "Sin cambios este mes",
-            style: { background: "rgba(201,168,76,0.12)", color: "#8a6d1e" },
+            style: { background: "rgba(59,130,246,0.12)", color: "#2563EB" },
           }
 
   return (
     <section
       style={{
-        background: "rgba(255, 245, 225, 0.6)",
+        background: "rgba(239, 246, 255, 0.6)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        border: "1px solid rgba(255, 200, 100, 0.25)",
+        border: "1px solid rgba(59, 130, 246, 0.25)",
         borderRadius: "16px",
         padding: "28px 32px",
         display: "flex",
@@ -201,7 +201,7 @@ export function ScoreWidget() {
             cy="40"
             r="35"
             fill="none"
-            stroke="rgba(201,168,76,0.15)"
+            stroke="rgba(59,130,246,0.15)"
             strokeWidth="5"
           />
           <circle
@@ -209,7 +209,7 @@ export function ScoreWidget() {
             cy="40"
             r="35"
             fill="none"
-            stroke="#C9A84C"
+            stroke="#2563EB"
             strokeWidth="5"
             strokeLinecap="round"
             strokeDasharray={220}
@@ -222,20 +222,19 @@ export function ScoreWidget() {
         </svg>
         <div
           className="absolute inset-0 flex items-center justify-center font-display text-[22px]"
-          style={{ color: "#C9A84C" }}
-        >
+          style={{ color: "#2563EB" }}>
           {data.score}
         </div>
       </div>
 
       <div className="flex-1">
-        <p className="text-[11px] font-medium tracking-[0.08em]" style={{ color: "rgba(92,61,0,0.4)" }}>
+        <p className="text-[11px] font-medium tracking-[0.08em]" style={{ color: "rgba(37,99,235,0.5)" }}>
           ÍNDICE DE MADUREZ OPERATIVA
         </p>
-        <p className="mb-2 font-display text-[20px]" style={{ color: "#5C3D00" }}>
+        <p className="mb-2 font-display text-[20px]" style={{ color: "#1E40AF" }}>
           Tu empresa está {data.nivel}
         </p>
-        <p className="max-w-[480px] text-[13px] leading-[1.6]" style={{ color: "rgba(92,61,0,0.5)" }}>
+        <p className="max-w-[480px] text-[13px] leading-[1.6]" style={{ color: "rgba(30,58,138,0.6)" }}>
           {data.resumen}
         </p>
         <div className="mt-3 flex items-center gap-3">
@@ -246,9 +245,9 @@ export function ScoreWidget() {
             onClick={recalculateScore}
             disabled={running}
             style={{
-              background: "rgba(201,168,76,0.15)",
-              border: "1px solid rgba(201,168,76,0.3)",
-              color: "#8a6d1e",
+              background: "rgba(59,130,246,0.15)",
+              border: "1px solid rgba(59,130,246,0.3)",
+              color: "#2563EB",
               borderRadius: "8px",
               padding: "7px 12px",
               fontSize: "13px",
@@ -256,10 +255,10 @@ export function ScoreWidget() {
               cursor: running ? "not-allowed" : "pointer",
             }}
             onMouseEnter={(event) => {
-              if (!running) event.currentTarget.style.background = "rgba(201,168,76,0.25)"
+              if (!running) event.currentTarget.style.background = "rgba(59,130,246,0.25)"
             }}
             onMouseLeave={(event) => {
-              event.currentTarget.style.background = "rgba(201,168,76,0.15)"
+              event.currentTarget.style.background = "rgba(59,130,246,0.15)"
             }}
           >
             {running ? "Actualizando..." : "Actualizar score"}

@@ -42,12 +42,12 @@ export function AlertsSection() {
       <CardHeader>
         <CardTitle
           className="flex items-center gap-2"
-          style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: "16px" }}
+          style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: "16px" }}
         >
           <Bell className="h-5 w-5" />
           Alertas Recientes
         </CardTitle>
-        <CardDescription style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px" }}>
+        <CardDescription style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px" }}>
           Cambios importantes detectados
         </CardDescription>
       </CardHeader>
@@ -59,19 +59,19 @@ export function AlertsSection() {
                 {alert.icon}
                 <div className="flex-1">
                   <AlertTitle
-                    style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: "13px" }}
+                    style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: "13px" }}
                   >
                     {alert.title}
                   </AlertTitle>
                   <AlertDescription
                     className="mt-1"
-                    style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px" }}
+                    style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px" }}
                   >
                     {alert.description}
                   </AlertDescription>
                   <p
                     className="mt-2 text-xs text-muted-foreground"
-                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                    style={{ fontFamily: "'Inter', sans-serif" }}
                   >
                     {alert.time}
                   </p>

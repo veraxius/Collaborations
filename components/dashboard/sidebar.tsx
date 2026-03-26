@@ -2,15 +2,15 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Bot, Wrench, ClipboardList, BarChart3, Settings } from "lucide-react"
+import { LayoutDashboard, FileText, Bot, Wrench, ClipboardList, BarChart3, Settings, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { LexoraFavicon, LexoraLogo } from "@/components/ui/lexora-logo"
+import { LexoraFavicon } from "@/components/ui/lexora-logo"
 
 const principalItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/mejoras", label: "Mejoras", icon: Wrench },
   { href: "/dashboard/documentos", label: "Documentos", icon: FileText },
-  { href: "/dashboard/chat", label: "Chat IA", icon: Bot },
+  { href: "/dashboard/chat", label: "Chat IA", icon: Bot, isAI: true },
 ]
 
 const gestionItems = [
@@ -24,89 +24,101 @@ export function Sidebar() {
 
   return (
     <aside
-      className="flex h-full w-[220px] flex-col p-[28px_20px] text-white"
-      style={{
-        background: "rgba(200, 110, 35, 0.62)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderRight: "1px solid rgba(220, 140, 60, 0.4)",
-        backgroundImage:
-          "radial-gradient(circle at 12px 12px, rgba(255,255,255,0.10) 1px, rgba(0,0,0,0) 1.2px), radial-gradient(circle at 6px 6px, rgba(255,255,255,0.05) 1px, rgba(0,0,0,0) 1.2px), linear-gradient(180deg, rgba(220,140,60,0.14), rgba(180,90,30,0.08))",
-        backgroundSize: "24px 24px, 24px 24px, 100% 100%",
-        backgroundBlendMode: "overlay, overlay, normal",
-      }}
+      className="flex h-full w-[260px] flex-col bg-surface border-r border-light"
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "36px" }}>
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-light">
         <LexoraFavicon />
-        <LexoraLogo size="small" theme="light" />
+        <span className="font-display text-lg text-text-primary">
+          Lexora
+        </span>
       </div>
 
-      <nav className="flex-1">
-        <p className="mb-[6px] ml-2 mt-4 text-[10px] font-medium uppercase tracking-[0.1em] text-white/25">
-          Principal
-        </p>
-        <div className="space-y-1">
-          {principalItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center justify-between rounded-[8px] px-[10px] py-[9px] text-[13px] font-medium transition-all",
-                  isActive
-                    ? "bg-[rgba(201,168,76,0.15)] text-[var(--gold-light)]"
-                    : "text-white/50 hover:bg-white/[0.06] hover:text-white/80"
-                )}
-              >
-                <span className="flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </span>
-                {isActive ? <span className="text-[var(--gold)]">•</span> : null}
-              </Link>
-            )
-          })}
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-6 space-y-6">
+        {/* Principal Section */}
+        <div>
+          <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+            Principal
+          </p>
+          <div className="space-y-1">
+            {principalItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                    isActive
+                      ? "bg-primary-50 text-primary-700"
+                      : item.isAI
+                        ? "text-secondary-600 hover:bg-secondary-50 hover:text-secondary-700"
+                        : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                  )}
+                >
+                  <Icon className={cn(
+                    "w-5 h-5",
+                    isActive ? "text-primary-600" : item.isAI ? "text-secondary-500" : "text-text-tertiary"
+                  )} />
+                  <span>{item.label}</span>
+                  {item.isAI && (
+                    <Sparkles className="w-3.5 h-3.5 ml-auto text-secondary-500" />
+                  )}
+                  {isActive && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500" />
+                  )}
+                </Link>
+              )
+            })}
+          </div>
         </div>
 
-        <p className="mb-[6px] ml-2 mt-4 text-[10px] font-medium uppercase tracking-[0.1em] text-white/25">
-          Gestión
-        </p>
-        <div className="space-y-1">
-          {gestionItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center justify-between rounded-[8px] px-[10px] py-[9px] text-[13px] font-medium transition-all",
-                  isActive
-                    ? "bg-[rgba(201,168,76,0.15)] text-[var(--gold-light)]"
-                    : "text-white/50 hover:bg-white/[0.06] hover:text-white/80"
-                )}
-              >
-                <span className="flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </span>
-                {isActive ? <span className="text-[var(--gold)]">•</span> : null}
-              </Link>
-            )
-          })}
+        {/* Gestión Section */}
+        <div>
+          <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+            Gestión
+          </p>
+          <div className="space-y-1">
+            {gestionItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                    isActive
+                      ? "bg-primary-50 text-primary-700"
+                      : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                  )}
+                >
+                  <Icon className={cn(
+                    "w-5 h-5",
+                    isActive ? "text-primary-600" : "text-text-tertiary"
+                  )} />
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500" />
+                  )}
+                </Link>
+              )
+            })}
+          </div>
         </div>
       </nav>
 
-      <div className="border-t border-white/[0.06] pt-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[var(--gold)] text-[12px] font-medium text-[var(--ink)]">
+      {/* User Profile */}
+      <div className="p-4 border-t border-light">
+        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
             A
           </div>
-          <div>
-            <p className="text-[12px] font-medium text-white">Adriel</p>
-            <p className="text-[11px] text-white/30">Plan Pro</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-text-primary truncate">Adriel</p>
+            <p className="text-xs text-text-tertiary truncate">Plan Pro</p>
           </div>
         </div>
       </div>

@@ -50,9 +50,9 @@ export function LexoraLogoAnimated() {
     >
       <div
         style={{
-          fontFamily: "'Instrument Serif', serif",
+          fontFamily: "'Inter', sans-serif",
           fontSize: "clamp(58px, 10vw, 84px)",
-          fontWeight: 400,
+          fontWeight: 700,
           letterSpacing: "-0.04em",
           lineHeight: 1,
           color: "#F0EDE8",

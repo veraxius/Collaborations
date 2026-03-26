@@ -267,7 +267,7 @@ export default function DocumentosPage() {
   return (
     <div
       style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         color: "#0D0D0F",
         minHeight: "100%",
       }}
@@ -371,10 +371,10 @@ export default function DocumentosPage() {
 
       <div
         style={{
-          border: `1px dashed ${isUploadActive ? "#C9A84C" : "rgba(201,168,76,0.4)"}`,
+          border: `1px dashed ${isUploadActive ? "#2563EB" : "rgba(59,130,246,0.4)"}`,
           borderRadius: "12px",
           padding: "28px",
-          background: isUploadActive ? "rgba(201,168,76,0.06)" : "rgba(201,168,76,0.03)",
+          background: isUploadActive ? "rgba(59,130,246,0.06)" : "rgba(59,130,246,0.03)",
           textAlign: "center",
           marginBottom: "16px",
           transition: "border-color 0.15s ease, background 0.15s ease",
@@ -567,7 +567,7 @@ export default function DocumentosPage() {
                     width: "32px",
                     height: "32px",
                     borderRadius: "8px",
-                    background: "rgba(201,168,76,0.1)",
+                    background: "rgba(59,130,246,0.1)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

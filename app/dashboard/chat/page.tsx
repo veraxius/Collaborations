@@ -7,7 +7,7 @@ interface ChatMessage {
   content: string
 }
 
-const sans = { fontFamily: "'Outfit', sans-serif" }
+const sans = { fontFamily: "'Inter', sans-serif" }
 
 export default function ChatPage() {
   const [historial, setHistorial] = useState<ChatMessage[]>([
@@ -163,10 +163,10 @@ export default function ChatPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontFamily: "'Instrument Serif', serif",
+                  fontFamily: "'Inter', sans-serif",
                   fontSize: "14px",
                   fontStyle: "italic",
-                  color: "#C9A84C",
+                  color: "#2563EB",
                   flexShrink: 0,
                   marginRight: "8px",
                   marginTop: "2px",
