@@ -323,7 +323,7 @@ export default function OnboardingPage() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="lex-btn lex-btn-primary"
+                    className="lex-btn lex-btn-primary bg-primary-600 text-white hover:bg-primary-700"
                   >
                     Siguiente
                     <ChevronRight className="w-4 h-4 ml-2" />
