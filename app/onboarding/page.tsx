@@ -54,6 +54,7 @@ export default function OnboardingPage() {
   const [userId, setUserId] = useState("")
   const [data, setData] = useState<OnboardingData>(initialData)
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showSteps, setShowSteps] = useState(false)
 
@@ -132,6 +133,33 @@ export default function OnboardingPage() {
   const prevStep = () => {
     setError(null)
     setCurrentStep((prev) => Math.max(prev - 1, 1))
+  }
+
+  const submitOnboarding = async () => {
+    setError(null)
+    setSubmitting(true)
+    try {
+      const response = await fetch("/api/onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      const body = (await response.json()) as { ok?: boolean; error?: string }
+      if (!response.ok || !body.ok) {
+        throw new Error(body.error || "No se pudo guardar el onboarding")
+      }
+
+      router.push("/onboarding/analizando")
+    } catch (caughtError) {
+      const message =
+        caughtError instanceof Error ? caughtError.message : "Error inesperado"
+      setError(message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (loading) {
@@ -303,7 +331,7 @@ export default function OnboardingPage() {
                     onChange={(objetivos) => setData((prev) => ({ ...prev, objetivos }))}
                   />
                 )}
-                {currentStep === 5 && <StepConfirmacion data={data} />}
+                {currentStep === 5 && <StepConfirmacion data={data} error={error} />}
               </div>
 
               {/* Navigation Buttons */}
@@ -329,8 +357,13 @@ export default function OnboardingPage() {
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 ) : (
-                  <Button className="lex-btn lex-btn-success">
-                    Completar configuración
+                  <Button
+                    type="button"
+                    onClick={submitOnboarding}
+                    disabled={submitting}
+                    className="lex-btn lex-btn-success"
+                  >
+                    {submitting ? "Guardando..." : "Completar configuración"}
                     <Check className="w-4 h-4 ml-2" />
                   </Button>
                 )}

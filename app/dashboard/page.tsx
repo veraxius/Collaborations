@@ -33,10 +33,12 @@ export default function DashboardPage() {
   const { user, loading: authLoading } = useRequireAuth()
 
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
+  const [tareasTotal, setTareasTotal] = useState(0)
+  const [tareasCompletadas, setTareasCompletadas] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loadAnalisis = async () => {
+    const loadDashboardData = async () => {
       const supabase = getSupabase()
       const {
         data: { user },
@@ -46,22 +48,40 @@ export default function DashboardPage() {
         return
       }
 
-      const { data } = await supabase
-        .from("analisis")
-        .select("resultado")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single()
+      const [
+        { data: analisisData },
+        { count: totalTareasCount },
+        { count: completadasCount },
+      ] = await Promise.all([
+        supabase
+          .from("analisis")
+          .select("resultado")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single(),
+        supabase
+          .from("tareas")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id),
+        supabase
+          .from("tareas")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("completada", true),
+      ])
 
-      const row = data as AnalisisRow | null
+      const row = analisisData as AnalisisRow | null
       if (row?.resultado) {
         setAnalisis(row.resultado)
       }
+
+      setTareasTotal(totalTareasCount ?? 0)
+      setTareasCompletadas(completadasCount ?? 0)
       setLoading(false)
     }
 
-    loadAnalisis()
+    loadDashboardData()
   }, [])
 
   if (loading) {
@@ -77,6 +97,8 @@ export default function DashboardPage() {
 
   const score = analisis?.score ?? 0
   const recomendacionesCount = analisis?.recomendaciones?.length ?? 0
+  const tareasPorcentaje =
+    tareasTotal > 0 ? Math.round((tareasCompletadas / tareasTotal) * 100) : 0
 
   return (
     <div className="space-y-8 animate-fade-up">
@@ -159,7 +181,9 @@ export default function DashboardPage() {
               <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-1">
                 Tareas
               </p>
-              <p className="text-3xl font-display text-text-primary">8/12</p>
+              <p className="text-3xl font-display text-text-primary">
+                {tareasCompletadas}/{tareasTotal}
+              </p>
             </div>
             <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-primary-600" />
@@ -167,9 +191,12 @@ export default function DashboardPage() {
           </div>
           <div className="mt-4">
             <div className="w-full h-2 bg-border-light rounded-full overflow-hidden">
-              <div className="h-full w-2/3 bg-primary-500 rounded-full" />
+              <div
+                className="h-full bg-primary-500 rounded-full transition-all duration-300"
+                style={{ width: `${tareasPorcentaje}%` }}
+              />
             </div>
-            <p className="text-sm text-text-secondary mt-2">67% completado</p>
+            <p className="text-sm text-text-secondary mt-2">{tareasPorcentaje}% completado</p>
           </div>
         </div>
       </div>
