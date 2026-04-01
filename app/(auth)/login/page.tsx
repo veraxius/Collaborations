@@ -3,22 +3,25 @@
 export const dynamic = "force-dynamic"
 
 import { FormEvent, useState } from "react"
-import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react"
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Languages } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { getSupabase } from "@/lib/supabase"
 import { signInWithGoogle } from "@/lib/auth"
 import { LexoraLogo } from "@/components/ui/lexora-logo"
 import { useRedirectIfAuth } from "@/hooks/useAuth"
+import { useLanguage } from "@/components/providers/language-provider"
 
 export default function LoginPage() {
   // Redirigir a dashboard si ya está autenticado
   useRedirectIfAuth("/dashboard")
+  const { language, setLanguage } = useLanguage()
 
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -75,7 +78,53 @@ export default function LoginPage() {
       </div>
 
       {/* Right side - Form (40%) */}
-      <div className="flex flex-col bg-background rounded-l-lg">
+      <div className="flex flex-col bg-background rounded-l-lg relative">
+        {/* Language Switch - top-left corner of white panel */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setLangOpen((prev) => !prev)}
+              className="h-10 w-10 rounded-full border border-[var(--border)] bg-surface/90 backdrop-blur-sm text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors flex items-center justify-center"
+              aria-label="Cambiar idioma"
+              title="Cambiar idioma"
+            >
+              <Languages className="w-5 h-5" />
+            </button>
+            {langOpen && (
+              <div className="absolute left-0 mt-2 min-w-[130px] rounded-lg border border-light bg-surface shadow-lg p-1">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await setLanguage("es")
+                    setLangOpen(false)
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    language === "es"
+                      ? "bg-primary-50 text-primary-700"
+                      : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                  }`}
+                >
+                  Español
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await setLanguage("en")
+                    setLangOpen(false)
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    language === "en"
+                      ? "bg-primary-50 text-primary-700"
+                      : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                  }`}
+                >
+                  English
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
         {/* Navbar */}
         <nav className="w-full px-6 py-4 flex items-center justify-end">
           <div className="flex items-center gap-6">

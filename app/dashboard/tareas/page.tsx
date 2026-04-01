@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
+import { useLanguage } from "@/components/providers/language-provider"
 
 // Recharts (cargado dinámico por si no está instalado aún)
 const ResponsiveContainer = dynamic(() => import("recharts").then(m => m.ResponsiveContainer), { ssr: false })
@@ -25,10 +26,12 @@ interface Tarea {
 }
 
 export default function TareasPage() {
+  const { language } = useLanguage()
   const [tareas, setTareas] = useState<Tarea[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [forzando, setForzando] = useState(false)
+  const [translated, setTranslated] = useState<Record<string, { titulo: string; descripcion: string | null }>>({})
 
   const completadas = useMemo(() => tareas.filter(t => t.completada).length, [tareas])
   const pendientes = useMemo(() => tareas.length - completadas, [tareas, completadas])
@@ -58,6 +61,45 @@ export default function TareasPage() {
   useEffect(() => {
     void fetchTareas()
   }, [])
+
+  // Translate existing tasks when language is 'en'
+  useEffect(() => {
+    const run = async () => {
+      if (language !== "en") return
+      const toTranslate: Array<{ id: string; titulo: string; descripcion: string | null }> = []
+      tareas.forEach((t) => {
+        if (!translated[t.id]) {
+          toTranslate.push({ id: t.id, titulo: t.titulo, descripcion: t.descripcion })
+        }
+      })
+      if (toTranslate.length === 0) return
+      try {
+        const texts: string[] = []
+        toTranslate.forEach((t) => {
+          texts.push(t.titulo)
+          if (t.descripcion) texts.push(t.descripcion)
+        })
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ texts, target: "en" }),
+        })
+        const body = await response.json()
+        if (!response.ok || !body.ok) return
+        const out: Record<string, { titulo: string; descripcion: string | null }> = {}
+        let idx = 0
+        toTranslate.forEach((item) => {
+          const titulo = body.data[idx++] as string
+          const descripcion = item.descripcion ? (body.data[idx++] as string) : null
+          out[item.id] = { titulo, descripcion }
+        })
+        setTranslated((prev) => ({ ...prev, ...out }))
+      } catch {
+        // noop if translation fails; show original
+      }
+    }
+    void run()
+  }, [language, tareas, translated])
 
   const toggleTarea = async (tarea: Tarea) => {
     // Optimista
@@ -200,9 +242,13 @@ export default function TareasPage() {
                     style={{ width: "16px", height: "16px", accentColor: "#0A7B6B" }}
                   />
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <span style={{ fontSize: "13px", fontWeight: 600, textDecoration: t.completada ? "line-through" : "none" }}>{t.titulo}</span>
+                    <span style={{ fontSize: "13px", fontWeight: 600, textDecoration: t.completada ? "line-through" : "none" }}>
+                      {language === "en" && translated[t.id]?.titulo ? translated[t.id]?.titulo : t.titulo}
+                    </span>
                     {t.descripcion && (
-                      <span style={{ fontSize: "12px", color: "rgba(13,13,15,0.5)", textDecoration: t.completada ? "line-through" : "none" }}>{t.descripcion}</span>
+                      <span style={{ fontSize: "12px", color: "rgba(13,13,15,0.5)", textDecoration: t.completada ? "line-through" : "none" }}>
+                        {language === "en" && translated[t.id]?.descripcion ? translated[t.id]?.descripcion : t.descripcion}
+                      </span>
                     )}
                   </div>
                 </label>

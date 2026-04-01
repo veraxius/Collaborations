@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic"
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { getSupabase } from "@/lib/supabase"
+import { useLanguage } from "@/components/providers/language-provider"
 
 interface Documento {
   name: string
@@ -35,11 +36,11 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-function formatDate(dateStr: string): string {
+function formatDate(dateStr: string, language: "es" | "en"): string {
   if (!dateStr) return "-"
   const date = new Date(dateStr)
   if (Number.isNaN(date.getTime())) return "-"
-  return date.toLocaleDateString("es-AR")
+  return date.toLocaleDateString(language === "en" ? "en-US" : "es-AR")
 }
 
 function cleanFileName(name: string): string {
@@ -47,6 +48,7 @@ function cleanFileName(name: string): string {
 }
 
 export default function DocumentosPage() {
+  const { language } = useLanguage()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const messageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -597,7 +599,7 @@ export default function DocumentosPage() {
               </span>
 
               <span style={{ fontSize: "12px", color: "rgba(13,13,15,0.5)" }}>
-                {formatDate(doc.created_at)}
+                {formatDate(doc.created_at, language)}
               </span>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>

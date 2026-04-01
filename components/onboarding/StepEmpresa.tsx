@@ -87,6 +87,7 @@ export function StepEmpresa({ data, onChange }: StepEmpresaProps) {
             <option value="Chile">Chile</option>
             <option value="Uruguay">Uruguay</option>
             <option value="España">España</option>
+            <option value="United States">United States</option>
             <option value="Otro">Otro</option>
           </Select>
         </div>

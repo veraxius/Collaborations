@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { LanguageProvider } from "@/components/providers/language-provider"
 
 export const metadata: Metadata = {
   title: "Lexora - Business Intelligence",
@@ -25,7 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   )

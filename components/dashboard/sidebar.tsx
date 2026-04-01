@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import { LayoutDashboard, FileText, Bot, Wrench, ClipboardList, BarChart3, Settings, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LexoraFavicon } from "@/components/ui/lexora-logo"
+import { useEffect, useState } from "react"
+import { getSupabase } from "@/lib/supabase"
 
 const principalItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -21,6 +23,30 @@ const gestionItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const [companyName, setCompanyName] = useState<string>("")
+
+  useEffect(() => {
+    const loadCompany = async () => {
+      try {
+        const supabase = getSupabase()
+        const { data: auth } = await supabase.auth.getUser()
+        const user = auth.user
+        if (!user) return
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("empresa_data")
+          .eq("id", user.id)
+          .single()
+        const nombre = (profile as any)?.empresa_data?.empresa?.nombreEmpresa
+        if (typeof nombre === "string" && nombre.trim().length > 0) {
+          setCompanyName(nombre.trim())
+        }
+      } catch {
+        // noop
+      }
+    }
+    void loadCompany()
+  }, [])
 
   return (
     <aside
@@ -114,11 +140,12 @@ export function Sidebar() {
       <div className="p-4 border-t border-light">
         <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
-            A
+            {(companyName?.[0] ?? "U").toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-text-primary truncate">Adriel</p>
-            <p className="text-xs text-text-tertiary truncate">Plan Pro</p>
+            <p className="text-sm font-medium text-text-primary truncate">
+              {companyName || "Tu empresa"}
+            </p>
           </div>
         </div>
       </div>

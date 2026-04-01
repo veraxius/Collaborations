@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { getSupabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useLanguage } from "@/components/providers/language-provider"
 
 interface Recomendacion {
   id: number
@@ -31,10 +32,15 @@ interface AnalisisRow {
 }
 
 export default function MejorasPage() {
+  const { language } = useLanguage()
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
   const [loading, setLoading] = useState(true)
   const [running, setRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [translated, setTranslated] = useState<{
+    resumen?: string
+    recs?: Record<number, { titulo: string; descripcion: string; accion: string }>
+  }>({})
 
   const loadAnalisis = async () => {
     const supabase = getSupabase()
@@ -75,6 +81,51 @@ export default function MejorasPage() {
     loadAnalisis()
   }, [])
 
+  // Translate analysis content when language is English
+  useEffect(() => {
+    const run = async () => {
+      if (language !== "en" || !analisis) return
+      const texts: string[] = []
+      const indexMap: Array<{ type: "resumen" } | { type: "rec"; id: number; field: "titulo" | "descripcion" | "accion" }> = []
+      // resumen
+      if (analisis.resumen) {
+        texts.push(analisis.resumen)
+        indexMap.push({ type: "resumen" })
+      }
+      // recomendaciones
+      analisis.recomendaciones.forEach((rec) => {
+        texts.push(rec.titulo); indexMap.push({ type: "rec", id: rec.id, field: "titulo" })
+        texts.push(rec.descripcion); indexMap.push({ type: "rec", id: rec.id, field: "descripcion" })
+        texts.push(rec.accion); indexMap.push({ type: "rec", id: rec.id, field: "accion" })
+      })
+      if (texts.length === 0) return
+      try {
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ texts, target: "en" }),
+        })
+        const body = await response.json()
+        if (!response.ok || !body.ok) return
+        const recs: Record<number, { titulo: string; descripcion: string; accion: string }> = {}
+        let idx = 0
+        indexMap.forEach((entry) => {
+          const value = body.data[idx++] as string
+          if (entry.type === "resumen") {
+            setTranslated((prev) => ({ ...prev, resumen: value }))
+          } else {
+            const current = recs[entry.id] ?? { titulo: "", descripcion: "", accion: "" }
+            current[entry.field] = value
+            recs[entry.id] = current
+          }
+        })
+        setTranslated((prev) => ({ ...prev, recs: { ...(prev.recs ?? {}), ...recs } }))
+      } catch {
+        // noop if translation fails
+      }
+    }
+    void run()
+  }, [language, analisis])
   const triggerAnalisis = async () => {
     setError(null)
     setRunning(true)
@@ -159,7 +210,9 @@ export default function MejorasPage() {
               <CardTitle>Resumen ejecutivo</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">{analisis.resumen}</p>
+              <p className="text-sm">
+                {language === "en" && translated.resumen ? translated.resumen : analisis.resumen}
+              </p>
             </CardContent>
           </Card>
 
@@ -168,11 +221,13 @@ export default function MejorasPage() {
               <Card key={`${rec.id}-${rec.titulo}`}>
                 <CardHeader>
                   <CardTitle className="text-[14px] font-medium">
-                    #{index + 1} - {rec.titulo}
+                    #{index + 1} - {language === "en" && translated.recs?.[rec.id]?.titulo ? translated.recs?.[rec.id]?.titulo : rec.titulo}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-[12px]">
-                  <p className="leading-[1.6] text-[var(--ink-60)]">{rec.descripcion}</p>
+                  <p className="leading-[1.6] text-[var(--ink-60)]">
+                    {language === "en" && translated.recs?.[rec.id]?.descripcion ? translated.recs?.[rec.id]?.descripcion : rec.descripcion}
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     <span className={`lex-pill ${impactoBadge(rec.impacto)}`}>Impacto: {rec.impacto}</span>
                     <span className={`lex-pill ${esfuerzoClass(rec.esfuerzo)}`}>
@@ -181,7 +236,7 @@ export default function MejorasPage() {
                     <span className="lex-pill bg-[var(--paper-2)] text-[var(--ink-60)]">{rec.categoria}</span>
                   </div>
                   <div className="rounded-[6px] bg-[var(--teal-light)] px-[10px] py-[5px] text-[12px] font-medium text-[var(--teal)]">
-                    <strong>Acción esta semana:</strong> {rec.accion}
+                    <strong>Acción esta semana:</strong> {language === "en" && translated.recs?.[rec.id]?.accion ? translated.recs?.[rec.id]?.accion : rec.accion}
                   </div>
                 </CardContent>
               </Card>

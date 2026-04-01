@@ -5,14 +5,16 @@ export const dynamic = "force-dynamic"
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { User, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react"
+import { User, Mail, Lock, ArrowRight, Eye, EyeOff, Languages } from "lucide-react"
 import { getSupabase } from "@/lib/supabase"
 import { LexoraLogo } from "@/components/ui/lexora-logo"
 import { useRedirectIfAuth } from "@/hooks/useAuth"
+import { useLanguage } from "@/components/providers/language-provider"
 
 export default function RegisterPage() {
   // Redirigir a dashboard si ya está autenticado
   useRedirectIfAuth("/dashboard")
+  const { language, setLanguage } = useLanguage()
 
   const router = useRouter()
   const [name, setName] = useState("")
@@ -20,6 +22,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,6 +62,52 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full bg-background flex flex-col">
+      <div className="fixed top-4 left-4 z-50">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setLangOpen((prev) => !prev)}
+            className="h-10 w-10 rounded-full border border-[var(--border)] bg-surface/90 backdrop-blur-sm text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors flex items-center justify-center"
+            aria-label="Cambiar idioma"
+            title="Cambiar idioma"
+          >
+            <Languages className="w-5 h-5" />
+          </button>
+          {langOpen && (
+            <div className="absolute left-0 mt-2 min-w-[130px] rounded-lg border border-light bg-surface shadow-lg p-1">
+              <button
+                type="button"
+                onClick={async () => {
+                  await setLanguage("es")
+                  setLangOpen(false)
+                }}
+                className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                  language === "es"
+                    ? "bg-primary-50 text-primary-700"
+                    : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                }`}
+              >
+                Español
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await setLanguage("en")
+                  setLangOpen(false)
+                }}
+                className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                  language === "en"
+                    ? "bg-primary-50 text-primary-700"
+                    : "text-text-secondary hover:bg-surface-elevated hover:text-text-primary"
+                }`}
+              >
+                English
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Navbar */}
       <nav className="w-full px-6 py-4 flex items-center justify-between">
         <LexoraLogo size="medium" theme="dark" />
@@ -211,7 +260,15 @@ export default function RegisterPage() {
                 disabled={loading}
                 className="lex-btn lex-btn-primary w-full"
               >
-                <span>{loading ? "Creando cuenta..." : "Crear cuenta"}</span>
+                <span>
+                  {loading
+                    ? language === "en"
+                      ? "Creating account..."
+                      : "Creando cuenta..."
+                    : language === "en"
+                      ? "Create account"
+                      : "Crear cuenta"}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>

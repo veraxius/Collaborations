@@ -85,20 +85,51 @@ export async function POST(request: Request) {
 
     const empresa_data = profile?.empresa_data ?? {}
 
+    const preferredLang =
+      (user.user_metadata as any)?.preferred_language === "en" ? "en" : "es"
+
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 1024,
       messages: [
         {
           role: "system",
-          content: `Sos un consultor de negocios experto en gestión de pequeñas empresas.
+          content: preferredLang === "en"
+            ? `You are a business consultant for small companies.
+Generate concrete, specific tasks that can be done within a week.
+Always respond in English.
+Reply ONLY with valid JSON (double quotes), no extra text, no markdown, no backticks.`
+            : `Sos un consultor de negocios experto en gestión de pequeñas empresas.
 Generás tareas concretas, específicas y realizables en una semana.
 Siempre en español rioplatense.
 Respondés SOLO en JSON válido con comillas dobles, sin texto extra, sin markdown, sin backticks.`,
         },
         {
           role: "user",
-          content: `Generá exactamente 5 tareas accionables para esta semana.
+          content: preferredLang === "en"
+            ? `Generate exactly 5 actionable tasks for this week.
+
+Company: ${JSON.stringify(empresa_data)}
+Recommendations: ${JSON.stringify((analisis?.resultado as any)?.recomendaciones ?? [])}
+
+Reply ONLY with this exact JSON using double quotes:
+{
+  "tareas": [
+    {
+      "titulo": "actionable title max 8 words",
+      "descripcion": "what to do exactly in 1 clear sentence",
+      "urgencia": "alta",
+      "categoria": "operaciones",
+      "tiempo_estimado": "1 hora"
+    }
+  ]
+}
+
+Valid values:
+- urgencia: "alta", "media", "baja"
+- categoria: "operaciones", "ventas", "finanzas", "rrhh", "tecnologia", "comunicacion"
+- tiempo_estimado: "30 min", "1 hora", "2 horas", "medio día", "1 día"`
+            : `Generá exactamente 5 tareas accionables para esta semana.
 
 Empresa: ${JSON.stringify(empresa_data)}
 Recomendaciones: ${JSON.stringify((analisis?.resultado as any)?.recomendaciones ?? [])}

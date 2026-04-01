@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/components/providers/language-provider"
 
 interface ResumenData {
   saludo: "Buenos días" | "Buenas tardes"
@@ -20,9 +21,16 @@ const CACHE_KEY = "lexora_resumen"
 const ONE_HOUR = 60 * 60 * 1000
 
 export function ResumenWidget() {
+  const { language } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<ResumenData | null>(null)
+  const [translated, setTranslated] = useState<{
+    saludo?: string
+    titular?: string
+    resumen?: string
+    oportunidad?: string
+  }>({})
 
   const fetchResumen = async () => {
     setLoading(true)
@@ -67,6 +75,40 @@ export function ResumenWidget() {
     fetchResumen()
   }, [])
 
+  // Auto-traducir el contenido dinámico cuando el idioma es inglés
+  useEffect(() => {
+    const run = async () => {
+      if (language !== "en" || !data) return
+      const texts: string[] = []
+      const keys: Array<keyof ResumenData> = []
+      if (data.saludo) { texts.push(data.saludo); keys.push("saludo") }
+      if (data.titular) { texts.push(data.titular); keys.push("titular") }
+      if (data.resumen) { texts.push(data.resumen); keys.push("resumen") }
+      if (data.oportunidad) { texts.push(data.oportunidad); keys.push("oportunidad") }
+      if (texts.length === 0) return
+      try {
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ texts, target: "en" }),
+        })
+        const body = await response.json()
+        if (!response.ok || !body.ok) return
+        const next: typeof translated = {}
+        keys.forEach((key, idx) => {
+          const val = body.data[idx] as string
+          if (key === "saludo") next.saludo = val
+          if (key === "titular") next.titular = val
+          if (key === "resumen") next.resumen = val
+          if (key === "oportunidad") next.oportunidad = val
+        })
+        setTranslated(next)
+      } catch {
+        // noop si falla la traducción
+      }
+    }
+    void run()
+  }, [language, data])
   const statusBadge = (estado: ResumenData["estado"]) => {
     if (estado === "critico") {
       return {
@@ -128,7 +170,7 @@ export function ResumenWidget() {
     <section className="w-full rounded-2xl border border-[rgba(13,13,15,0.1)] bg-white p-[28px_32px]">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[rgba(13,13,15,0.45)]">
-          {data.saludo}
+          {language === "en" && translated.saludo ? translated.saludo : data.saludo}
         </p>
         <span className="rounded-full px-3 py-1 text-xs font-medium" style={badge.style}>
           {badge.text}
@@ -136,10 +178,10 @@ export function ResumenWidget() {
       </div>
 
       <h3 className="font-display text-[24px] font-normal tracking-[-0.02em] text-[var(--ink)]">
-        {data.titular}
+        {language === "en" && translated.titular ? translated.titular : data.titular}
       </h3>
       <p className="mb-4 mt-[10px] text-[14px] leading-[1.7] text-[rgba(13,13,15,0.65)]">
-        {data.resumen}
+        {language === "en" && translated.resumen ? translated.resumen : data.resumen}
       </p>
 
       <div className="border-t border-[rgba(13,13,15,0.08)] pt-4">
@@ -148,7 +190,7 @@ export function ResumenWidget() {
         </p>
         <p className="mt-[6px] text-[13px] font-medium text-[var(--teal)]">
           <span className="mr-1 text-[var(--primary-600)]">→</span>
-          {data.oportunidad}
+          {language === "en" && translated.oportunidad ? translated.oportunidad : data.oportunidad}
         </p>
       </div>
     </section>

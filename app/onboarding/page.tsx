@@ -13,6 +13,7 @@ import { StepObjetivos } from "@/components/onboarding/StepObjetivos"
 import { OnboardingData } from "@/components/onboarding/types"
 import { getSupabase } from "@/lib/supabase"
 import { LexoraLogo } from "@/components/ui/lexora-logo"
+import { useLanguage } from "@/components/providers/language-provider"
 
 const steps = [
   { id: 1, title: "Empresa", description: "Información básica" },
@@ -49,6 +50,7 @@ const initialData: OnboardingData = {
 }
 
 export default function OnboardingPage() {
+  const { language } = useLanguage()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [userId, setUserId] = useState("")
@@ -267,18 +269,6 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Help Card */}
-            <div className="lex-card-ai p-6">
-              <h3 className="font-display text-base text-secondary-900 mb-2">
-                ¿Necesitas ayuda?
-              </h3>
-              <p className="text-sm text-secondary-700 mb-4">
-                Nuestro asistente de IA puede guiarte en el proceso.
-              </p>
-              <Button variant="outline" className="lex-btn-secondary w-full text-secondary-700 border-secondary-200">
-                Hablar con IA
-              </Button>
-            </div>
           </aside>
 
           {/* Main Content */}
@@ -361,9 +351,15 @@ export default function OnboardingPage() {
                     type="button"
                     onClick={submitOnboarding}
                     disabled={submitting}
-                    className="lex-btn lex-btn-success"
+                    className="lex-btn lex-btn-primary bg-primary-600 text-white hover:bg-primary-700"
                   >
-                    {submitting ? "Guardando..." : "Completar configuración"}
+                    {submitting
+                      ? language === "en"
+                        ? "Saving..."
+                        : "Guardando..."
+                      : language === "en"
+                        ? "Complete setup"
+                        : "Completar configuración"}
                     <Check className="w-4 h-4 ml-2" />
                   </Button>
                 )}
