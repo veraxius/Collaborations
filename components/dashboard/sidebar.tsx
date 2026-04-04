@@ -13,6 +13,7 @@ const principalItems = [
   { href: "/dashboard/mejoras", label: "Mejoras", icon: Wrench },
   { href: "/dashboard/documentos", label: "Documentos", icon: FileText },
   { href: "/dashboard/chat", label: "Chat IA", icon: Bot, isAI: true },
+  { href: "/dashboard/plan", label: "Plan", icon: ClipboardList, isAI: true },
 ]
 
 const gestionItems = [
