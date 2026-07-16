@@ -4,11 +4,126 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["fleetguard"]
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
+model Company {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  passwordHash       String
+  createdAt          DateTime @default(now())
+  trialEndsAt        DateTime
+  lsCustomerId       String?
+  lsSubscriptionId   String?  @unique
+  subscriptionStatus String   @default("trialing")
+  contactName        String?
+  phone              String?
+  country            String?
+
+  vehicles  Vehicle[]
+  drivers   Driver[]
+  documents Document[]
+  events    ActivityEvent[]
+  snapshots ComplianceSnapshot[]
+
+  @@schema("fleetguard")
+}
+
+model Vehicle {
+  id         String   @id @default(cuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name       String
+  plate      String
+  type       String   @default("truck")
+  status     String   @default("active")
+  make       String?
+  model      String?
+  year       Int?
+  vin        String?
+  odometerKm Int?
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  documents Document[]
+
+  @@index([companyId])
+  @@schema("fleetguard")
+}
+
+model Driver {
+  id            String    @id @default(cuid())
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name          String
+  status        String    @default("active")
+  email         String?
+  phone         String?
+  licenseNumber String?
+  licenseClass  String?
+  hiredAt       DateTime?
+  birthDate     DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+
+  documents Document[]
+
+  @@index([companyId])
+  @@schema("fleetguard")
+}
+
+model Document {
+  id              String    @id @default(cuid())
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  vehicleId       String?
+  vehicle         Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  driverId        String?
+  driver          Driver?   @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  type            String
+  title           String
+  referenceNumber String?
+  issuer          String?
+  issuedAt        DateTime?
+  expiresAt       DateTime
+  cost            Float?
+  currency        String    @default("USD")
+  fileName        String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  sentReminders   String    @default("")
+
+  @@index([companyId])
+  @@index([expiresAt])
+  @@schema("fleetguard")
+}
+
+model ActivityEvent {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  kind      String
+  label     String
+  onTime    Boolean?
+  daysDelta Int?
   createdAt DateTime @default(now())
+
+  @@index([companyId, createdAt])
+  @@schema("fleetguard")
+}
+
+model ComplianceSnapshot {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  date      String
+  score     Int
+  expired   Int
+  expiring  Int
+  ok        Int
+  createdAt DateTime @default(now())
+
+  @@unique([companyId, date])
+  @@schema("fleetguard")
 }

@@ -1,132 +1,92 @@
-# Business Analytics Platform
+# FleetGuard
 
-Una plataforma de análisis de negocio construida con Next.js, React, TypeScript y shadcn/ui que permite analizar el estado de tu negocio con inteligencia artificial.
+Track insurance, inspections, licenses and permits for your fleet. Get email reminders before anything expires.
 
-## 🚀 Características
+## Architecture
 
-### Flujo de Usuario
+- **Frontend** — Next.js app on port **3000**
+- **Backend** — Express API on port **3001**
 
-1. **Login / Register** - Autenticación de usuarios
-2. **Añadir Empresa** - Popup para agregar empresas a analizar
-3. **Dashboard** - Vista principal con:
-   - **Business Score** - Indicador general del estado del negocio (0-10)
-   - **Métricas Principales** - Tarjetas con métricas clave:
-     - Tráfico estimado
-     - Crecimiento mensual
-     - Ranking SEO
-     - Performance del sitio
-   - **Problemas Detectados** - Sección que muestra problemas críticos con nivel de gravedad e impacto
-   - **Oportunidades** - Recomendaciones de IA para crecer
-   - **Competidores** - Resumen de competidores agregados
-   - **Alertas Recientes** - Cambios importantes detectados
+The frontend talks to the Express API using a Bearer token stored in `localStorage`. No Supabase or server-side session — all authenticated requests go through `lib/api.ts`.
 
-4. **Navegación Lateral** con:
-   - Dashboard
-   - Company Analysis
-   - Problems
-   - AI Recommendations
-   - Competitors
-   - Opportunities
-   - Reports
-   - Settings
+## Quick start
 
-## 🛠️ Tecnologías
-
-- **Next.js 16** - Framework de React
-- **React 19** - Biblioteca de UI
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Estilos
-- **shadcn/ui** - Componentes UI
-- **Radix UI** - Componentes accesibles
-- **Lucide React** - Iconos
-
-## 📦 Instalación
+### 1. Backend (Express)
 
 ```bash
-# Instalar dependencias
+cd backend
+cp .env.fleetguard.example .env
+# Edit .env: DATABASE_URL, JWT_SECRET, FRONTEND_URL
 npm install
-
-# Ejecutar en desarrollo
+npx prisma db push
 npm run dev
-
-# Construir para producción
-npm run build
-
-# Iniciar en producción
-npm start
 ```
 
-## 🎨 Componentes UI Utilizados
 
-- Card
-- Badge
-- Tabs
-- Table
-- Alert
-- Progress
-- Dialog
-- Input
-- Label
-- Button
+The API listens on **http://localhost:3001**.
 
-## 📁 Estructura del Proyecto
+### 2. Frontend (Next.js)
 
-```
-├── app/
-│   ├── (auth)/
-│   │   ├── login/
-│   │   └── register/
-│   ├── dashboard/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── problems/
-│   │   ├── ai-recommendations/
-│   │   ├── competitors/
-│   │   ├── opportunities/
-│   │   ├── company-analysis/
-│   │   ├── reports/
-│   │   └── settings/
-│   └── page.tsx
-├── components/
-│   ├── dashboard/
-│   │   ├── sidebar.tsx
-│   │   ├── add-company-dialog.tsx
-│   │   ├── business-score.tsx
-│   │   ├── metric-cards.tsx
-│   │   ├── problems-section.tsx
-│   │   ├── opportunities-section.tsx
-│   │   ├── competitors-section.tsx
-│   │   └── alerts-section.tsx
-│   └── ui/
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── badge.tsx
-│       ├── tabs.tsx
-│       ├── table.tsx
-│       ├── alert.tsx
-│       ├── progress.tsx
-│       ├── dialog.tsx
-│       ├── input.tsx
-│       └── label.tsx
-└── lib/
-    └── utils.ts
+From the repo root:
+
+```bash
+npm install
+npm run dev
 ```
 
-## 🚦 Uso
+Open **http://localhost:3000**.
 
-1. Inicia el servidor de desarrollo: `npm run dev`
-2. Abre [http://localhost:3000](http://localhost:3000)
-3. Navega a `/login` o `/register` para autenticarte
-4. Una vez autenticado, serás redirigido al dashboard
-5. Usa el botón "Añadir Empresa" para agregar empresas a analizar
-6. Explora las diferentes secciones desde el menú lateral
+## Environment variables
 
-## 📝 Notas
+### Frontend (`.env.local` in repo root)
 
-- La autenticación actual es simulada. En producción, deberías implementar un sistema de autenticación real.
-- Los datos mostrados son de ejemplo. Conecta con APIs reales para obtener datos dinámicos.
-- El proyecto está listo para ser extendido con funcionalidades adicionales.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | `http://localhost:3001` | Express API base URL |
 
-## 📄 Licencia
+### Backend (`backend/.env`)
 
-Este proyecto es privado.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string (Prisma) |
+| `JWT_SECRET` | Yes | Secret for signing auth tokens |
+| `FRONTEND_URL` | Yes | Next.js origin for CORS (e.g. `http://localhost:3000`) |
+| `PORT` | No | API port (default `3001`) |
+| `UPLOAD_DIR` | No | Directory for uploaded document files |
+| `LEMONSQUEEZY_*` | No | Lemon Squeezy billing (checkout & portal) |
+| `CRON_SECRET` | No | Bearer token for `/api/cron/reminders` |
+| `ENABLE_INTERNAL_CRON` | No | Set to `1` to run daily reminder sweep in-process |
+
+See `backend/.env.fleetguard.example` for a full template.
+
+## Routes
+
+| Path | Description |
+|------|-------------|
+| `/` | Landing page |
+| `/login`, `/register`, `/signup` | Auth (`/signup` redirects to `/register`) |
+| `/app` | Dashboard |
+| `/app/analytics` | Compliance analytics |
+| `/app/documents` | Document list & filters |
+| `/app/vehicles`, `/app/drivers` | Fleet management |
+| `/app/billing` | Subscription checkout & portal |
+| `/app/settings` | Company profile & password |
+
+## Development
+
+```bash
+# Terminal 1 — API
+cd backend && npm run dev
+
+# Terminal 2 — UI
+npm run dev
+```
+
+```bash
+npm run build   # production build (frontend)
+npm run lint    # ESLint
+```
+
+## License
+
+Private.

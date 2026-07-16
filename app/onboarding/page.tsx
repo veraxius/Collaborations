@@ -178,7 +178,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-surface border-b border-light sticky top-0 z-10">
+      <header className="bg-surface border-b border-light sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
           <LexoraLogo size="small" theme="light" />
           <div className="flex items-center gap-4">

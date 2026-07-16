@@ -1,6 +1,7 @@
 {
-  "name": "startup-adriel",
+  "name": "fleetguard",
   "version": "0.1.0",
+  "description": "FleetGuard — fleet compliance tracking with expiry reminders",
   "private": true,
   "scripts": {
     "dev": "next dev",
