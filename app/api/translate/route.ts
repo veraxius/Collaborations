@@ -41,16 +41,16 @@ export async function POST(request: Request) {
     try {
       translated = JSON.parse(cleaned) as string[]
     } catch {
-      return NextResponse.json({ error: "Formato inválido de traducción" }, { status: 500 })
+      return NextResponse.json({ error: "Invalid translation format" }, { status: 500 })
     }
 
     if (!Array.isArray(translated) || translated.length !== texts.length) {
-      return NextResponse.json({ error: "Traducción incompleta" }, { status: 500 })
+      return NextResponse.json({ error: "Incomplete translation" }, { status: 500 })
     }
 
     return NextResponse.json({ ok: true, data: translated })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

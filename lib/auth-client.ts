@@ -8,18 +8,14 @@ export type Company = {
   id: string;
   name: string;
   email: string;
-  trialEndsAt: string;
-  subscriptionStatus: string;
   contactName?: string | null;
   phone?: string | null;
   country?: string | null;
-  lsSubscriptionId?: string | null;
 };
 
 export function useCompany(requireAuth = true) {
   const router = useRouter();
   const [company, setCompany] = useState<Company | null>(null);
-  const [access, setAccess] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -30,9 +26,8 @@ export function useCompany(requireAuth = true) {
       return;
     }
     try {
-      const data = await api<{ company: Company; access: boolean }>("/api/me");
+      const data = await api<{ company: Company }>("/api/me");
       setCompany(data.company);
-      setAccess(data.access);
     } catch {
       setToken(null);
       setCompany(null);
@@ -46,7 +41,7 @@ export function useCompany(requireAuth = true) {
     refresh();
   }, [refresh]);
 
-  return { company, access, loading, refresh, setCompany };
+  return { company, loading, refresh, setCompany };
 }
 
 export async function login(email: string, password: string) {

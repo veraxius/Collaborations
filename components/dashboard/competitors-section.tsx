@@ -14,9 +14,9 @@ interface Competitor {
 }
 
 const competitors: Competitor[] = [
-  { name: "Competidor A", traffic: "120K", seo: "Excelente", trend: "up", notes: "Tráfico mayor, mejor estrategia de contenido" },
-  { name: "Competidor B", traffic: "85K", seo: "Muy Bueno", trend: "up", notes: "Mejor SEO, más backlinks" },
-  { name: "Competidor C", traffic: "65K", seo: "Bueno", trend: "down", notes: "Similar a tu negocio, oportunidad de superar" },
+  { name: "Competitor A", traffic: "120K", seo: "Excellent", trend: "up", notes: "Higher traffic, better content strategy" },
+  { name: "Competitor B", traffic: "85K", seo: "Very Good", trend: "up", notes: "Better SEO, more backlinks" },
+  { name: "Competitor C", traffic: "65K", seo: "Good", trend: "down", notes: "Similar to your business, opportunity to overtake" },
 ]
 
 const sans = { fontFamily: "'Inter', sans-serif" }
@@ -30,17 +30,17 @@ export function CompetitorsSection() {
           style={{ ...sans, fontWeight: 500, fontSize: "16px" }}
         >
           <Users className="h-5 w-5" />
-          Competidores
+          Competitors
         </CardTitle>
         <CardDescription style={{ ...sans, fontSize: "13px" }}>
-          Resumen de competidores agregados
+          Summary of added competitors
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              {["Competidor", "Tráfico", "SEO", "Tendencia", "Notas"].map((h) => (
+              {["Competitor", "Traffic", "SEO", "Trend", "Notes"].map((h) => (
                 <TableHead key={h} style={{ ...sans, fontSize: "12px", fontWeight: 500 }}>
                   {h}
                 </TableHead>

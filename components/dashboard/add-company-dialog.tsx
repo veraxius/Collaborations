@@ -40,22 +40,22 @@ export function AddCompanyDialog() {
     setLoading(true)
 
     try {
-      // Extraer el dominio del sitio web
+      // Extract the domain from the website
       let domain = website.trim()
       
-      // Si tiene protocolo, extraer solo el dominio
+      // If it has a protocol, extract just the domain
       try {
         const url = new URL(domain)
         domain = url.hostname.replace("www.", "")
       } catch {
-        // Si no es una URL válida, usar el valor tal cual
+        // If it's not a valid URL, use the value as-is
         domain = domain.replace(/^https?:\/\//, "").replace(/^www\./, "")
       }
 
-      // Llamar al API para analizar el SEO y Performance
+      // Call the API to analyze SEO and Performance
       const response = await axios.post("/api/analyze", { domain })
       
-      // Guardar los datos en localStorage (en producción usarías una base de datos)
+      // Save the data in localStorage (in production you would use a database)
       const companyData = {
         companyName,
         website: domain,
@@ -65,17 +65,17 @@ export function AddCompanyDialog() {
         createdAt: new Date().toISOString(),
       }
       
-      // Obtener empresas existentes
+      // Get existing companies
       const existingCompanies = JSON.parse(
         localStorage.getItem("companies") || "[]"
       )
       existingCompanies.push(companyData)
       localStorage.setItem("companies", JSON.stringify(existingCompanies))
       
-      // Guardar la empresa actual seleccionada
+      // Save the currently selected company
       localStorage.setItem("currentCompany", JSON.stringify(companyData))
 
-      // Guardar los resultados para mostrarlos en el popup
+      // Save the results to show them in the popup
       setAnalysisResults({
         companyName,
         website: domain,
@@ -84,20 +84,20 @@ export function AddCompanyDialog() {
         aiRecommendations: response.data.aiRecommendations,
       })
 
-      // Cerrar el diálogo de añadir empresa y abrir el de resultados
+      // Close the add-company dialog and open the results dialog
       setOpen(false)
       setCompanyName("")
       setWebsite("")
       setResultsOpen(true)
       
-      // Recargar la página para actualizar el dashboard
+      // Reload the page to refresh the dashboard
       router.refresh()
     } catch (err) {
-      console.error("Error al analizar empresa:", err)
+      console.error("Error analyzing company:", err)
       setError(
         err instanceof Error
           ? err.message
-          : "Error al analizar el sitio. Verifica que la URL sea correcta."
+          : "Error analyzing the site. Please check that the URL is correct."
       )
     } finally {
       setLoading(false)
@@ -110,34 +110,34 @@ export function AddCompanyDialog() {
         <DialogTrigger asChild>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Añadir Empresa
+            Add Company
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Añadir Nueva Empresa</DialogTitle>
+            <DialogTitle>Add New Company</DialogTitle>
             <DialogDescription>
-              Ingresa la información de la empresa que deseas analizar.
+              Enter the information of the company you want to analyze.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="company-name">Nombre de la Empresa</Label>
+                <Label htmlFor="company-name">Company Name</Label>
                 <Input
                   id="company-name"
-                  placeholder="Ej: Mi Empresa S.A."
+                  placeholder="E.g.: My Company Inc."
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   required
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="website">Sitio Web</Label>
+                <Label htmlFor="website">Website</Label>
                 <Input
                   id="website"
                   type="url"
-                  placeholder="https://www.ejemplo.com"
+                  placeholder="https://www.example.com"
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
                   required
@@ -157,16 +157,16 @@ export function AddCompanyDialog() {
                 }}
                 disabled={loading}
               >
-                Cancelar
+                Cancel
               </Button>
               <Button type="submit" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analizando...
+                    Analyzing...
                   </>
                 ) : (
-                  "Añadir Empresa"
+                  "Add Company"
                 )}
               </Button>
             </DialogFooter>
@@ -174,7 +174,7 @@ export function AddCompanyDialog() {
         </DialogContent>
       </Dialog>
 
-      {/* Popup de Resultados */}
+      {/* Results Popup */}
       {analysisResults && (
         <ResultsDialog
           open={resultsOpen}

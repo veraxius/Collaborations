@@ -41,12 +41,12 @@ export default function TareasProgressWidget() {
         const response = await fetch("/api/dashboard/tareas-stats", { method: "GET" })
         const body = (await response.json()) as TareasStatsResponse | { error?: string }
         if (!response.ok || !("ok" in body) || !body.ok) {
-          throw new Error("No se pudieron cargar estadísticas de tareas")
+          throw new Error("Could not load task statistics")
         }
         setStats(body as TareasStatsResponse)
       } catch (caughtError) {
         const message =
-          caughtError instanceof Error ? caughtError.message : "Error cargando tareas"
+          caughtError instanceof Error ? caughtError.message : "Error loading tasks"
         setError(message)
       } finally {
         setLoading(false)
@@ -76,16 +76,16 @@ export default function TareasProgressWidget() {
   const interpretativo = useMemo(() => {
     if (!stats) return { text: "", color: "#0A7B6B" }
     if (stats.completadasEstaSemana >= 4) {
-      return { text: "Tu empresa está ejecutando muy bien esta semana.", color: "#0A7B6B" }
+      return { text: "Your company is executing very well this week.", color: "#0A7B6B" }
     }
     if (stats.completadasEstaSemana >= 2) {
       return {
-        text: "Buen ritmo, seguí completando las tareas pendientes.",
+        text: "Good pace, keep completing your pending tasks.",
         color: "#2563EB",
       }
     }
     return {
-      text: "Hay tareas importantes pendientes que necesitan atención.",
+      text: "There are important pending tasks that need attention.",
       color: "#E8503A",
     }
   }, [stats])
@@ -135,7 +135,7 @@ export default function TareasProgressWidget() {
         }}
       >
         <p style={{ margin: 0, fontSize: "13px", fontWeight: 500, color: "rgba(13,13,15,0.5)" }}>
-          Generá tus primeras tareas para ver el progreso de tu empresa
+          Generate your first tasks to see your company's progress
         </p>
         <button
           onClick={() => router.push("/dashboard/tareas")}
@@ -151,7 +151,7 @@ export default function TareasProgressWidget() {
             cursor: "pointer",
           }}
         >
-          Generar tareas
+          Generate tasks
         </button>
       </section>
     )
@@ -180,7 +180,7 @@ export default function TareasProgressWidget() {
               marginBottom: "6px",
             }}
           >
-            EN BASE A TUS TAREAS
+            BASED ON YOUR TASKS
           </p>
           <h3
             style={{
@@ -192,7 +192,7 @@ export default function TareasProgressWidget() {
               fontFamily: "'Inter', sans-serif",
             }}
           >
-            Progreso operativo de tu empresa
+            Your company's operational progress
           </h3>
         </div>
 
@@ -210,7 +210,7 @@ export default function TareasProgressWidget() {
             {porcentaje}%
           </p>
           <p style={{ margin: "4px 0 0", fontSize: "12px", color: "rgba(13,13,15,0.4)" }}>
-            completadas esta semana
+            completed this week
           </p>
         </div>
       </div>
@@ -260,7 +260,7 @@ export default function TareasProgressWidget() {
               }}
               formatter={(value, name) => {
                 const numericValue = typeof value === "number" ? value : 0
-                const label = name === "completadas" ? "Completadas" : "Pendientes"
+                const label = name === "completadas" ? "Completed" : "Pending"
                 return [numericValue, label]
               }}
             />
@@ -294,11 +294,11 @@ export default function TareasProgressWidget() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#0A7B6B" }} />
-          <span>Tareas completadas</span>
+          <span>Completed tasks</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#E8503A" }} />
-          <span>Tareas pendientes</span>
+          <span>Pending tasks</span>
         </div>
       </div>
 

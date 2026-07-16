@@ -11,16 +11,16 @@ interface StepObjetivosProps {
 }
 
 const objetivosOptions = [
-  "Reducir costos operativos",
-  "Automatizar tareas manuales",
-  "Mejorar tiempos de entrega",
-  "Aumentar ventas",
-  "Mejorar atención al cliente",
-  "Organizar la información",
-  "Mejorar comunicación interna",
-  "Control financiero",
-  "Escalar el negocio",
-  "Retener talento",
+  "Reduce operating costs",
+  "Automate manual tasks",
+  "Improve delivery times",
+  "Increase sales",
+  "Improve customer service",
+  "Organize information",
+  "Improve internal communication",
+  "Financial control",
+  "Scale the business",
+  "Retain talent",
 ]
 
 export function StepObjetivos({ data, onChange }: StepObjetivosProps) {
@@ -35,7 +35,7 @@ export function StepObjetivos({ data, onChange }: StepObjetivosProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Objetivos (mínimo 1) *</Label>
+        <Label>Goals (minimum 1) *</Label>
         <div className="flex flex-wrap gap-2">
           {objetivosOptions.map((item) => (
             <button
@@ -52,7 +52,7 @@ export function StepObjetivos({ data, onChange }: StepObjetivosProps) {
 
       <div className="space-y-2">
         <Label htmlFor="problemaPrincipal">
-          ¿Cuál es el principal problema que querés resolver? *
+          What is the main problem you want to solve? *
         </Label>
         <Textarea
           id="problemaPrincipal"
@@ -63,17 +63,17 @@ export function StepObjetivos({ data, onChange }: StepObjetivosProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tiempoResultados">Tiempo esperado de resultados</Label>
+        <Label htmlFor="tiempoResultados">Expected time to results</Label>
         <Select
           id="tiempoResultados"
           value={data.tiempoResultados}
           onChange={(event) => onChange({ ...data, tiempoResultados: event.target.value })}
         >
-          <option value="">Seleccionar</option>
-          <option value="En el próximo mes">En el próximo mes</option>
-          <option value="En 3 meses">En 3 meses</option>
-          <option value="En 6 meses">En 6 meses</option>
-          <option value="En el próximo año">En el próximo año</option>
+          <option value="">Select</option>
+          <option value="In the next month">In the next month</option>
+          <option value="In 3 months">In 3 months</option>
+          <option value="In 6 months">In 6 months</option>
+          <option value="In the next year">In the next year</option>
         </Select>
       </div>
     </div>

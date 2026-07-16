@@ -9,7 +9,7 @@ import crypto from "crypto";
 import { fileURLToPath } from "url";
 import cron from "node-cron";
 import prisma from "./lib/prisma.js";
-import { signToken, requireAuth, hasAccess } from "./lib/auth.js";
+import { signToken, requireAuth } from "./lib/auth.js";
 import {
   CURRENCIES,
   DOCUMENT_TYPES,
@@ -21,12 +21,6 @@ import {
 } from "./lib/expiry.js";
 import { captureSnapshot, countStatuses, getAnalytics, healthScore, logEvent } from "./lib/analytics.js";
 import { runReminderSweep } from "./lib/reminders.js";
-import {
-  buildCheckoutUrl,
-  getCustomerPortalUrl,
-  isLemonConfigured,
-  verifyWebhookSignature,
-} from "./lib/lemonsqueezy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "uploads");
@@ -51,7 +45,6 @@ const upload = multer({
 
 const app = express();
 const port = process.env.PORT || 3001;
-const TRIAL_DAYS = 14;
 
 app.use(
   cors({
@@ -59,50 +52,6 @@ app.use(
     credentials: true,
   })
 );
-
-// Lemon webhook needs raw body — mount before json parser
-app.post("/api/lemonsqueezy/webhook", express.raw({ type: "*/*" }), async (req, res) => {
-  try {
-    const rawBody = req.body.toString("utf8");
-    if (!verifyWebhookSignature(rawBody, req.headers["x-signature"])) {
-      return res.status(401).send("Invalid signature");
-    }
-    const payload = JSON.parse(rawBody);
-    const eventName = payload.meta?.event_name ?? "";
-    if (!eventName.startsWith("subscription_") || eventName.startsWith("subscription_payment_")) {
-      return res.json({ received: true });
-    }
-
-    const STATUS_MAP = {
-      active: "active",
-      on_trial: "active",
-      cancelled: "active",
-      past_due: "past_due",
-      unpaid: "canceled",
-      expired: "canceled",
-      paused: "canceled",
-    };
-
-    const companyId = payload.meta?.custom_data?.company_id;
-    const subscriptionId = String(payload.data?.id ?? "");
-    const customerId = String(payload.data?.attributes?.customer_id ?? "");
-    const status = payload.data?.attributes?.status ?? "";
-    const data = {
-      subscriptionStatus: STATUS_MAP[status] ?? "canceled",
-      lsSubscriptionId: subscriptionId || undefined,
-      lsCustomerId: customerId || undefined,
-    };
-
-    if (companyId) await prisma.company.updateMany({ where: { id: companyId }, data });
-    else if (subscriptionId) {
-      await prisma.company.updateMany({ where: { lsSubscriptionId: subscriptionId }, data });
-    }
-    return res.json({ received: true });
-  } catch (err) {
-    console.error("[webhook]", err);
-    return res.status(200).json({ received: true });
-  }
-});
 
 app.use(express.json());
 
@@ -136,15 +85,14 @@ app.post("/api/auth/register", async (req, res) => {
     const existing = await prisma.company.findUnique({ where: { email } });
     if (existing) return res.status(400).json({ error: "An account with that email already exists." });
 
-    const trialEndsAt = new Date();
-    trialEndsAt.setDate(trialEndsAt.getDate() + TRIAL_DAYS);
-
     const company = await prisma.company.create({
       data: {
         name,
         email,
         passwordHash: await bcrypt.hash(password, 10),
-        trialEndsAt,
+        // Column still exists in the schema; the product is free so the
+        // value is never checked anywhere.
+        trialEndsAt: new Date(),
       },
     });
     const token = signToken(company);
@@ -176,7 +124,7 @@ app.post("/api/auth/login", async (req, res) => {
 app.get("/api/me", requireAuth, async (req, res) => {
   const company = await prisma.company.findUnique({ where: { id: req.companyId } });
   if (!company) return res.status(401).json({ error: "Unauthorized" });
-  return res.json({ company: publicCompany(company), access: hasAccess(company) });
+  return res.json({ company: publicCompany(company) });
 });
 
 app.patch("/api/me", requireAuth, async (req, res) => {
@@ -214,26 +162,15 @@ function publicCompany(c) {
     id: c.id,
     name: c.name,
     email: c.email,
-    trialEndsAt: c.trialEndsAt,
-    subscriptionStatus: c.subscriptionStatus,
     contactName: c.contactName,
     phone: c.phone,
     country: c.country,
     createdAt: c.createdAt,
-    lsSubscriptionId: c.lsSubscriptionId,
   };
 }
 
-async function requireActive(req, res, next) {
-  const company = await prisma.company.findUnique({ where: { id: req.companyId } });
-  if (!company) return res.status(401).json({ error: "Unauthorized" });
-  if (!hasAccess(company)) return res.status(402).json({ error: "Trial ended", company: publicCompany(company) });
-  req.company = company;
-  next();
-}
-
 // ---------- Dashboard / Analytics ----------
-app.get("/api/dashboard", requireAuth, requireActive, async (req, res) => {
+app.get("/api/dashboard", requireAuth, async (req, res) => {
   await captureSnapshot(req.companyId);
   const [documents, vehicleCount, driverCount, events] = await Promise.all([
     prisma.document.findMany({
@@ -260,13 +197,13 @@ app.get("/api/dashboard", requireAuth, requireActive, async (req, res) => {
   });
 });
 
-app.get("/api/analytics", requireAuth, requireActive, async (req, res) => {
+app.get("/api/analytics", requireAuth, async (req, res) => {
   await captureSnapshot(req.companyId);
   res.json(await getAnalytics(req.companyId));
 });
 
 // ---------- Vehicles ----------
-app.get("/api/vehicles", requireAuth, requireActive, async (req, res) => {
+app.get("/api/vehicles", requireAuth, async (req, res) => {
   const vehicles = await prisma.vehicle.findMany({
     where: { companyId: req.companyId },
     include: {
@@ -278,7 +215,7 @@ app.get("/api/vehicles", requireAuth, requireActive, async (req, res) => {
   res.json({ vehicles });
 });
 
-app.get("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => {
+app.get("/api/vehicles/:id", requireAuth, async (req, res) => {
   const vehicle = await prisma.vehicle.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
     include: { documents: { orderBy: { expiresAt: "asc" } } },
@@ -287,7 +224,7 @@ app.get("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => {
   res.json({ vehicle });
 });
 
-app.post("/api/vehicles", requireAuth, requireActive, async (req, res) => {
+app.post("/api/vehicles", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   const plate = String(req.body.plate ?? "").trim();
   if (!name || !plate) return res.status(400).json({ error: "Name and plate required" });
@@ -310,7 +247,7 @@ app.post("/api/vehicles", requireAuth, requireActive, async (req, res) => {
   res.status(201).json({ vehicle });
 });
 
-app.patch("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => {
+app.patch("/api/vehicles/:id", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   const plate = String(req.body.plate ?? "").trim();
   if (!name || !plate) return res.status(400).json({ error: "Name and plate required" });
@@ -335,7 +272,7 @@ app.patch("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => {
   res.json({ vehicle });
 });
 
-app.delete("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => {
+app.delete("/api/vehicles/:id", requireAuth, async (req, res) => {
   const vehicle = await prisma.vehicle.findFirst({ where: { id: req.params.id, companyId: req.companyId } });
   if (!vehicle) return res.status(404).json({ error: "Not found" });
   await prisma.vehicle.delete({ where: { id: vehicle.id } });
@@ -344,7 +281,7 @@ app.delete("/api/vehicles/:id", requireAuth, requireActive, async (req, res) => 
 });
 
 // ---------- Drivers ----------
-app.get("/api/drivers", requireAuth, requireActive, async (req, res) => {
+app.get("/api/drivers", requireAuth, async (req, res) => {
   const drivers = await prisma.driver.findMany({
     where: { companyId: req.companyId },
     include: {
@@ -356,7 +293,7 @@ app.get("/api/drivers", requireAuth, requireActive, async (req, res) => {
   res.json({ drivers });
 });
 
-app.get("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
+app.get("/api/drivers/:id", requireAuth, async (req, res) => {
   const driver = await prisma.driver.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
     include: { documents: { orderBy: { expiresAt: "asc" } } },
@@ -365,7 +302,7 @@ app.get("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
   res.json({ driver });
 });
 
-app.post("/api/drivers", requireAuth, requireActive, async (req, res) => {
+app.post("/api/drivers", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   if (!name) return res.status(400).json({ error: "Name required" });
   const driver = await prisma.driver.create({
@@ -386,7 +323,7 @@ app.post("/api/drivers", requireAuth, requireActive, async (req, res) => {
   res.status(201).json({ driver });
 });
 
-app.patch("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
+app.patch("/api/drivers/:id", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   if (!name) return res.status(400).json({ error: "Name required" });
   const { count } = await prisma.driver.updateMany({
@@ -409,7 +346,7 @@ app.patch("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
   res.json({ driver });
 });
 
-app.delete("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
+app.delete("/api/drivers/:id", requireAuth, async (req, res) => {
   const driver = await prisma.driver.findFirst({ where: { id: req.params.id, companyId: req.companyId } });
   if (!driver) return res.status(404).json({ error: "Not found" });
   await prisma.driver.delete({ where: { id: driver.id } });
@@ -418,7 +355,7 @@ app.delete("/api/drivers/:id", requireAuth, requireActive, async (req, res) => {
 });
 
 // ---------- Documents ----------
-app.get("/api/documents", requireAuth, requireActive, async (req, res) => {
+app.get("/api/documents", requireAuth, async (req, res) => {
   const { status, type } = req.query;
   const now = new Date();
   const windowEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -439,7 +376,7 @@ app.get("/api/documents", requireAuth, requireActive, async (req, res) => {
   res.json({ documents });
 });
 
-app.get("/api/documents/:id", requireAuth, requireActive, async (req, res) => {
+app.get("/api/documents/:id", requireAuth, async (req, res) => {
   const document = await prisma.document.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
     include: { vehicle: true, driver: true },
@@ -448,7 +385,7 @@ app.get("/api/documents/:id", requireAuth, requireActive, async (req, res) => {
   res.json({ document });
 });
 
-app.post("/api/documents", requireAuth, requireActive, upload.single("file"), async (req, res) => {
+app.post("/api/documents", requireAuth, upload.single("file"), async (req, res) => {
   try {
     const title = String(req.body.title ?? "").trim();
     const type = oneOf(String(req.body.type ?? "other"), DOCUMENT_TYPES, "other");
@@ -499,7 +436,7 @@ app.post("/api/documents", requireAuth, requireActive, upload.single("file"), as
   }
 });
 
-app.patch("/api/documents/:id", requireAuth, requireActive, upload.single("file"), async (req, res) => {
+app.patch("/api/documents/:id", requireAuth, upload.single("file"), async (req, res) => {
   const existing = await prisma.document.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
   });
@@ -538,7 +475,7 @@ app.patch("/api/documents/:id", requireAuth, requireActive, upload.single("file"
   res.json({ document });
 });
 
-app.post("/api/documents/:id/renew", requireAuth, requireActive, async (req, res) => {
+app.post("/api/documents/:id/renew", requireAuth, async (req, res) => {
   const doc = await prisma.document.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
   });
@@ -565,7 +502,7 @@ app.post("/api/documents/:id/renew", requireAuth, requireActive, async (req, res
   res.json({ document });
 });
 
-app.delete("/api/documents/:id", requireAuth, requireActive, async (req, res) => {
+app.delete("/api/documents/:id", requireAuth, async (req, res) => {
   const doc = await prisma.document.findFirst({
     where: { id: req.params.id, companyId: req.companyId },
   });
@@ -589,34 +526,6 @@ app.get("/api/files/:name", requireAuth, (req, res) => {
       if (!doc) return res.status(404).json({ error: "Not found" });
       res.sendFile(filePath);
     });
-});
-
-// ---------- Billing ----------
-app.get("/api/billing", requireAuth, async (req, res) => {
-  const company = await prisma.company.findUnique({ where: { id: req.companyId } });
-  res.json({
-    company: publicCompany(company),
-    access: hasAccess(company),
-    lemonConfigured: isLemonConfigured(),
-  });
-});
-
-app.post("/api/billing/checkout", requireAuth, async (req, res) => {
-  try {
-    const company = await prisma.company.findUnique({ where: { id: req.companyId } });
-    const url = buildCheckoutUrl(company);
-    res.json({ url });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.post("/api/billing/portal", requireAuth, async (req, res) => {
-  const company = await prisma.company.findUnique({ where: { id: req.companyId } });
-  if (!company?.lsSubscriptionId) return res.status(400).json({ error: "No subscription" });
-  const url = await getCustomerPortalUrl(company.lsSubscriptionId);
-  if (!url) return res.status(500).json({ error: "Portal unavailable" });
-  res.json({ url });
 });
 
 app.get("/api/meta", (_req, res) => {

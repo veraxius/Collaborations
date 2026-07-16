@@ -61,26 +61,26 @@ export function ResultsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Análisis Completado</DialogTitle>
+          <DialogTitle className="text-2xl">Analysis Completed</DialogTitle>
           <DialogDescription>
-            Resultados del análisis para <strong>{companyName}</strong>
+            Analysis results for <strong>{companyName}</strong>
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
-          {/* Información de la Empresa */}
+          {/* Company Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Información de la Empresa</CardTitle>
+              <CardTitle>Company Information</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Nombre</p>
+                  <p className="text-sm font-medium text-muted-foreground">Name</p>
                   <p className="text-lg font-semibold">{companyName}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Sitio Web</p>
+                  <p className="text-sm font-medium text-muted-foreground">Website</p>
                   <p className="text-lg font-semibold">{website}</p>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export function ResultsDialog({
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Análisis SEO</CardTitle>
+                <CardTitle>SEO Analysis</CardTitle>
                 <Badge
                   variant={
                     seoAnalysis.seoScore >= 8
@@ -118,22 +118,22 @@ export function ResultsDialog({
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Título</p>
+                  <p className="text-sm font-medium">Title</p>
                   <p className="text-sm text-muted-foreground">{seoAnalysis.title}</p>
                   <div className="flex items-center gap-2">
                     {seoAnalysis.title.length >= 30 && seoAnalysis.title.length <= 60 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Longitud óptima
+                        Optimal length
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
-                        {seoAnalysis.title.length < 30 ? "Muy corto" : "Muy largo"}
+                        {seoAnalysis.title.length < 30 ? "Too short" : "Too long"}
                       </Badge>
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {seoAnalysis.title.length} caracteres
+                      {seoAnalysis.title.length} characters
                     </span>
                   </div>
                 </div>
@@ -148,98 +148,98 @@ export function ResultsDialog({
                     seoAnalysis.metaDescription.length <= 160 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Longitud óptima
+                        Optimal length
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
                         {seoAnalysis.metaDescription.length < 120
-                          ? "Muy corta"
-                          : "Muy larga"}
+                          ? "Too short"
+                          : "Too long"}
                       </Badge>
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {seoAnalysis.metaDescription.length} caracteres
+                      {seoAnalysis.metaDescription.length} characters
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">Encabezados H1</p>
+                  <p className="text-sm font-medium">H1 Headings</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-lg font-bold">{seoAnalysis.h1Count}</span>
                     {seoAnalysis.h1Count === 1 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Óptimo
+                        Optimal
                       </Badge>
                     ) : seoAnalysis.h1Count === 0 ? (
                       <Badge variant="destructive" className="text-xs">
                         <XCircle className="h-3 w-3 mr-1" />
-                        Falta H1
+                        Missing H1
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
-                        Múltiples H1
+                        Multiple H1s
                       </Badge>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">Encabezados H2</p>
+                  <p className="text-sm font-medium">H2 Headings</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-lg font-bold">{seoAnalysis.h2Count}</span>
                     {seoAnalysis.h2Count >= 2 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Buena estructura
+                        Good structure
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
-                        Pocos H2
+                        Few H2s
                       </Badge>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">Imágenes sin Alt</p>
+                  <p className="text-sm font-medium">Images without Alt</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-lg font-bold">{seoAnalysis.imagesWithoutAlt}</span>
                     {seoAnalysis.imagesWithoutAlt === 0 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Todas tienen alt
+                        All have alt
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
-                        Requieren alt
+                        Alt required
                       </Badge>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">Enlaces Internos</p>
+                  <p className="text-sm font-medium">Internal Links</p>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-lg font-bold">{seoAnalysis.internalLinks}</span>
                     {seoAnalysis.internalLinks >= 10 ? (
                       <Badge variant="success" className="text-xs">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
-                        Excelente
+                        Excellent
                       </Badge>
                     ) : seoAnalysis.internalLinks >= 5 ? (
                       <Badge variant="secondary" className="text-xs">
-                        Bueno
+                        Good
                       </Badge>
                     ) : (
                       <Badge variant="warning" className="text-xs">
                         <AlertCircle className="h-3 w-3 mr-1" />
-                        Pocos enlaces
+                        Few links
                       </Badge>
                     )}
                   </div>
@@ -252,7 +252,7 @@ export function ResultsDialog({
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Análisis de Rendimiento</CardTitle>
+                <CardTitle>Performance Analysis</CardTitle>
                 <Badge
                   variant={
                     performanceAnalysis.performanceScore >= 90
@@ -266,7 +266,7 @@ export function ResultsDialog({
                 </Badge>
               </div>
               <CardDescription>
-                Análisis realizado con Google PageSpeed Insights
+                Analysis performed with Google PageSpeed Insights
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -288,15 +288,15 @@ export function ResultsDialog({
                 <p className="text-xs text-muted-foreground mt-2">
                   {performanceAnalysis.performanceScore >= 90 ? (
                     <span className="text-green-600 font-medium">
-                      ✅ Excelente: Tu sitio tiene un rendimiento óptimo
+                      ✅ Excellent: Your site has optimal performance
                     </span>
                   ) : performanceAnalysis.performanceScore >= 50 ? (
                     <span className="text-yellow-600 font-medium">
-                      ⚠️ Mejorable: Hay oportunidades de optimización
+                      ⚠️ Could be better: There are optimization opportunities
                     </span>
                   ) : (
                     <span className="text-red-600 font-medium">
-                      ❌ Necesita Mejoras: El rendimiento es bajo y requiere atención
+                      ❌ Needs Improvement: Performance is low and requires attention
                     </span>
                   )}
                 </p>
@@ -304,16 +304,16 @@ export function ResultsDialog({
             </CardContent>
           </Card>
 
-          {/* Recomendaciones de IA */}
+          {/* AI Recommendations */}
           {aiRecommendations && (
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
-                  <CardTitle>Recomendaciones de IA</CardTitle>
+                  <CardTitle>AI Recommendations</CardTitle>
                 </div>
                 <CardDescription>
-                  Recomendaciones generadas por Google Gemini basadas en el análisis SEO
+                  Recommendations generated by Google Gemini based on the SEO analysis
                 </CardDescription>
               </CardHeader>
               <CardContent>

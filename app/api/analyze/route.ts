@@ -8,21 +8,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { domain } = body
 
-    // Validar que se proporcionó el dominio
+    // Validate that a domain was provided
     if (!domain || typeof domain !== "string" || domain.trim() === "") {
       return NextResponse.json(
-        { error: "El campo 'domain' es requerido" },
+        { error: "The 'domain' field is required" },
         { status: 400 }
       )
     }
 
-    // Analizar SEO y Performance en paralelo para mayor eficiencia
+    // Analyze SEO and Performance in parallel for better efficiency
     const [seoAnalysis, performanceAnalysis] = await Promise.all([
       analyzeSEO(domain),
       analyzePerformance(domain),
     ])
 
-    // Generar recomendaciones de IA basadas en el análisis SEO
+    // Generate AI recommendations based on the SEO analysis
     const aiRecommendations = await analyzeSEOWithAI(seoAnalysis)
 
     return NextResponse.json(
@@ -34,12 +34,12 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error("Error en /api/analyze:", error)
+    console.error("Error in /api/analyze:", error)
     
     return NextResponse.json(
       {
-        error: "Error al analizar el sitio",
-        message: error instanceof Error ? error.message : "Error desconocido",
+        error: "Error analyzing the site",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     )

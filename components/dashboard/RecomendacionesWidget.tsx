@@ -40,13 +40,13 @@ export function RecomendacionesWidget() {
       }
 
       if (!response.ok || !body.ok || !body.data) {
-        throw new Error(body.error || "No pudimos cargar recomendaciones")
+        throw new Error(body.error || "We couldn't load recommendations")
       }
 
       setItems(body.data.slice(0, 3))
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No pudimos cargar recomendaciones"
+        caughtError instanceof Error ? caughtError.message : "We couldn't load recommendations"
       setError(message)
     } finally {
       setLoading(false)
@@ -63,17 +63,20 @@ export function RecomendacionesWidget() {
       const response = await fetch("/api/ai/analizar", { method: "POST" })
       const body = (await response.json()) as { ok?: boolean; error?: string }
       if (!response.ok || !body.ok) {
-        throw new Error(body.error || "No se pudo analizar la empresa")
+        throw new Error(body.error || "The company could not be analyzed")
       }
       window.location.reload()
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No se pudo analizar la empresa"
+        caughtError instanceof Error ? caughtError.message : "The company could not be analyzed"
       setError(message)
     } finally {
       setRunning(false)
     }
   }
+
+  // API returns Spanish enum values; map them to English for display.
+  const levelLabel: Record<string, string> = { alto: "high", medio: "medium", bajo: "low" }
 
   const impactClass = (impacto: Recomendacion["impacto"]) => {
     if (impacto === "alto") return "bg-[rgba(10,123,107,0.1)] text-[var(--teal)]"
@@ -108,13 +111,13 @@ export function RecomendacionesWidget() {
     <section className="space-y-2">
       <div className="flex items-center justify-between">
         <h3 className="font-display text-[20px] tracking-[-0.02em] text-[var(--ink)]">
-          Mejoras prioritarias
+          Priority improvements
         </h3>
         <Link
           href="/dashboard/mejoras"
           className="text-[13px] text-[rgba(13,13,15,0.5)] underline underline-offset-[3px]"
         >
-          Ver todas →
+          View all →
         </Link>
       </div>
 
@@ -126,22 +129,22 @@ export function RecomendacionesWidget() {
         </div>
       ) : error ? (
         <div className="rounded-[10px] border border-[var(--border)] bg-white p-5">
-          <p className="mb-3 text-sm text-[var(--ink-60)]">No pudimos cargar recomendaciones</p>
+          <p className="mb-3 text-sm text-[var(--ink-60)]">We couldn't load recommendations</p>
           <Button variant="outline" onClick={load}>
-            Reintentar
+            Retry
           </Button>
         </div>
       ) : isEmpty ? (
         <div className="rounded-[10px] border border-[var(--border)] bg-white p-6 text-center">
           <div className="mx-auto mb-3 h-12 w-12 rounded-lg border-2 border-dashed border-[var(--border)]" />
           <p className="text-sm font-medium text-[var(--ink)]">
-            Todavía no tenemos recomendaciones para tu empresa
+            We don't have recommendations for your company yet
           </p>
           <p className="mb-4 mt-1 text-xs text-[var(--ink-60)]">
-            Hacé tu primer análisis para ver tus mejoras
+            Run your first analysis to see your improvements
           </p>
           <Button onClick={analyze} disabled={running}>
-            {running ? "Analizando..." : "Analizar mi empresa"}
+            {running ? "Analyzing..." : "Analyze my company"}
           </Button>
         </div>
       ) : (
@@ -169,10 +172,10 @@ export function RecomendacionesWidget() {
 
               <div className="flex shrink-0 flex-col gap-[6px]">
                 <span className={`rounded-[20px] px-[9px] py-[3px] text-[11px] font-medium ${impactClass(item.impacto)}`}>
-                  Impacto {item.impacto}
+                  Impact {levelLabel[item.impacto] ?? item.impacto}
                 </span>
                 <span className={`rounded-[20px] px-[9px] py-[3px] text-[11px] font-medium ${effortClass(item.esfuerzo)}`}>
-                  Esfuerzo {item.esfuerzo}
+                  Effort {levelLabel[item.esfuerzo] ?? item.esfuerzo}
                 </span>
               </div>
             </article>

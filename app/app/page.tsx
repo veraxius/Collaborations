@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ScoreRing } from "@/components/charts";
+import { FleetChat } from "@/components/fleet-chat";
 import { api } from "@/lib/api";
 import {
   daysUntil,
@@ -124,7 +125,11 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-3">
+      <div className="mt-10">
+        <FleetChat />
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <h2 className="text-lg font-semibold tracking-tight">Needs attention</h2>
           {attention.length === 0 ? (

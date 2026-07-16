@@ -7,24 +7,24 @@ import { FileText, Download } from "lucide-react"
 const reports = [
   {
     id: 1,
-    title: "Reporte Mensual - Enero 2024",
-    description: "Análisis completo del rendimiento del mes",
+    title: "Monthly Report - January 2024",
+    description: "Complete analysis of the month's performance",
     date: "2024-01-31",
-    type: "Mensual"
+    type: "Monthly"
   },
   {
     id: 2,
-    title: "Análisis SEO - Semana 4",
-    description: "Reporte semanal de métricas SEO",
+    title: "SEO Analysis - Week 4",
+    description: "Weekly SEO metrics report",
     date: "2024-01-28",
-    type: "Semanal"
+    type: "Weekly"
   },
   {
     id: 3,
-    title: "Comparativa de Competidores",
-    description: "Análisis comparativo con competidores principales",
+    title: "Competitor Comparison",
+    description: "Comparative analysis with main competitors",
     date: "2024-01-25",
-    type: "Especial"
+    type: "Special"
   },
 ]
 
@@ -33,14 +33,14 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Reportes</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Reports</h1>
           <p className="text-muted-foreground">
-            Genera y descarga reportes de análisis
+            Generate and download analysis reports
           </p>
         </div>
         <Button>
           <FileText className="mr-2 h-4 w-4" />
-          Generar Nuevo Reporte
+          Generate New Report
         </Button>
       </div>
 
@@ -60,8 +60,8 @@ export default function ReportsPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <span>Fecha: {report.date}</span>
-                <span>Tipo: {report.type}</span>
+                <span>Date: {report.date}</span>
+                <span>Type: {report.type}</span>
               </div>
             </CardContent>
           </Card>

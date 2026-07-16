@@ -204,7 +204,7 @@ export default function DriverDetailPage() {
                       {documentTypeLabel(doc.type)} · expires {formatDate(doc.expiresAt)}
                     </p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                     <div className="text-right">
                       <StatusBadge status={expiryStatus(doc.expiresAt)} />
                       <p className="mt-1 text-xs tabular-nums text-neutral-400">
@@ -220,7 +220,7 @@ export default function DriverDetailPage() {
         )}
       </div>
 
-      <div className="card mt-10 flex items-center justify-between border-red-100">
+      <div className="card mt-10 flex flex-wrap items-center justify-between gap-3 border-red-100">
         <div>
           <p className="font-medium text-red-600">Delete this driver</p>
           <p className="text-sm text-neutral-400">

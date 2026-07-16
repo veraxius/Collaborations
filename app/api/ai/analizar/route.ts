@@ -79,7 +79,7 @@ export async function POST() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -114,24 +114,24 @@ export async function POST() {
       )
       const fullPath = `${user.id}/${file.name}`
 
-      // Word y Excel binarios — no intentar leer
+      // Binary Word and Excel files — do not attempt to read
       if (isWord) {
-        fragments.push(`[${file.name}] Documento Word subido por el usuario.`)
+        fragments.push(`[${file.name}] Word document uploaded by the user.`)
         continue
       }
       if (isExcel) {
-        fragments.push(`[${file.name}] Documento Excel subido por el usuario.`)
+        fragments.push(`[${file.name}] Excel document uploaded by the user.`)
         continue
       }
 
-      // Archivos de texto y PDF — intentar leer
+      // Text files and PDFs — attempt to read
       if (isText || isPdf) {
         const { data: blobData, error: downloadError } = await supabase.storage
           .from("documentos")
           .download(fullPath)
 
         if (downloadError) {
-          fragments.push(`[${file.name}] No se pudo leer el archivo.`)
+          fragments.push(`[${file.name}] The file could not be read.`)
           continue
         }
 
@@ -142,30 +142,30 @@ export async function POST() {
           if (isReadableText(sanitized)) {
             fragments.push(`[${file.name}]\n${sanitized}`)
           } else {
-            // PDF con contenido binario ilegible — no mandarlo al prompt
+            // PDF with unreadable binary content — do not send it to the prompt
             fragments.push(
               isPdf
-                ? `[${file.name}] Documento PDF subido por el usuario.`
-                : `[${file.name}] Archivo subido por el usuario.`
+                ? `[${file.name}] PDF document uploaded by the user.`
+                : `[${file.name}] File uploaded by the user.`
             )
           }
         } catch {
           fragments.push(
             isPdf
-              ? `[${file.name}] Documento PDF subido por el usuario.`
-              : `[${file.name}] Archivo subido por el usuario.`
+              ? `[${file.name}] PDF document uploaded by the user.`
+              : `[${file.name}] File uploaded by the user.`
           )
         }
         continue
       }
 
-      fragments.push(`[${file.name}] Archivo subido por el usuario.`)
+      fragments.push(`[${file.name}] File uploaded by the user.`)
     }
 
     const contenido_documentos =
       fragments.length > 0
         ? fragments.join("\n\n")
-        : "No hay documentos disponibles."
+        : "No documents available."
 
     const empresa_data = profile?.empresa_data ?? {}
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -177,55 +177,56 @@ export async function POST() {
       messages: [
         {
           role: "system",
-          content: `Sos un consultor de negocios experto en optimización y automatización de procesos para pequeñas empresas.
-Analizás la información de una empresa y generás recomendaciones concretas, priorizadas y accionables.
-Siempre respondés en español.
-Respondés SOLO en JSON válido, sin texto extra, sin markdown, sin backticks.`,
+          content: `You are a business consultant who is an expert in process optimization and automation for small companies.
+You analyze a company's information and generate concrete, prioritized, actionable recommendations.
+Always respond in English.
+Reply ONLY with valid JSON, no extra text, no markdown, no backticks.`,
         },
         {
           role: "user",
-          content: `Analizá esta empresa en profundidad y generá exactamente 5 recomendaciones de mejora priorizadas.
+          content: `Analyze this company in depth and generate exactly 5 prioritized improvement recommendations.
 
-INFORMACIÓN DE LA EMPRESA:
-Nombre: ${ed?.nombre ?? "No especificado"}
-Rubro: ${ed?.rubro ?? "No especificado"}
-Descripción: ${ed?.descripcion ?? "No especificada"}
-País: ${ed?.pais ?? "No especificado"}
-Años en el mercado: ${ed?.antiguedad ?? "No especificado"}
-Cantidad de empleados: ${ed?.empleados ?? "No especificado"}
-Sitio web: ${ed?.web ?? "No tiene"}
+COMPANY INFORMATION:
+Name: ${ed?.nombre ?? "Not specified"}
+Industry: ${ed?.rubro ?? "Not specified"}
+Description: ${ed?.descripcion ?? "Not specified"}
+Country: ${ed?.pais ?? "Not specified"}
+Years in the market: ${ed?.antiguedad ?? "Not specified"}
+Number of employees: ${ed?.empleados ?? "Not specified"}
+Website: ${ed?.web ?? "None"}
 
-Áreas de la empresa: ${JSON.stringify(ed?.areas ?? [])}
-Herramientas que usan hoy: ${JSON.stringify(ed?.herramientas ?? [])}
-Objetivos declarados: ${JSON.stringify(ed?.objetivos ?? [])}
-Principal problema a resolver: ${ed?.objetivo_principal ?? "No especificado"}
-Tiempo esperado para ver resultados: ${ed?.tiempo ?? "No especificado"}
+Company areas: ${JSON.stringify(ed?.areas ?? [])}
+Tools they use today: ${JSON.stringify(ed?.herramientas ?? [])}
+Stated goals: ${JSON.stringify(ed?.objetivos ?? [])}
+Main problem to solve: ${ed?.objetivo_principal ?? "Not specified"}
+Expected time to see results: ${ed?.tiempo ?? "Not specified"}
 
-DOCUMENTOS Y PROCESOS SUBIDOS:
+UPLOADED DOCUMENTS AND PROCESSES:
 ${contenido_documentos}
 
-INSTRUCCIONES:
-- Usá los objetivos declarados como guía principal
-- Considerá las herramientas que ya usan
-- Tené en cuenta el rubro para dar recomendaciones relevantes
-- El score debe reflejar la madurez operativa real
-- Las recomendaciones deben ser accionables para ese tamaño y rubro
-- El primer paso debe ser realizable esta semana sin costo o costo mínimo
+INSTRUCTIONS:
+- Use the stated goals as the main guide
+- Consider the tools they already use
+- Take the industry into account to give relevant recommendations
+- The score must reflect the company's real operational maturity
+- Recommendations must be actionable for that size and industry
+- The first step must be doable this week at no or minimal cost
+- Write all text values in English, but keep the exact allowed values shown below for "impacto", "esfuerzo" and "categoria"
 
-Respondé SOLO con este JSON, sin texto extra, sin markdown, sin backticks:
+Reply ONLY with this JSON, no extra text, no markdown, no backticks:
 {
-  "empresa": "nombre de la empresa",
-  "resumen": "resumen ejecutivo de 2 oraciones",
-  "score": número del 1 al 100,
+  "empresa": "company name",
+  "resumen": "2-sentence executive summary in English",
+  "score": number from 1 to 100,
   "recomendaciones": [
     {
       "id": 1,
-      "titulo": "título corto máximo 6 palabras",
-      "descripcion": "2-3 oraciones explicando el problema y solución",
-      "impacto": "alto",
-      "esfuerzo": "bajo",
-      "categoria": "operaciones",
-      "accion": "primer paso concreto esta semana"
+      "titulo": "short title, max 6 words, in English",
+      "descripcion": "2-3 sentences in English explaining the problem and solution",
+      "impacto": "alto" | "medio" | "bajo",
+      "esfuerzo": "alto" | "medio" | "bajo",
+      "categoria": "operaciones" | "ventas" | "finanzas" | "rrhh" | "tecnologia" | "comunicacion",
+      "accion": "concrete first step for this week, in English"
     }
   ]
 }`,
@@ -248,7 +249,7 @@ Respondé SOLO con este JSON, sin texto extra, sin markdown, sin backticks:
 
     return NextResponse.json({ ok: true, data: resultado })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

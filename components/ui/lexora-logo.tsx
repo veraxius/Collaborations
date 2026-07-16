@@ -14,16 +14,16 @@ function LexoraIcon({ size = 32, color = "#0D0D0F" }: { size?: number; color?: s
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Barra izquierda — más baja */}
+      {/* Left bar — shortest */}
       <rect x="2" y="28" width="8" height="16" fill={color} rx="1" />
 
-      {/* Barra del medio — mediana */}
+      {/* Middle bar — medium */}
       <rect x="14" y="20" width="8" height="24" fill={color} rx="1" />
 
-      {/* Barra derecha — más alta */}
+      {/* Right bar — tallest */}
       <rect x="26" y="12" width="8" height="32" fill={color} rx="1" />
 
-      {/* Línea diagonal de la flecha */}
+      {/* Diagonal line of the arrow */}
       <path
         d="M8 32 L36 6"
         stroke={color}
@@ -31,7 +31,7 @@ function LexoraIcon({ size = 32, color = "#0D0D0F" }: { size?: number; color?: s
         strokeLinecap="round"
       />
 
-      {/* Punta de la flecha */}
+      {/* Arrow head */}
       <path
         d="M28 4 L38 4 L38 14"
         stroke={color}

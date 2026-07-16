@@ -6,18 +6,18 @@ export default function ReportesPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="font-display text-5xl">Reportes</h1>
+        <h1 className="font-display text-5xl">Reports</h1>
         <p className="text-[13px] text-[var(--ink-60)]">
-          Generá reportes ejecutivos con indicadores y evolución.
+          Generate executive reports with indicators and trends.
         </p>
       </div>
       <Card className="lex-card">
         <CardHeader>
-          <CardTitle>Historial de reportes</CardTitle>
+          <CardTitle>Report history</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-[var(--ink-60)]">
-            Próximamente disponible en este nuevo módulo unificado.
+            Coming soon in this new unified module.
           </p>
         </CardContent>
       </Card>

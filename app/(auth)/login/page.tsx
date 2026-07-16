@@ -58,7 +58,7 @@ export default function LoginPage() {
       <p className="mt-4 text-center text-sm text-neutral-600">
         New to FleetGuard?{" "}
         <Link className="font-medium text-accent-600" href="/signup">
-          Start free trial
+          Sign up free
         </Link>
       </p>
     </div>

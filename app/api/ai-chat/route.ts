@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import Groq from "groq-sdk"
 
-export const dynamic = "force-dynamic" // 👈 CLAVE
+export const dynamic = "force-dynamic" // 👈 KEY
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     if (!message || typeof message !== "string") {
       return NextResponse.json(
-        { error: "El campo 'message' es requerido" },
+        { error: "The 'message' field is required" },
         { status: 400 }
       )
     }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
         role: "system",
-        content: "Eres un asistente experto en SEO, análisis web y optimización de sitios. Responde siempre en español de manera clara, concisa y profesional.",
+        content: "You are an assistant who is an expert in SEO, web analysis and site optimization. Always respond in English in a clear, concise and professional manner.",
       },
     ]
 
@@ -57,17 +57,17 @@ export async function POST(request: NextRequest) {
 
     const text =
       chatCompletion.choices[0]?.message?.content ||
-      "No se pudo generar una respuesta."
+      "A response could not be generated."
 
     return NextResponse.json({ response: text }, { status: 200 })
 
   } catch (error) {
-    console.error("Error en /api/ai-chat:", error)
+    console.error("Error in /api/ai-chat:", error)
 
     return NextResponse.json(
       {
-        error: "Error al procesar el mensaje",
-        message: error instanceof Error ? error.message : "Error desconocido",
+        error: "Error processing the message",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     )

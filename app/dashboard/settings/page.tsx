@@ -10,35 +10,35 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configuración</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">
-          Gestiona la configuración de tu cuenta y preferencias
+          Manage your account settings and preferences
         </p>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="profile">Perfil</TabsTrigger>
-          <TabsTrigger value="notifications">Notificaciones</TabsTrigger>
-          <TabsTrigger value="integrations">Integraciones</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="integrations">Integrations</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Información del Perfil</CardTitle>
-              <CardDescription>Actualiza tu información personal</CardDescription>
+              <CardTitle>Profile Information</CardTitle>
+              <CardDescription>Update your personal information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre</Label>
-                <Input id="name" placeholder="Tu nombre" />
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Your name" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="tu@email.com" />
+                <Input id="email" type="email" placeholder="you@email.com" />
               </div>
-              <Button>Guardar Cambios</Button>
+              <Button>Save Changes</Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -46,11 +46,11 @@ export default function SettingsPage() {
         <TabsContent value="notifications" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Preferencias de Notificaciones</CardTitle>
-              <CardDescription>Configura cómo recibes las notificaciones</CardDescription>
+              <CardTitle>Notification Preferences</CardTitle>
+              <CardDescription>Configure how you receive notifications</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">Configuración de notificaciones...</p>
+              <p className="text-muted-foreground">Notification settings...</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -58,11 +58,11 @@ export default function SettingsPage() {
         <TabsContent value="integrations" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Integraciones</CardTitle>
-              <CardDescription>Conecta con otras herramientas</CardDescription>
+              <CardTitle>Integrations</CardTitle>
+              <CardDescription>Connect with other tools</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">Integraciones disponibles...</p>
+              <p className="text-muted-foreground">Available integrations...</p>
             </CardContent>
           </Card>
         </TabsContent>

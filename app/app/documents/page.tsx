@@ -161,7 +161,7 @@ function DocumentsContent() {
               return (
                 <div
                   key={doc.id}
-                  className="flex flex-wrap items-center justify-between gap-4 px-6 py-4"
+                  className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6"
                 >
                   <div className="min-w-0 flex-1">
                     <Link
@@ -192,7 +192,7 @@ function DocumentsContent() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                     <div className="text-right">
                       <StatusBadge status={expiryStatus(doc.expiresAt)} />
                       <p className="mt-1 text-xs tabular-nums text-neutral-400">

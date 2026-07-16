@@ -12,9 +12,9 @@ interface Problem {
 }
 
 const problems: Problem[] = [
-  { title: "Velocidad Web Baja", severity: "critical", impact: "Alto", description: "El tiempo de carga promedio es de 4.2s, afectando la experiencia del usuario y el SEO." },
-  { title: "SEO Débil", severity: "high", impact: "Medio-Alto", description: "Faltan meta tags optimizados y estructura de datos estructurados." },
-  { title: "Abandono de Carrito Alto", severity: "high", impact: "Alto", description: "Tasa de abandono del 68%, principalmente en el proceso de checkout." },
+  { title: "Slow Website Speed", severity: "critical", impact: "High", description: "Average load time is 4.2s, affecting user experience and SEO." },
+  { title: "Weak SEO", severity: "high", impact: "Medium-High", description: "Missing optimized meta tags and structured data markup." },
+  { title: "High Cart Abandonment", severity: "high", impact: "High", description: "68% abandonment rate, mainly in the checkout process." },
 ]
 
 const sans = { fontFamily: "'Inter', sans-serif" }
@@ -34,10 +34,10 @@ export function ProblemsSection() {
           style={{ ...sans, fontWeight: 500, fontSize: "16px" }}
         >
           <AlertTriangle className="h-5 w-5" />
-          Problemas Detectados
+          Detected Problems
         </CardTitle>
         <CardDescription style={{ ...sans, fontSize: "13px" }}>
-          Problemas críticos que requieren atención inmediata
+          Critical problems that require immediate attention
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -56,7 +56,7 @@ export function ProblemsSection() {
                 </div>
                 <p style={{ ...sans, fontSize: "13px", color: "rgba(13,13,15,0.5)" }}>{p.description}</p>
                 <p style={{ ...sans, fontSize: "12px", color: "rgba(13,13,15,0.4)" }}>
-                  Impacto: <strong style={{ fontWeight: 500 }}>{p.impact}</strong>
+                  Impact: <strong style={{ fontWeight: 500 }}>{p.impact}</strong>
                 </p>
               </div>
             </div>

@@ -33,7 +33,7 @@ export default function RegisterPage() {
           <Logo size={28} />
         </Link>
         <h1 className="mt-5 text-2xl font-semibold tracking-tight">Create your account</h1>
-        <p className="mt-1.5 text-sm text-neutral-500">14-day free trial. No credit card required.</p>
+        <p className="mt-1.5 text-sm text-neutral-500">Free forever. No credit card required.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -63,7 +63,7 @@ export default function RegisterPage() {
         )}
 
         <button className="btn-primary w-full py-2.5" disabled={pending}>
-          {pending ? "Please wait…" : "Start free trial"}
+          {pending ? "Please wait…" : "Create account"}
         </button>
       </form>
 

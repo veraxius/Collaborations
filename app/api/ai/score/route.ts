@@ -50,7 +50,7 @@ export async function GET() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data } = await supabase
@@ -77,7 +77,7 @@ export async function GET() {
       } satisfies ScoreResult,
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
@@ -96,7 +96,7 @@ export async function POST() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -119,7 +119,7 @@ export async function POST() {
 
     if (analisisError || !latestAnalisis) {
       return NextResponse.json(
-        { error: "No hay análisis previo para calcular el score" },
+        { error: "No previous analysis available to compute the score" },
         { status: 400 }
       )
     }
@@ -133,31 +133,34 @@ export async function POST() {
       messages: [
         {
           role: "system",
-          content: `Sos un consultor de negocios experto en 
-      analizar pequeñas empresas. Respondés SOLO en JSON 
-      válido, sin texto extra, sin markdown, sin backticks.
-      Siempre en español.`,
+          content: `You are a business consultant who is an expert 
+      in analyzing small companies. Reply ONLY with valid JSON, 
+      no extra text, no markdown, no backticks.
+      Always respond in English.`,
         },
         {
           role: "user",
-          content: `Analizá esta empresa y generá un score de 
-      madurez operativa.
+          content: `Analyze this company and generate an operational 
+      maturity score.
 
-      Datos de la empresa:
+      Company data:
       ${JSON.stringify(empresa_data)}
 
-      Análisis previo:
+      Previous analysis:
       ${JSON.stringify(ultimo_analisis)}
 
-      Respondé SOLO con este JSON exacto:
+      Write "resumen" in English, but keep the exact allowed 
+      values shown below for "nivel" and "color".
+
+      Reply ONLY with this exact JSON:
       {
-        "score": número del 1 al 100,
-        "variacion": número positivo o negativo vs mes anterior 
-                     (si no hay historial ponés 0),
+        "score": number from 1 to 100,
+        "variacion": positive or negative number vs the previous month 
+                     (use 0 if there is no history),
         "nivel": "inicial" | "en desarrollo" | "consolidado" | 
                  "avanzado" | "excelente",
-        "resumen": "2 oraciones máximo sobre el estado actual 
-                   de la empresa",
+        "resumen": "max 2 sentences in English about the company's 
+                   current state",
         "color": "rojo" | "amarillo" | "verde"
       }`,
         },
@@ -190,7 +193,7 @@ export async function POST() {
 
     return NextResponse.json({ ok: true, data: resultado })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

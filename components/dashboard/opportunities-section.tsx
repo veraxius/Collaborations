@@ -13,9 +13,9 @@ interface Opportunity {
 }
 
 const opportunities: Opportunity[] = [
-  { title: "Nuevas Keywords SEO", category: "SEO", potential: "Alto", description: "15 keywords de alto volumen y baja competencia identificadas." },
-  { title: "Optimizar Páginas", category: "Performance", potential: "Medio", description: "3 páginas principales pueden mejorar su velocidad en un 40%." },
-  { title: "Mejorar Conversión", category: "Marketing", potential: "Alto", description: "A/B testing en CTA puede aumentar conversión en un 25%." },
+  { title: "New SEO Keywords", category: "SEO", potential: "High", description: "15 high-volume, low-competition keywords identified." },
+  { title: "Optimize Pages", category: "Performance", potential: "Medium", description: "3 main pages can improve their speed by 40%." },
+  { title: "Improve Conversion", category: "Marketing", potential: "High", description: "A/B testing on CTAs can increase conversion by 25%." },
 ]
 
 const sans = { fontFamily: "'Inter', sans-serif" }
@@ -29,10 +29,10 @@ export function OpportunitiesSection() {
           style={{ ...sans, fontWeight: 500, fontSize: "16px" }}
         >
           <Sparkles className="h-5 w-5" />
-          Oportunidades
+          Opportunities
         </CardTitle>
         <CardDescription style={{ ...sans, fontSize: "13px" }}>
-          Oportunidades detectadas por IA para crecer
+          Growth opportunities detected by AI
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -49,7 +49,7 @@ export function OpportunitiesSection() {
                 </div>
                 <p style={{ ...sans, fontSize: "13px", color: "rgba(13,13,15,0.5)" }}>{op.description}</p>
                 <p style={{ ...sans, fontSize: "12px", color: "rgba(13,13,15,0.4)" }}>
-                  Potencial: <strong style={{ fontWeight: 500 }}>{op.potential}</strong>
+                  Potential: <strong style={{ fontWeight: 500 }}>{op.potential}</strong>
                 </p>
               </div>
               <Button variant="ghost" size="icon">

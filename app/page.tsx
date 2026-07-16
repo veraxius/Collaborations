@@ -36,11 +36,11 @@ export default function LandingPage() {
   return (
     <main>
       <header className="glass-header sticky top-0 z-40">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <span className="shrink-0">
             <Logo size={26} className="text-[15px]" />
           </span>
-          <nav className="flex shrink-0 items-center justify-end gap-2">
+          <nav className="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
             {loggedIn ? (
               <Link href="/app" className="btn-primary">
                 Open dashboard
@@ -49,7 +49,7 @@ export default function LandingPage() {
               <>
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-sm text-neutral-500 transition hover:text-neutral-900"
+                  className="px-2.5 py-2 text-sm text-neutral-500 transition hover:text-neutral-900 sm:px-4"
                 >
                   Log in
                 </Link>
@@ -72,16 +72,16 @@ export default function LandingPage() {
           Insurance, inspections, licenses and permits — tracked, with an email
           before anything lapses.
         </p>
-        <div className="mt-10 flex items-center justify-center gap-6">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
           <Link href="/signup" className="btn-primary px-7 py-3 text-base">
-            Start free trial
+            Get started free
           </Link>
           <a href="#how" className="text-base font-medium text-accent-500 hover:underline">
             Learn more ›
           </a>
         </div>
         <p className="mt-5 text-sm text-neutral-400">
-          14 days free. No credit card required.
+          100% free. No credit card required.
         </p>
       </section>
 
@@ -152,14 +152,11 @@ export default function LandingPage() {
 
       <section id="pricing" className="scroll-mt-20 py-28">
         <div className="mx-auto max-w-sm px-6 text-center">
-          <h2 className="text-4xl font-semibold tracking-tight">One plan.</h2>
-          <p className="mt-3 text-lg text-neutral-500">Everything included. Cancel anytime.</p>
+          <h2 className="text-4xl font-semibold tracking-tight">Completely free.</h2>
+          <p className="mt-3 text-lg text-neutral-500">Everything included. No catch.</p>
 
           <div className="mt-12">
-            <p className="text-6xl font-semibold tracking-tight">
-              $29
-              <span className="ml-1 text-xl font-normal text-neutral-400">/mo</span>
-            </p>
+            <p className="text-6xl font-semibold tracking-tight">$0</p>
             <ul className="mt-10 space-y-4 text-[15px] text-neutral-600">
               <li>Unlimited vehicles and drivers</li>
               <li>Unlimited documents and files</li>
@@ -168,7 +165,7 @@ export default function LandingPage() {
               <li>Performance analytics and trends</li>
             </ul>
             <Link href="/signup" className="btn-primary mt-12 w-full py-3 text-base">
-              Start free trial
+              Get started free
             </Link>
           </div>
         </div>
@@ -180,7 +177,7 @@ export default function LandingPage() {
             The cheapest insurance is the reminder you didn&apos;t miss.
           </h2>
           <Link href="/signup" className="btn-primary mt-10 px-8 py-3 text-base">
-            Start 14-day free trial
+            Get started free
           </Link>
         </div>
       </section>

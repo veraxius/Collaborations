@@ -55,7 +55,7 @@ export async function POST() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -77,7 +77,7 @@ export async function POST() {
       .single<AnalisisRow>()
 
     if (analisisError || !latestAnalisis) {
-      return NextResponse.json({ error: "Sin análisis previo" }, { status: 404 })
+      return NextResponse.json({ error: "No previous analysis" }, { status: 404 })
     }
 
     const previousResult = latestAnalisis.resultado ?? {}
@@ -95,36 +95,39 @@ export async function POST() {
       messages: [
         {
           role: "system",
-          content: `Sos un consultor de negocios experto en 
-      optimización de pequeñas empresas. Generás 
-      recomendaciones concretas, priorizadas y accionables.
-      Siempre en español. Respondés SOLO en JSON válido, 
-      sin texto extra, sin markdown, sin backticks.`,
+          content: `You are a business consultant who is an expert in 
+      small business optimization. You generate concrete, 
+      prioritized, actionable recommendations.
+      Always respond in English. Reply ONLY with valid JSON, 
+      no extra text, no markdown, no backticks.`,
         },
         {
           role: "user",
-          content: `Generá exactamente 5 recomendaciones de mejora 
-      priorizadas para esta empresa.
+          content: `Generate exactly 5 prioritized improvement 
+      recommendations for this company.
 
-      Datos de la empresa:
+      Company data:
       ${JSON.stringify(empresa_data)}
 
-      Análisis previo:
+      Previous analysis:
       ${JSON.stringify(ultimo_analisis)}
 
-      Respondé SOLO con este JSON exacto:
+      Write all text values in English, but keep the exact allowed 
+      values shown below for "impacto", "esfuerzo" and "categoria".
+
+      Reply ONLY with this exact JSON:
       {
         "recomendaciones": [
           {
             "id": 1,
-            "titulo": "título corto máximo 6 palabras",
-            "descripcion": "2 oraciones: el problema y la solución",
+            "titulo": "short title, max 6 words, in English",
+            "descripcion": "2 sentences in English: the problem and the solution",
             "impacto": "alto" | "medio" | "bajo",
             "esfuerzo": "alto" | "medio" | "bajo",
             "categoria": "operaciones" | "ventas" | "finanzas" | 
                          "rrhh" | "tecnologia" | "comunicacion",
-            "accion": "primer paso concreto esta semana 
-                      máximo 10 palabras"
+            "accion": "concrete first step for this week, 
+                      max 10 words, in English"
           }
         ]
       }`,
@@ -153,7 +156,7 @@ export async function POST() {
 
     return NextResponse.json({ ok: true, data: resultado.recomendaciones })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

@@ -49,17 +49,17 @@ export default function CompanyAnalysisPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Análisis de Empresa</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Company Analysis</h1>
         <p className="text-muted-foreground">
-          Análisis detallado de tu empresa
+          Detailed analysis of your company
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Resumen</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="seo">SEO</TabsTrigger>
-          <TabsTrigger value="performance">Rendimiento</TabsTrigger>
+          <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="marketing">Marketing</TabsTrigger>
         </TabsList>
 
@@ -67,7 +67,7 @@ export default function CompanyAnalysisPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Sitio Web</CardTitle>
+                <CardTitle className="text-sm font-medium">Website</CardTitle>
                 <Globe className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -75,41 +75,41 @@ export default function CompanyAnalysisPage() {
                   {companyData?.website || "N/A"}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {companyData ? "Dominio activo" : "Sin empresa seleccionada"}
+                  {companyData ? "Active domain" : "No company selected"}
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tráfico Mensual</CardTitle>
+                <CardTitle className="text-sm font-medium">Monthly Traffic</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">45.2K</div>
-                <p className="text-xs text-muted-foreground">+12.5% vs mes anterior</p>
+                <p className="text-xs text-muted-foreground">+12.5% vs last month</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Visitas Únicas</CardTitle>
+                <CardTitle className="text-sm font-medium">Unique Visits</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">32.8K</div>
-                <p className="text-xs text-muted-foreground">+8.2% vs mes anterior</p>
+                <p className="text-xs text-muted-foreground">+8.2% vs last month</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tasa de Rebote</CardTitle>
+                <CardTitle className="text-sm font-medium">Bounce Rate</CardTitle>
                 <Building2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">42%</div>
-                <p className="text-xs text-muted-foreground">-3.1% vs mes anterior</p>
+                <p className="text-xs text-muted-foreground">-3.1% vs last month</p>
               </CardContent>
             </Card>
           </div>
@@ -122,9 +122,9 @@ export default function CompanyAnalysisPage() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle>Análisis SEO</CardTitle>
+                      <CardTitle>SEO Analysis</CardTitle>
                       <CardDescription>
-                        Métricas de optimización para motores de búsqueda
+                        Search engine optimization metrics
                       </CardDescription>
                     </div>
                     <Badge variant={companyData.seoAnalysis.seoScore >= 7 ? "success" : companyData.seoAnalysis.seoScore >= 5 ? "warning" : "destructive"}>
@@ -151,21 +151,21 @@ export default function CompanyAnalysisPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
-                          <CardTitle className="text-sm">Título</CardTitle>
+                          <CardTitle className="text-sm">Title</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
                         <p className="text-sm">{companyData.seoAnalysis.title}</p>
                         <p className="text-xs text-muted-foreground mt-2">
-                          Longitud: {companyData.seoAnalysis.title.length} caracteres
+                          Length: {companyData.seoAnalysis.title.length} characters
                           {companyData.seoAnalysis.title.length >= 30 &&
                           companyData.seoAnalysis.title.length <= 60 ? (
-                            <Badge variant="success" className="ml-2">Óptimo</Badge>
+                            <Badge variant="success" className="ml-2">Optimal</Badge>
                           ) : (
                             <Badge variant="warning" className="ml-2">
                               {companyData.seoAnalysis.title.length < 30
-                                ? "Muy corto"
-                                : "Muy largo"}
+                                ? "Too short"
+                                : "Too long"}
                             </Badge>
                           )}
                         </p>
@@ -182,15 +182,15 @@ export default function CompanyAnalysisPage() {
                       <CardContent>
                         <p className="text-sm">{companyData.seoAnalysis.metaDescription}</p>
                         <p className="text-xs text-muted-foreground mt-2">
-                          Longitud: {companyData.seoAnalysis.metaDescription.length} caracteres
+                          Length: {companyData.seoAnalysis.metaDescription.length} characters
                           {companyData.seoAnalysis.metaDescription.length >= 120 &&
                           companyData.seoAnalysis.metaDescription.length <= 160 ? (
-                            <Badge variant="success" className="ml-2">Óptimo</Badge>
+                            <Badge variant="success" className="ml-2">Optimal</Badge>
                           ) : (
                             <Badge variant="warning" className="ml-2">
                               {companyData.seoAnalysis.metaDescription.length < 120
-                                ? "Muy corta"
-                                : "Muy larga"}
+                                ? "Too short"
+                                : "Too long"}
                             </Badge>
                           )}
                         </p>
@@ -201,7 +201,7 @@ export default function CompanyAnalysisPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
-                          <CardTitle className="text-sm">Encabezados H1</CardTitle>
+                          <CardTitle className="text-sm">H1 Headings</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
@@ -210,12 +210,12 @@ export default function CompanyAnalysisPage() {
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
                           {companyData.seoAnalysis.h1Count === 1 ? (
-                            <Badge variant="success">Óptimo (1 H1)</Badge>
+                            <Badge variant="success">Optimal (1 H1)</Badge>
                           ) : companyData.seoAnalysis.h1Count === 0 ? (
-                            <Badge variant="destructive">Falta H1</Badge>
+                            <Badge variant="destructive">Missing H1</Badge>
                           ) : (
                             <Badge variant="warning">
-                              Múltiples H1 ({companyData.seoAnalysis.h1Count})
+                              Multiple H1s ({companyData.seoAnalysis.h1Count})
                             </Badge>
                           )}
                         </p>
@@ -226,7 +226,7 @@ export default function CompanyAnalysisPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
-                          <CardTitle className="text-sm">Encabezados H2</CardTitle>
+                          <CardTitle className="text-sm">H2 Headings</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
@@ -235,9 +235,9 @@ export default function CompanyAnalysisPage() {
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
                           {companyData.seoAnalysis.h2Count >= 2 ? (
-                            <Badge variant="success">Buena estructura</Badge>
+                            <Badge variant="success">Good structure</Badge>
                           ) : (
-                            <Badge variant="warning">Pocos H2</Badge>
+                            <Badge variant="warning">Few H2s</Badge>
                           )}
                         </p>
                       </CardContent>
@@ -247,7 +247,7 @@ export default function CompanyAnalysisPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <Image className="h-4 w-4 text-muted-foreground" />
-                          <CardTitle className="text-sm">Imágenes sin Alt</CardTitle>
+                          <CardTitle className="text-sm">Images Without Alt</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
@@ -256,10 +256,10 @@ export default function CompanyAnalysisPage() {
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
                           {companyData.seoAnalysis.imagesWithoutAlt === 0 ? (
-                            <Badge variant="success">Todas tienen alt</Badge>
+                            <Badge variant="success">All have alt text</Badge>
                           ) : (
                             <Badge variant="warning">
-                              Requieren atributo alt
+                              Need an alt attribute
                             </Badge>
                           )}
                         </p>
@@ -270,7 +270,7 @@ export default function CompanyAnalysisPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <Link2 className="h-4 w-4 text-muted-foreground" />
-                          <CardTitle className="text-sm">Enlaces Internos</CardTitle>
+                          <CardTitle className="text-sm">Internal Links</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
@@ -279,11 +279,11 @@ export default function CompanyAnalysisPage() {
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
                           {companyData.seoAnalysis.internalLinks >= 10 ? (
-                            <Badge variant="success">Excelente</Badge>
+                            <Badge variant="success">Excellent</Badge>
                           ) : companyData.seoAnalysis.internalLinks >= 5 ? (
-                            <Badge variant="secondary">Bueno</Badge>
+                            <Badge variant="secondary">Good</Badge>
                           ) : (
-                            <Badge variant="warning">Pocos enlaces</Badge>
+                            <Badge variant="warning">Few links</Badge>
                           )}
                         </p>
                       </CardContent>
@@ -295,14 +295,14 @@ export default function CompanyAnalysisPage() {
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle>Análisis SEO</CardTitle>
+                <CardTitle>SEO Analysis</CardTitle>
                 <CardDescription>
-                  Métricas de optimización para motores de búsqueda
+                  Search engine optimization metrics
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  No hay datos de análisis SEO disponibles. Añade una empresa para comenzar.
+                  No SEO analysis data available. Add a company to get started.
                 </p>
               </CardContent>
             </Card>
@@ -315,9 +315,9 @@ export default function CompanyAnalysisPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Rendimiento del Sitio</CardTitle>
+                    <CardTitle>Site Performance</CardTitle>
                     <CardDescription>
-                      Métricas de velocidad y rendimiento (Google PageSpeed Insights)
+                      Speed and performance metrics (Google PageSpeed Insights)
                     </CardDescription>
                   </div>
                   <Badge
@@ -349,22 +349,22 @@ export default function CompanyAnalysisPage() {
                     <p className="text-sm text-muted-foreground">
                       {companyData.performanceAnalysis.performanceScore >= 90 ? (
                         <span className="text-green-600 font-medium">
-                          ✅ Excelente: Tu sitio tiene un rendimiento óptimo
+                          ✅ Excellent: Your site has optimal performance
                         </span>
                       ) : companyData.performanceAnalysis.performanceScore >= 50 ? (
                         <span className="text-yellow-600 font-medium">
-                          ⚠️ Mejorable: Hay oportunidades de optimización
+                          ⚠️ Room for improvement: There are optimization opportunities
                         </span>
                       ) : (
                         <span className="text-red-600 font-medium">
-                          ❌ Necesita Mejoras: El rendimiento es bajo y requiere atención
+                          ❌ Needs Improvement: Performance is low and requires attention
                         </span>
                       )}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Este score se basa en el análisis de Google PageSpeed Insights y evalúa
-                      métricas como velocidad de carga, tiempo de interacción, y optimización de
-                      recursos.
+                      This score is based on Google PageSpeed Insights analysis and evaluates
+                      metrics such as load speed, time to interactive, and resource
+                      optimization.
                     </p>
                   </div>
                 </div>
@@ -373,14 +373,14 @@ export default function CompanyAnalysisPage() {
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle>Rendimiento del Sitio</CardTitle>
+                <CardTitle>Site Performance</CardTitle>
                 <CardDescription>
-                  Métricas de velocidad y rendimiento
+                  Speed and performance metrics
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  No hay datos de rendimiento disponibles. Añade una empresa para comenzar.
+                  No performance data available. Add a company to get started.
                 </p>
               </CardContent>
             </Card>
@@ -390,11 +390,11 @@ export default function CompanyAnalysisPage() {
         <TabsContent value="marketing" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Análisis de Marketing</CardTitle>
-              <CardDescription>Estrategias y métricas de marketing</CardDescription>
+              <CardTitle>Marketing Analysis</CardTitle>
+              <CardDescription>Marketing strategies and metrics</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">Análisis de marketing...</p>
+              <p className="text-muted-foreground">Marketing analysis...</p>
             </CardContent>
           </Card>
         </TabsContent>

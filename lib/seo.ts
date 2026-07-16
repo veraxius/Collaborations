@@ -12,53 +12,53 @@ export interface SEOAnalysisResult {
 }
 
 /**
- * Analiza el SEO de un sitio web
- * @param url - URL del sitio a analizar (ej: "empresa.com" o "https://empresa.com")
- * @returns Objeto con las métricas SEO analizadas
+ * Analyzes a website's SEO
+ * @param url - URL of the site to analyze (e.g. "empresa.com" or "https://empresa.com")
+ * @returns Object with the analyzed SEO metrics
  */
 export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
   try {
-    // Normalizar la URL - agregar https:// si no tiene protocolo
+    // Normalize the URL - add https:// if it has no protocol
     let normalizedUrl = url.trim()
     if (!normalizedUrl.startsWith("http://") && !normalizedUrl.startsWith("https://")) {
       normalizedUrl = `https://${normalizedUrl}`
     }
 
-    // Descargar el HTML del sitio
+    // Download the site's HTML
     const response = await axios.get(normalizedUrl, {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
       },
-      timeout: 10000, // 10 segundos de timeout
+      timeout: 10000, // 10-second timeout
       maxRedirects: 5,
     })
 
     const html = response.data
     const $ = cheerio.load(html)
 
-    // Extraer el dominio base para identificar enlaces internos
+    // Extract the base domain to identify internal links
     const urlObj = new URL(normalizedUrl)
     const baseDomain = urlObj.hostname.replace("www.", "")
 
     // 1. Title
-    const title = $("title").first().text().trim() || "Sin título"
+    const title = $("title").first().text().trim() || "No title"
 
     // 2. Meta description
     const metaDescription =
-      $('meta[name="description"]').attr("content")?.trim() || "Sin descripción"
+      $('meta[name="description"]').attr("content")?.trim() || "No description"
 
-    // 3. Cantidad de H1
+    // 3. H1 count
     const h1Count = $("h1").length
 
-    // 4. Cantidad de H2
+    // 4. H2 count
     const h2Count = $("h2").length
 
-    // 5. Imágenes sin atributo alt
+    // 5. Images without alt attribute
     const imagesWithoutAlt = $("img")
       .filter((_, el) => !$(el).attr("alt") || $(el).attr("alt")?.trim() === "")
       .length
 
-    // 6. Cantidad de enlaces internos
+    // 6. Internal link count
     const allLinks = $("a[href]")
     let internalLinks = 0
 
@@ -67,7 +67,7 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       if (!href) return
 
       try {
-        // Si es una URL absoluta
+        // If it's an absolute URL
         if (href.startsWith("http://") || href.startsWith("https://")) {
           const linkUrl = new URL(href)
           const linkDomain = linkUrl.hostname.replace("www.", "")
@@ -75,21 +75,21 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
             internalLinks++
           }
         }
-        // Si es una URL relativa (empieza con / o no tiene protocolo)
+        // If it's a relative URL (starts with / or has no protocol)
         else if (href.startsWith("/") || !href.includes("://")) {
           internalLinks++
         }
       } catch (error) {
-        // Ignorar URLs inválidas
+        // Ignore invalid URLs
       }
     })
 
-    // 7. Calcular SEO Score (0-10)
-    // Fórmula simple basada en las métricas
+    // 7. Compute SEO Score (0-10)
+    // Simple formula based on the metrics
     let score = 0
 
-    // Title (2 puntos): existe y tiene longitud adecuada (30-60 caracteres)
-    if (title && title !== "Sin título") {
+    // Title (2 points): exists and has an appropriate length (30-60 characters)
+    if (title && title !== "No title") {
       if (title.length >= 30 && title.length <= 60) {
         score += 2
       } else if (title.length > 0) {
@@ -97,8 +97,8 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       }
     }
 
-    // Meta description (2 puntos): existe y tiene longitud adecuada (120-160 caracteres)
-    if (metaDescription && metaDescription !== "Sin descripción") {
+    // Meta description (2 points): exists and has an appropriate length (120-160 characters)
+    if (metaDescription && metaDescription !== "No description") {
       if (metaDescription.length >= 120 && metaDescription.length <= 160) {
         score += 2
       } else if (metaDescription.length > 0) {
@@ -106,21 +106,21 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       }
     }
 
-    // H1 (1.5 puntos): tiene exactamente 1 H1
+    // H1 (1.5 points): has exactly 1 H1
     if (h1Count === 1) {
       score += 1.5
     } else if (h1Count > 1) {
-      score += 0.5 // Tiene H1 pero más de uno
+      score += 0.5 // Has H1s but more than one
     }
 
-    // H2 (1 punto): tiene al menos 2 H2 (buena estructura)
+    // H2 (1 point): has at least 2 H2s (good structure)
     if (h2Count >= 2) {
       score += 1
     } else if (h2Count === 1) {
       score += 0.5
     }
 
-    // Imágenes sin alt (1.5 puntos): penalizar si hay muchas sin alt
+    // Images without alt (1.5 points): penalize if many are missing alt
     const totalImages = $("img").length
     if (totalImages > 0) {
       const altPercentage = ((totalImages - imagesWithoutAlt) / totalImages) * 100
@@ -133,7 +133,7 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       }
     }
 
-    // Enlaces internos (2 puntos): tener enlaces internos es bueno para SEO
+    // Internal links (2 points): having internal links is good for SEO
     if (internalLinks >= 10) {
       score += 2
     } else if (internalLinks >= 5) {
@@ -142,7 +142,7 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       score += 1
     }
 
-    // Normalizar el score a 0-10
+    // Normalize the score to 0-10
     const seoScore = Math.min(10, Math.max(0, score))
 
     return {
@@ -152,13 +152,13 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult> {
       h2Count,
       imagesWithoutAlt,
       internalLinks,
-      seoScore: Math.round(seoScore * 10) / 10, // Redondear a 1 decimal
+      seoScore: Math.round(seoScore * 10) / 10, // Round to 1 decimal
     }
   } catch (error) {
-    // En caso de error, devolver valores por defecto
-    console.error("Error analizando SEO:", error)
+    // On error, throw with details
+    console.error("Error analyzing SEO:", error)
     throw new Error(
-      `Error al analizar el sitio: ${error instanceof Error ? error.message : "Error desconocido"}`
+      `Error analyzing the site: ${error instanceof Error ? error.message : "Unknown error"}`
     )
   }
 }

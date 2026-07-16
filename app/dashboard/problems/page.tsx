@@ -9,9 +9,9 @@ export default function ProblemsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Problemas Detectados</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Detected Problems</h1>
         <p className="text-muted-foreground">
-          Lista completa de problemas identificados en tu negocio
+          Complete list of problems identified in your business
         </p>
       </div>
       <ProblemsSection />

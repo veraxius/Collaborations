@@ -12,21 +12,21 @@ export default function ConfiguracionPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="font-display text-5xl">Configuración</h1>
+        <h1 className="font-display text-5xl">Settings</h1>
         <p className="text-[13px] text-[var(--ink-60)]">
-          Preferencias de cuenta, alertas e integraciones.
+          Account preferences, alerts, and integrations.
         </p>
       </div>
       <Card className="lex-card">
         <CardHeader>
-          <CardTitle>Ajustes generales</CardTitle>
+          <CardTitle>General settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-[var(--ink-60)]">
-            Espacio listo para centralizar opciones de perfil y seguridad.
+            Space ready to centralize profile and security options.
           </p>
           <div className="space-y-2">
-            <p className="text-sm font-medium text-text-primary">Idioma</p>
+            <p className="text-sm font-medium text-text-primary">Language</p>
             <div className="max-w-xs">
               <Select
                 value={language}
@@ -38,12 +38,12 @@ export default function ConfiguracionPage() {
                 }}
                 disabled={saving}
               >
-                <option value="es">Español</option>
-                <option value="en">Inglés</option>
+                <option value="es">Spanish</option>
+                <option value="en">English</option>
               </Select>
             </div>
             <p className="text-xs text-text-tertiary">
-              {saving ? "Guardando..." : "Guardado en tu cuenta"}
+              {saving ? "Saving..." : "Saved to your account"}
             </p>
           </div>
         </CardContent>

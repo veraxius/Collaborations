@@ -444,7 +444,7 @@ function applyTranslation(language: AppLanguage) {
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<AppLanguage>("es")
+  const [language, setLanguageState] = useState<AppLanguage>("en")
 
   useEffect(() => {
     let mounted = true
@@ -454,7 +454,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         setLanguageState(local)
         applyTranslation(local)
       } else {
-        applyTranslation("es")
+        applyTranslation("en")
       }
 
       try {
@@ -521,7 +521,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext)
   if (!context) {
-    throw new Error("useLanguage debe usarse dentro de LanguageProvider")
+    throw new Error("useLanguage must be used within a LanguageProvider")
   }
   return context
 }

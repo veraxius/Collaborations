@@ -29,7 +29,7 @@ interface AnalisisRow {
 }
 
 export default function DashboardPage() {
-  // Proteger ruta - redirige a login si no hay sesión
+  // Protect route - redirects to login if there is no session
   const { user, loading: authLoading } = useRequireAuth()
 
   const [analisis, setAnalisis] = useState<AnalisisResultado | null>(null)
@@ -89,7 +89,7 @@ export default function DashboardPage() {
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
-          <p className="text-text-secondary">Cargando... </p>
+          <p className="text-text-secondary">Loading... </p>
         </div>
       </div>
     )
@@ -106,10 +106,10 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-display text-text-primary">Dashboard</h1>
-          <p className="text-text-secondary mt-1">Visión general de tu operación</p>
+          <p className="text-text-secondary mt-1">Overview of your operation</p>
         </div>
         <Button asChild className="lex-btn lex-btn-primary">
-          <Link href="/dashboard/mejoras">Ver todas las mejoras</Link>
+          <Link href="/dashboard/mejoras">View all improvements</Link>
         </Button>
       </div>
 
@@ -120,7 +120,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-1">
-                Score IA
+                AI Score
               </p>
               <p className="text-3xl font-display text-text-primary">{score}</p>
             </div>
@@ -131,16 +131,16 @@ export default function DashboardPage() {
           <div className="mt-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-primary-500" />
             <span className="text-sm text-primary-600 font-medium">+12%</span>
-            <span className="text-sm text-text-secondary">vs mes pasado</span>
+            <span className="text-sm text-text-secondary">vs last month</span>
           </div>
         </div>
 
-        {/* Recomendaciones Card */}
+        {/* Recommendations Card */}
         <div className="lex-card-metric">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-1">
-                Recomendaciones
+                Recommendations
               </p>
               <p className="text-3xl font-display text-text-primary">{recomendacionesCount}</p>
             </div>
@@ -149,19 +149,19 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-sm text-text-secondary">{recomendacionesCount} pendientes de revisión</span>
+            <span className="text-sm text-text-secondary">{recomendacionesCount} pending review</span>
           </div>
         </div>
 
-        {/* Estado Card */}
+        {/* Status Card */}
         <div className="lex-card-metric">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-1">
-                Estado
+                Status
               </p>
               <div className="flex items-center gap-2">
-                <p className="text-xl font-display text-text-primary">Activo</p>
+                <p className="text-xl font-display text-text-primary">Active</p>
                 <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
               </div>
             </div>
@@ -170,16 +170,16 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="mt-4">
-            <span className="lex-badge lex-badge-success">Todo funcionando</span>
+            <span className="lex-badge lex-badge-success">Everything running</span>
           </div>
         </div>
 
-        {/* Tareas Card */}
+        {/* Tasks Card */}
         <div className="lex-card-metric">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-1">
-                Tareas
+                Tasks
               </p>
               <p className="text-3xl font-display text-text-primary">
                 {tareasCompletadas}/{tareasTotal}
@@ -196,7 +196,7 @@ export default function DashboardPage() {
                 style={{ width: `${tareasPorcentaje}%` }}
               />
             </div>
-            <p className="text-sm text-text-secondary mt-2">{tareasPorcentaje}% completado</p>
+            <p className="text-sm text-text-secondary mt-2">{tareasPorcentaje}% completed</p>
           </div>
         </div>
       </div>
@@ -215,18 +215,18 @@ export default function DashboardPage() {
 
           {/* Quick Actions Card */}
           <div className="lex-card">
-            <h3 className="font-display text-lg text-text-primary mb-4">Acciones rápidas</h3>
+            <h3 className="font-display text-lg text-text-primary mb-4">Quick actions</h3>
             <div className="space-y-3">
               <Button asChild variant="outline" className="w-full justify-start lex-btn-secondary">
                 <Link href="/dashboard/chat">
                   <MessageSquare className="w-4 h-4 mr-2 text-primary-500" />
-                  Hablar con IA
+                  Talk to AI
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full justify-start lex-btn-secondary">
                 <Link href="/dashboard/documentos">
                   <Zap className="w-4 h-4 mr-2 text-primary-500" />
-                  Subir documentos
+                  Upload documents
                 </Link>
               </Button>
             </div>

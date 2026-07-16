@@ -42,11 +42,11 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
 
       for (const file of Array.from(files)) {
         if (!hasValidExtension(file.name)) {
-          setError("Solo se permiten PDF, Word, Excel y CSV.")
+          setError("Only PDF, Word, Excel, and CSV files are allowed.")
           continue
         }
         if (file.size > MAX_SIZE_BYTES) {
-          setError("Cada archivo debe pesar máximo 20MB.")
+          setError("Each file must be 20MB or less.")
           continue
         }
 
@@ -57,7 +57,7 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
           .upload(path, file, { upsert: false })
 
         if (uploadError) {
-          setError(uploadError.message || "No se pudo subir un archivo.")
+          setError(uploadError.message || "A file could not be uploaded.")
           continue
         }
 
@@ -107,9 +107,9 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
           await onFilesSelected(event.dataTransfer.files)
         }}
       >
-        <p className="text-sm font-medium">Arrastrá y soltá tus documentos acá</p>
+        <p className="text-sm font-medium">Drag and drop your documents here</p>
         <p className="text-xs text-muted-foreground">
-          PDF, Word, Excel, CSV - máximo 20MB por archivo
+          PDF, Word, Excel, CSV - max 20MB per file
         </p>
         <Button
           type="button"
@@ -118,7 +118,7 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
           disabled={uploading}
           onClick={() => inputRef.current?.click()}
         >
-          {uploading ? "Subiendo..." : "Seleccionar archivos"}
+          {uploading ? "Uploading..." : "Select files"}
         </Button>
         <input
           ref={inputRef}
@@ -130,10 +130,10 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
       </div>
 
       <div className="space-y-2">
-        <Label>Archivos subidos</Label>
+        <Label>Uploaded files</Label>
         <div className="space-y-2">
           {data.archivos.length === 0 && (
-            <p className="text-sm text-muted-foreground">No subiste archivos todavía.</p>
+            <p className="text-sm text-muted-foreground">You haven&apos;t uploaded any files yet.</p>
           )}
           {data.archivos.map((file) => (
             <div
@@ -145,17 +145,17 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
                 <span className="text-sm">{file.name}</span>
               </div>
               <Button type="button" variant="ghost" onClick={() => removeFile(file.path)}>
-                Eliminar
+                Remove
               </Button>
             </div>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground">Total de archivos: {totalFiles}</p>
+        <p className="text-xs text-muted-foreground">Total files: {totalFiles}</p>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="descripcionProcesos">
-          ¿No tenés documentos? Describí tus procesos principales
+          No documents? Describe your main processes
         </Label>
         <Textarea
           id="descripcionProcesos"
@@ -163,7 +163,7 @@ export function StepDocumentos({ userId, data, onChange }: StepDocumentosProps) 
           onChange={(event) =>
             onChange({ ...data, descripcionProcesos: event.target.value })
           }
-          placeholder="Por ejemplo: cómo captan clientes, cómo venden y cómo entregan el servicio."
+          placeholder="For example: how you attract customers, how you sell, and how you deliver the service."
         />
       </div>
     </div>

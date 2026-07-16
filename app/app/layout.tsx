@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/fleetguard-logo";
-import { daysUntil } from "@/lib/expiry";
 import { logout, useCompany } from "@/lib/auth-client";
 
 const nav = [
@@ -12,13 +11,12 @@ const nav = [
   { href: "/app/documents", label: "Documents" },
   { href: "/app/vehicles", label: "Vehicles" },
   { href: "/app/drivers", label: "Drivers" },
-  { href: "/app/billing", label: "Billing" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { company, access, loading } = useCompany();
+  const { company, loading } = useCompany();
 
   if (loading) {
     return (
@@ -30,9 +28,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (!company) return null;
 
-  const trialDaysLeft = daysUntil(company.trialEndsAt);
-  const onTrial = company.subscriptionStatus === "trialing";
-
   function handleLogout() {
     logout();
     router.replace("/login");
@@ -41,7 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="glass-header sticky top-0 z-40">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <Link href="/app" className="shrink-0 text-[15px]">
             <Logo size={24} />
           </Link>
@@ -94,34 +89,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </nav>
       </header>
 
-      {onTrial && access && (
-        <div className="border-b border-amber-100 bg-amber-50/70 px-6 py-2 text-center text-sm text-amber-900">
-          Free trial — {trialDaysLeft} day{trialDaysLeft === 1 ? "" : "s"} left.{" "}
-          <Link href="/app/billing" className="font-semibold underline underline-offset-2">
-            Subscribe
-          </Link>
-        </div>
-      )}
-
-      {company.subscriptionStatus === "past_due" && (
-        <div className="border-b border-amber-100 bg-amber-50/70 px-6 py-2 text-center text-sm text-amber-900">
-          Your last payment failed — access continues while we retry.{" "}
-          <Link href="/app/billing" className="font-semibold underline underline-offset-2">
-            Update your payment method
-          </Link>
-        </div>
-      )}
-
-      {!access && (
-        <div className="border-b border-red-100 bg-red-50/70 px-6 py-2 text-center text-sm text-red-900">
-          Your free trial has ended.{" "}
-          <Link href="/app/billing" className="font-semibold underline underline-offset-2">
-            Subscribe to regain access
-          </Link>
-        </div>
-      )}
-
-      <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</main>
     </div>
   );
 }

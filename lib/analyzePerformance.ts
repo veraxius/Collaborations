@@ -5,9 +5,9 @@ export interface PerformanceAnalysisResult {
 }
 
 /**
- * Analiza el rendimiento de un sitio web usando Google PageSpeed Insights API
- * @param url - URL del sitio a analizar (ej: "empresa.com" o "https://empresa.com")
- * @returns Objeto con el score de rendimiento (0-100)
+ * Analyzes a website's performance using the Google PageSpeed Insights API
+ * @param url - URL of the site to analyze (e.g. "empresa.com" or "https://empresa.com")
+ * @returns Object with the performance score (0-100)
  */
 export async function analyzePerformance(
   url: string
@@ -16,54 +16,54 @@ export async function analyzePerformance(
     const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY
 
     if (!apiKey) {
-      throw new Error("GOOGLE_PAGESPEED_API_KEY no está configurada en las variables de entorno")
+      throw new Error("GOOGLE_PAGESPEED_API_KEY is not configured in the environment variables")
     }
 
-    // Normalizar la URL - agregar https:// si no tiene protocolo
+    // Normalize the URL - add https:// if it has no protocol
     let normalizedUrl = url.trim()
     if (!normalizedUrl.startsWith("http://") && !normalizedUrl.startsWith("https://")) {
       normalizedUrl = `https://${normalizedUrl}`
     }
 
-    // Llamar a la API de Google PageSpeed Insights
+    // Call the Google PageSpeed Insights API
     const response = await axios.get("https://www.googleapis.com/pagespeedonline/v5/runPagespeed", {
       params: {
         url: normalizedUrl,
         key: apiKey,
-        strategy: "desktop", // Puede ser "desktop" o "mobile"
+        strategy: "desktop", // Can be "desktop" or "mobile"
       },
-      timeout: 60000, // 60 segundos de timeout (PageSpeed puede tardar)
+      timeout: 60000, // 60-second timeout (PageSpeed can be slow)
     })
 
-    // Obtener el score de performance
+    // Get the performance score
     const performanceScore =
       response.data?.lighthouseResult?.categories?.performance?.score
 
     if (performanceScore === undefined || performanceScore === null) {
-      throw new Error("No se pudo obtener el score de performance de la API")
+      throw new Error("Could not get the performance score from the API")
     }
 
-    // Convertir el score de 0-1 a 0-100
+    // Convert the score from 0-1 to 0-100
     const performanceScorePercent = Math.round(performanceScore * 100)
 
     return {
       performanceScore: performanceScorePercent,
     }
   } catch (error) {
-    console.error("Error analizando performance:", error)
+    console.error("Error analyzing performance:", error)
     
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 400) {
-        throw new Error("URL inválida o no accesible")
+        throw new Error("Invalid or inaccessible URL")
       } else if (error.response?.status === 403) {
-        throw new Error("API Key inválida o sin permisos")
+        throw new Error("Invalid API key or missing permissions")
       } else if (error.response?.status === 429) {
-        throw new Error("Límite de solicitudes excedido. Intenta más tarde")
+        throw new Error("Request limit exceeded. Try again later")
       }
     }
 
     throw new Error(
-      `Error al analizar el rendimiento: ${error instanceof Error ? error.message : "Error desconocido"}`
+      `Error analyzing performance: ${error instanceof Error ? error.message : "Unknown error"}`
     )
   }
 }

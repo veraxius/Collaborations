@@ -52,7 +52,7 @@ export default function MejorasPage() {
       } = await supabase.auth.getUser()
 
       if (!user) {
-        setError("No autenticado.")
+        setError("Not authenticated.")
         return
       }
 
@@ -87,12 +87,12 @@ export default function MejorasPage() {
       if (language !== "en" || !analisis) return
       const texts: string[] = []
       const indexMap: Array<{ type: "resumen" } | { type: "rec"; id: number; field: "titulo" | "descripcion" | "accion" }> = []
-      // resumen
+      // summary
       if (analisis.resumen) {
         texts.push(analisis.resumen)
         indexMap.push({ type: "resumen" })
       }
-      // recomendaciones
+      // recommendations
       analisis.recomendaciones.forEach((rec) => {
         texts.push(rec.titulo); indexMap.push({ type: "rec", id: rec.id, field: "titulo" })
         texts.push(rec.descripcion); indexMap.push({ type: "rec", id: rec.id, field: "descripcion" })
@@ -137,12 +137,12 @@ export default function MejorasPage() {
         error?: string
       }
       if (!response.ok || !body.ok || !body.data) {
-        throw new Error(body.error || "No se pudo generar el análisis")
+        throw new Error(body.error || "Could not generate the analysis")
       }
       setAnalisis(body.data)
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "Error desconocido"
+        caughtError instanceof Error ? caughtError.message : "Unknown error"
       setError(message)
     } finally {
       setRunning(false)
@@ -162,20 +162,20 @@ export default function MejorasPage() {
   }
 
   if (loading) {
-    return <p className="text-sm text-[var(--ink-60)]">Cargando análisis...</p>
+    return <p className="text-sm text-[var(--ink-60)]">Loading analysis...</p>
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-5xl">Mejoras recomendadas</h1>
+          <h1 className="font-display text-5xl">Recommended improvements</h1>
           <p className="text-[13px] text-[var(--ink-60)]">
-            Recomendaciones priorizadas por IA para tu empresa.
+            AI-prioritized recommendations for your company.
           </p>
         </div>
         <Button onClick={triggerAnalisis} disabled={running}>
-          {running ? "Analizando..." : analisis ? "Actualizar análisis" : "Analizar mi empresa"}
+          {running ? "Analyzing..." : analisis ? "Update analysis" : "Analyze my company"}
         </Button>
       </div>
 
@@ -185,10 +185,10 @@ export default function MejorasPage() {
         <Card>
           <CardContent className="pt-6">
             <p className="mb-4 text-sm text-[var(--ink-60)]">
-              Todavía no hay análisis guardado para esta cuenta.
+              There is no saved analysis for this account yet.
             </p>
             <Button onClick={triggerAnalisis} disabled={running}>
-              {running ? "Analizando..." : "Analizar mi empresa"}
+              {running ? "Analyzing..." : "Analyze my company"}
             </Button>
           </CardContent>
         </Card>
@@ -207,7 +207,7 @@ export default function MejorasPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Resumen ejecutivo</CardTitle>
+              <CardTitle>Executive summary</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm">
@@ -229,14 +229,14 @@ export default function MejorasPage() {
                     {language === "en" && translated.recs?.[rec.id]?.descripcion ? translated.recs?.[rec.id]?.descripcion : rec.descripcion}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className={`lex-pill ${impactoBadge(rec.impacto)}`}>Impacto: {rec.impacto}</span>
+                    <span className={`lex-pill ${impactoBadge(rec.impacto)}`}>Impact: {rec.impacto}</span>
                     <span className={`lex-pill ${esfuerzoClass(rec.esfuerzo)}`}>
-                      Esfuerzo: {rec.esfuerzo}
+                      Effort: {rec.esfuerzo}
                     </span>
                     <span className="lex-pill bg-[var(--paper-2)] text-[var(--ink-60)]">{rec.categoria}</span>
                   </div>
                   <div className="rounded-[6px] bg-[var(--teal-light)] px-[10px] py-[5px] text-[12px] font-medium text-[var(--teal)]">
-                    <strong>Acción esta semana:</strong> {language === "en" && translated.recs?.[rec.id]?.accion ? translated.recs?.[rec.id]?.accion : rec.accion}
+                    <strong>Action this week:</strong> {language === "en" && translated.recs?.[rec.id]?.accion ? translated.recs?.[rec.id]?.accion : rec.accion}
                   </div>
                 </CardContent>
               </Card>

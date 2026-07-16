@@ -10,17 +10,17 @@ interface StepEquipoProps {
 }
 
 const areasOptions = [
-  "Ventas",
+  "Sales",
   "Marketing",
-  "Operaciones",
-  "Finanzas/Contabilidad",
-  "RRHH",
-  "Logística",
-  "Producción",
-  "Atención al cliente",
-  "IT/Tecnología",
+  "Operations",
+  "Finance/Accounting",
+  "HR",
+  "Logistics",
+  "Production",
+  "Customer support",
+  "IT/Technology",
   "Legal",
-  "Compras",
+  "Purchasing",
 ]
 
 const herramientasOptions = [
@@ -29,10 +29,10 @@ const herramientasOptions = [
   "Gmail/Outlook",
   "Trello/Asana",
   "Slack",
-  "Facturación electrónica",
+  "E-invoicing",
   "ERP",
   "CRM",
-  "Ninguna",
+  "None",
 ]
 
 export function StepEquipo({ data, onChange }: StepEquipoProps) {
@@ -54,41 +54,41 @@ export function StepEquipo({ data, onChange }: StepEquipoProps) {
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="empleados">Cantidad de empleados *</Label>
+          <Label htmlFor="empleados">Number of employees *</Label>
           <Select
             id="empleados"
             value={data.empleados}
             onChange={(event) => updateField("empleados", event.target.value)}
             required
           >
-            <option value="">Seleccionar</option>
+            <option value="">Select</option>
             <option value="1-5">1-5</option>
             <option value="6-20">6-20</option>
             <option value="21-50">21-50</option>
             <option value="51-100">51-100</option>
-            <option value="Más de 100">Más de 100</option>
+            <option value="More than 100">More than 100</option>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="facturacion">Facturación anual</Label>
+          <Label htmlFor="facturacion">Annual revenue</Label>
           <Select
             id="facturacion"
             value={data.facturacion}
             onChange={(event) => updateField("facturacion", event.target.value)}
           >
-            <option value="">Seleccionar</option>
-            <option value="Prefiero no decir">Prefiero no decir</option>
-            <option value="Menos de $1M">Menos de $1M</option>
+            <option value="">Select</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+            <option value="Less than $1M">Less than $1M</option>
             <option value="$1M-$10M">$1M-$10M</option>
             <option value="$10M-$50M">$10M-$50M</option>
-            <option value="Más de $50M">Más de $50M</option>
+            <option value="More than $50M">More than $50M</option>
           </Select>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label>Áreas (mínimo 1) *</Label>
+        <Label>Areas (minimum 1) *</Label>
         <div className="flex flex-wrap gap-2">
           {areasOptions.map((item) => (
             <button
@@ -104,7 +104,7 @@ export function StepEquipo({ data, onChange }: StepEquipoProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Herramientas actuales</Label>
+        <Label>Current tools</Label>
         <div className="flex flex-wrap gap-2">
           {herramientasOptions.map((item) => (
             <button

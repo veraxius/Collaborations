@@ -13,7 +13,7 @@ export default function ChatPage() {
   const [historial, setHistorial] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Hola, soy Lexora. Ya analicé tu empresa. ¿En qué puedo ayudarte hoy?",
+      content: "Hi, I'm Lexora. I've already analyzed your company. How can I help you today?",
     },
   ])
   const [mensaje, setMensaje] = useState("")
@@ -49,11 +49,11 @@ export default function ChatPage() {
       try {
         body = JSON.parse(rawBody) as { respuesta?: string; error?: string }
       } catch {
-        throw new Error("El servidor devolvió una respuesta inválida")
+        throw new Error("The server returned an invalid response")
       }
 
       if (!response.ok || !body.respuesta) {
-        throw new Error(body.error || "No se pudo obtener respuesta")
+        throw new Error(body.error || "Could not get a response")
       }
 
       setHistorial((prev) => [
@@ -62,7 +62,7 @@ export default function ChatPage() {
       ])
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "Error desconocido"
+        caughtError instanceof Error ? caughtError.message : "Unknown error"
       setError(message)
     } finally {
       setLoading(false)
@@ -99,7 +99,7 @@ export default function ChatPage() {
               color: "#0D0D0F",
             }}
           >
-            Chat con Lexora
+            Chat with Lexora
           </h1>
           <span
             style={{
@@ -125,12 +125,12 @@ export default function ChatPage() {
         </div>
         <div style={{ padding: "10px 18px" }}>
           <p style={{ ...sans, fontSize: "13px", color: "rgba(13,13,15,0.5)" }}>
-            Consultá sobre mejoras, operaciones y próximos pasos para tu negocio.
+            Ask about improvements, operations, and next steps for your business.
           </p>
         </div>
       </div>
 
-      {/* Mensajes */}
+      {/* Messages */}
       <div
         style={{
           flex: 1,
@@ -223,7 +223,7 @@ export default function ChatPage() {
       {/* Input */}
       <div style={{ display: "flex", gap: "8px" }}>
         <textarea
-          placeholder="Escribí tu pregunta..."
+          placeholder="Type your question..."
           value={mensaje}
           rows={1}
           onChange={(e) => setMensaje(e.target.value)}
@@ -295,7 +295,7 @@ export default function ChatPage() {
           textAlign: "center",
         }}
       >
-        Enter para enviar · Shift+Enter para nueva línea
+        Enter to send · Shift+Enter for a new line
       </p>
 
       <style>{`

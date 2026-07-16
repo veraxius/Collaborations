@@ -15,23 +15,23 @@ interface AlertItem {
 const alerts: AlertItem[] = [
   {
     type: "destructive",
-    title: "Tráfico Bajó 18%",
-    description: "El tráfico del sitio web disminuyó significativamente esta semana.",
-    time: "Hace 2 horas",
+    title: "Traffic Dropped 18%",
+    description: "Website traffic decreased significantly this week.",
+    time: "2 hours ago",
     icon: <TrendingDown className="h-4 w-4" />
   },
   {
     type: "warning",
-    title: "Competidor Lanzó Nueva Campaña",
-    description: "Competidor A lanzó una nueva campaña de marketing digital.",
-    time: "Hace 5 horas",
+    title: "Competitor Launched New Campaign",
+    description: "Competitor A launched a new digital marketing campaign.",
+    time: "5 hours ago",
     icon: <Users className="h-4 w-4" />
   },
   {
     type: "success",
-    title: "SEO Mejoró Esta Semana",
-    description: "El ranking SEO mejoró en 3 posiciones gracias a las optimizaciones.",
-    time: "Hace 1 día",
+    title: "SEO Improved This Week",
+    description: "SEO ranking improved by 3 positions thanks to the optimizations.",
+    time: "1 day ago",
     icon: <TrendingUp className="h-4 w-4" />
   },
 ]
@@ -45,10 +45,10 @@ export function AlertsSection() {
           style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: "16px" }}
         >
           <Bell className="h-5 w-5" />
-          Alertas Recientes
+          Recent Alerts
         </CardTitle>
         <CardDescription style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px" }}>
-          Cambios importantes detectados
+          Important changes detected
         </CardDescription>
       </CardHeader>
       <CardContent>

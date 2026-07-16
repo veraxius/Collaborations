@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const inicioSemana = new Date()
@@ -166,7 +166,7 @@ Valores válidos:
       resultado = JSON.parse(limpio) as { tareas: TareaIA[] }
     } catch {
       return NextResponse.json(
-        { error: "La IA devolvió un formato inválido. Intentá de nuevo." },
+        { error: "The AI returned an invalid format. Please try again." },
         { status: 500 }
       )
     }
@@ -175,7 +175,7 @@ Valores válidos:
 
     if (tareasIA.length === 0) {
       return NextResponse.json(
-        { error: "No se pudieron generar tareas. Intentá de nuevo." },
+        { error: "Tasks could not be generated. Please try again." },
         { status: 500 }
       )
     }
@@ -204,7 +204,7 @@ Valores válidos:
 
     return NextResponse.json({ ok: true, data: insertadas })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

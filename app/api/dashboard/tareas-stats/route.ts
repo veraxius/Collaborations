@@ -42,7 +42,7 @@ export async function GET(): Promise<NextResponse<TareasStatsResponse | { error:
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const semanas: Array<{
@@ -59,7 +59,7 @@ export async function GET(): Promise<NextResponse<TareasStatsResponse | { error:
       const fin = new Date(inicio)
       fin.setDate(fin.getDate() + 7)
 
-      const label = i === 0 ? "Esta sem." : i === 1 ? "Sem. pasada" : `Hace ${i} sem.`
+      const label = i === 0 ? "This wk." : i === 1 ? "Last wk." : `${i} wks. ago`
       semanas.push({ inicio, fin, label })
     }
 
@@ -103,7 +103,7 @@ export async function GET(): Promise<NextResponse<TareasStatsResponse | { error:
 
     return NextResponse.json(response)
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

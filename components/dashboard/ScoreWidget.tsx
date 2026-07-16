@@ -28,12 +28,12 @@ export function ScoreWidget() {
         error?: string
       }
       if (!response.ok) {
-        throw new Error(body.error || "No pudimos calcular el score")
+        throw new Error(body.error || "We couldn't calculate the score")
       }
       setData(body.data ?? null)
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No pudimos calcular el score"
+        caughtError instanceof Error ? caughtError.message : "We couldn't calculate the score"
       setError(message)
     } finally {
       setLoading(false)
@@ -51,12 +51,12 @@ export function ScoreWidget() {
       const response = await fetch("/api/ai/analizar", { method: "POST" })
       const body = (await response.json()) as { ok?: boolean; error?: string }
       if (!response.ok || !body.ok) {
-        throw new Error(body.error || "No pudimos generar el análisis")
+        throw new Error(body.error || "We couldn't generate the analysis")
       }
       await fetchScore()
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No pudimos generar el análisis"
+        caughtError instanceof Error ? caughtError.message : "We couldn't generate the analysis"
       setError(message)
     } finally {
       setRunning(false)
@@ -74,12 +74,12 @@ export function ScoreWidget() {
         error?: string
       }
       if (!response.ok || !body.ok || !body.data) {
-        throw new Error(body.error || "No pudimos recalcular el score")
+        throw new Error(body.error || "We couldn't recalculate the score")
       }
       setData(body.data)
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No pudimos recalcular el score"
+        caughtError instanceof Error ? caughtError.message : "We couldn't recalculate the score"
       setError(message)
     } finally {
       setRunning(false)
@@ -128,10 +128,10 @@ export function ScoreWidget() {
         }}
       >
         <p className="mb-3 text-sm" style={{ color: "#1e3a8a" }}>
-          No pudimos calcular el score
+          We couldn't calculate the score
         </p>
         <Button variant="outline" onClick={fetchScore}>
-          Reintentar
+          Retry
         </Button>
       </section>
     )
@@ -150,10 +150,10 @@ export function ScoreWidget() {
         }}
       >
         <p className="mb-3 text-sm" style={{ color: "rgba(30, 58, 138, 0.5)" }}>
-          Todavía no hay score disponible.
+          No score available yet.
         </p>
         <Button onClick={runAnalisis} disabled={running}>
-          {running ? "Generando..." : "Generar análisis"}
+          {running ? "Generating..." : "Generate analysis"}
         </Button>
       </section>
     )
@@ -162,16 +162,16 @@ export function ScoreWidget() {
   const variacionBadge =
     data.variacion > 0
       ? {
-          label: `↑ +${data.variacion} puntos este mes`,
+          label: `↑ +${data.variacion} points this month`,
           style: { background: "rgba(10,123,107,0.2)", color: "#0A7B6B" },
         }
       : data.variacion < 0
         ? {
-            label: `↓ ${data.variacion} puntos este mes`,
+            label: `↓ ${data.variacion} points this month`,
             style: { background: "rgba(232,80,58,0.12)", color: "#E8503A" },
           }
         : {
-            label: "Sin cambios este mes",
+            label: "No changes this month",
             style: { background: "rgba(59,130,246,0.12)", color: "#2563EB" },
           }
 
@@ -229,10 +229,17 @@ export function ScoreWidget() {
 
       <div className="flex-1">
         <p className="text-[11px] font-medium tracking-[0.08em]" style={{ color: "rgba(37,99,235,0.5)" }}>
-          ÍNDICE DE MADUREZ OPERATIVA
+          OPERATIONAL MATURITY INDEX
         </p>
         <p className="mb-2 font-display text-[20px]" style={{ color: "#1E40AF" }}>
-          Tu empresa está {data.nivel}
+          Your company is{" "}
+          {{
+            inicial: "at an early stage",
+            "en desarrollo": "developing",
+            consolidado: "consolidated",
+            avanzado: "advanced",
+            excelente: "excellent",
+          }[data.nivel] ?? data.nivel}
         </p>
         <p className="max-w-[480px] text-[13px] leading-[1.6]" style={{ color: "rgba(30,58,138,0.6)" }}>
           {data.resumen}
@@ -261,7 +268,7 @@ export function ScoreWidget() {
               event.currentTarget.style.background = "rgba(59,130,246,0.15)"
             }}
           >
-            {running ? "Actualizando..." : "Actualizar score"}
+            {running ? "Updating..." : "Update score"}
           </button>
         </div>
       </div>

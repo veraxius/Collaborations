@@ -16,7 +16,7 @@ export function AIChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hola, soy Lexora. Estoy acá para ayudarte a mejorar tu empresa. ¿En qué puedo ayudarte hoy?",
+      content: "Hi, I'm Lexora. I'm here to help you improve your company. How can I help you today?",
     },
   ])
   const [input, setInput] = useState("")
@@ -54,7 +54,7 @@ export function AIChat() {
       const body = await response.json() as { respuesta?: string; error?: string }
 
       if (!response.ok || !body.respuesta) {
-        throw new Error(body.error || "Error al procesar tu mensaje")
+        throw new Error(body.error || "Error processing your message")
       }
 
       setMessages([
@@ -66,7 +66,7 @@ export function AIChat() {
         ...newMessages,
         {
           role: "assistant",
-          content: "Hubo un error al procesar tu mensaje. Intentá de nuevo.",
+          content: "There was an error processing your message. Please try again.",
         },
       ])
     } finally {
@@ -89,13 +89,13 @@ export function AIChat() {
           style={{ ...sans, fontSize: "16px", fontWeight: 500 }}
         >
           <Sparkles className="h-5 w-5" style={{ color: "#2563EB" }} />
-          Chat con Lexora
+          Chat with Lexora
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
 
-          {/* Mensajes */}
+          {/* Messages */}
           <div
             style={{
               height: "380px",
@@ -221,7 +221,7 @@ export function AIChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Preguntale algo a Lexora..."
+              placeholder="Ask Lexora something..."
               disabled={loading}
               rows={1}
               style={{
@@ -273,7 +273,7 @@ export function AIChat() {
           </form>
 
           <p style={{ ...sans, fontSize: "11px", color: "rgba(13,13,15,0.35)", textAlign: "center" }}>
-            Enter para enviar · Shift+Enter para nueva línea
+            Enter to send · Shift+Enter for a new line
           </p>
 
         </div>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/components/providers/language-provider"
 
 interface ResumenData {
-  saludo: "Buenos días" | "Buenas tardes"
+  saludo: "Good morning" | "Good afternoon"
   titular: string
   resumen: string
   oportunidad: string
@@ -54,7 +54,7 @@ export function ResumenWidget() {
         error?: string
       }
       if (!response.ok || !body.ok || !body.data) {
-        throw new Error(body.error || "No pudimos generar el resumen")
+        throw new Error(body.error || "We couldn't generate the summary")
       }
 
       setData(body.data)
@@ -64,7 +64,7 @@ export function ResumenWidget() {
       )
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No pudimos generar el resumen"
+        caughtError instanceof Error ? caughtError.message : "We couldn't generate the summary"
       setError(message)
     } finally {
       setLoading(false)
@@ -75,7 +75,7 @@ export function ResumenWidget() {
     fetchResumen()
   }, [])
 
-  // Auto-traducir el contenido dinámico cuando el idioma es inglés
+  // Auto-translate the dynamic content when the language is English
   useEffect(() => {
     const run = async () => {
       if (language !== "en" || !data) return
@@ -104,7 +104,7 @@ export function ResumenWidget() {
         })
         setTranslated(next)
       } catch {
-        // noop si falla la traducción
+        // noop if translation fails
       }
     }
     void run()
@@ -112,24 +112,24 @@ export function ResumenWidget() {
   const statusBadge = (estado: ResumenData["estado"]) => {
     if (estado === "critico") {
       return {
-        text: "Atención requerida",
+        text: "Attention required",
         style: { background: "rgba(232,80,58,0.1)", color: "#E8503A" },
       }
     }
     if (estado === "regular") {
       return {
-        text: "En desarrollo",
+        text: "In progress",
         style: { background: "rgba(59,130,246,0.12)", color: "#2563EB" },
       }
     }
     if (estado === "bueno") {
       return {
-        text: "Buen camino",
+        text: "On track",
         style: { background: "rgba(10,123,107,0.1)", color: "#0A7B6B" },
       }
     }
     return {
-      text: "Excelente",
+      text: "Excellent",
       style: { background: "rgba(10,123,107,0.15)", color: "#0A7B6B" },
     }
   }
@@ -156,9 +156,9 @@ export function ResumenWidget() {
   if (error || !data) {
     return (
       <section className="w-full rounded-2xl border border-[rgba(13,13,15,0.1)] bg-white p-[28px_32px]">
-        <p className="mb-3 text-sm text-[var(--ink-60)]">No pudimos generar el resumen</p>
+        <p className="mb-3 text-sm text-[var(--ink-60)]">We couldn't generate the summary</p>
         <Button variant="outline" onClick={fetchResumen}>
-          Reintentar
+          Retry
         </Button>
       </section>
     )
@@ -186,7 +186,7 @@ export function ResumenWidget() {
 
       <div className="border-t border-[rgba(13,13,15,0.08)] pt-4">
         <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-[rgba(13,13,15,0.35)]">
-          OPORTUNIDAD ESTA SEMANA
+          OPPORTUNITY THIS WEEK
         </p>
         <p className="mt-[6px] text-[13px] font-medium text-[var(--teal)]">
           <span className="mr-1 text-[var(--primary-600)]">→</span>

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { useLanguage } from "@/components/providers/language-provider"
 
-// Recharts (cargado dinámico por si no está instalado aún)
+// Recharts (loaded dynamically in case it isn't installed yet)
 const ResponsiveContainer = dynamic(() => import("recharts").then(m => m.ResponsiveContainer), { ssr: false })
 const BarChart = dynamic(() => import("recharts").then(m => m.BarChart), { ssr: false })
 const Bar = dynamic(() => import("recharts").then(m => m.Bar), { ssr: false })
@@ -47,11 +47,11 @@ export default function TareasPage() {
       })
       const body = await response.json()
       if (!response.ok) {
-        throw new Error(body.error || "No se pudieron obtener las tareas")
+        throw new Error(body.error || "Could not fetch tasks")
       }
       setTareas(body.data || [])
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error desconocido")
+      setError(e instanceof Error ? e.message : "Unknown error")
     } finally {
       setLoading(false)
       setForzando(false)
@@ -102,7 +102,7 @@ export default function TareasPage() {
   }, [language, tareas, translated])
 
   const toggleTarea = async (tarea: Tarea) => {
-    // Optimista
+    // Optimistic update
     setTareas(prev => prev.map(t => (t.id === tarea.id ? { ...t, completada: !t.completada } : t)))
     try {
       const response = await fetch(`/api/tareas/${tarea.id}`, {
@@ -111,23 +111,23 @@ export default function TareasPage() {
         body: JSON.stringify({ completada: !tarea.completada }),
       })
       const body = await response.json()
-      if (!response.ok) throw new Error(body.error || "No se pudo actualizar la tarea")
+      if (!response.ok) throw new Error(body.error || "Could not update the task")
     } catch (e) {
-      // revertir si falla
+      // revert on failure
       setTareas(prev => prev.map(t => (t.id === tarea.id ? { ...t, completada: tarea.completada } : t)))
-      setError(e instanceof Error ? e.message : "Error al actualizar tarea")
+      setError(e instanceof Error ? e.message : "Error updating task")
     }
   }
 
   const Chart = () => (
     <div style={{ height: "160px" }}>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={[{ name: "Esta semana", Completadas: completadas, Pendientes: pendientes }]}>
+        <BarChart data={[{ name: "This week", Completed: completadas, Pending: pendientes }]}>
           <XAxis dataKey="name" hide />
           <YAxis hide />
           <Tooltip />
-          <Bar dataKey="Completadas" fill="#0A7B6B" radius={[6, 6, 0, 0]} />
-          <Bar dataKey="Pendientes" fill="#E8503A" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="Completed" fill="#0A7B6B" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="Pending" fill="#E8503A" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -153,8 +153,8 @@ export default function TareasPage() {
     <div style={{ fontFamily: "'Inter', sans-serif", color: "#0D0D0F" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", gap: "12px" }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 500, letterSpacing: "-0.02em" }}>Tareas de esta semana</h1>
-          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}>{completadas}/{Math.max(5, tareas.length)} completadas</p>
+          <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 500, letterSpacing: "-0.02em" }}>This week's tasks</h1>
+          <p style={{ margin: "6px 0 0", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}>{completadas}/{Math.max(5, tareas.length)} completed</p>
         </div>
         <button
           onClick={() => { setForzando(true); void fetchTareas({ forzar: true }) }}
@@ -171,7 +171,7 @@ export default function TareasPage() {
             opacity: forzando ? 0.6 : 1,
           }}
         >
-          {forzando ? "Generando..." : "Generar nuevas tareas"}
+          {forzando ? "Generating..." : "Generate new tasks"}
         </button>
       </div>
 
@@ -179,7 +179,7 @@ export default function TareasPage() {
         <div style={{ marginBottom: "12px", color: "#E8503A", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}>
           <span>{error}</span>
           <button onClick={() => void fetchTareas()} style={{ textDecoration: "underline", fontSize: "13px", color: "#0D0D0F" }}>
-            Reintentar
+            Retry
           </button>
         </div>
       )}
@@ -192,7 +192,7 @@ export default function TareasPage() {
         </div>
       ) : tareas.length === 0 ? (
         <div style={{ textAlign: "center", background: "#fff", border: "1px solid rgba(13,13,15,0.1)", borderRadius: "12px", padding: "28px" }}>
-          <p style={{ margin: 0, fontSize: "14px" }}>No hay tareas esta semana.</p>
+          <p style={{ margin: 0, fontSize: "14px" }}>No tasks this week.</p>
           <button
             onClick={() => { setForzando(true); void fetchTareas({ forzar: true }) }}
             disabled={forzando}
@@ -209,7 +209,7 @@ export default function TareasPage() {
               opacity: forzando ? 0.6 : 1,
             }}
           >
-            {forzando ? "Generando..." : "Generar tareas con IA"}
+            {forzando ? "Generating..." : "Generate tasks with AI"}
           </button>
         </div>
       ) : (

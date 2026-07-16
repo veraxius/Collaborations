@@ -95,7 +95,7 @@ export default function DocumentosPage() {
       setDocumentos(mapped)
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "Error cargando documentos"
+        caughtError instanceof Error ? caughtError.message : "Error loading documents"
       setError(message)
     } finally {
       setLoading(false)
@@ -116,14 +116,14 @@ export default function DocumentosPage() {
         if (userError) throw new Error(userError.message)
         if (!user) {
           setDocumentos([])
-          throw new Error("No autenticado")
+          throw new Error("Not authenticated")
         }
 
         setUserId(user.id)
         await loadDocumentos(user.id)
       } catch (caughtError) {
         const message =
-          caughtError instanceof Error ? caughtError.message : "Error cargando documentos"
+          caughtError instanceof Error ? caughtError.message : "Error loading documents"
         setError(message)
         setLoading(false)
       }
@@ -153,11 +153,11 @@ export default function DocumentosPage() {
     try {
       for (const file of Array.from(files)) {
         if (!hasValidExtension(file.name)) {
-          setUploadError("Solo se permiten PDF, Word, Excel y CSV.")
+          setUploadError("Only PDF, Word, Excel, and CSV files are allowed.")
           continue
         }
         if (file.size > MAX_SIZE_BYTES) {
-          setUploadError("Cada archivo debe pesar máximo 20MB.")
+          setUploadError("Each file must be at most 20MB.")
           continue
         }
 
@@ -168,7 +168,7 @@ export default function DocumentosPage() {
           .upload(path, file, { upsert: false })
 
         if (uploadErrorResult) {
-          setUploadError(uploadErrorResult.message || "No se pudo subir un archivo.")
+          setUploadError(uploadErrorResult.message || "Could not upload a file.")
         }
       }
 
@@ -188,16 +188,16 @@ export default function DocumentosPage() {
       const body = (await response.json().catch(() => ({}))) as { error?: string }
 
       if (!response.ok) {
-        throw new Error(body.error || "No se pudo actualizar el análisis")
+        throw new Error(body.error || "Could not update the analysis")
       }
 
-      setAnalysisMessage("✓ Análisis actualizado correctamente")
+      setAnalysisMessage("✓ Analysis updated successfully")
       setAnalysisMessageColor("#0A7B6B")
     } catch (caughtError) {
       const message =
         caughtError instanceof Error
           ? caughtError.message
-          : "Error al actualizar análisis con IA"
+          : "Error updating analysis with AI"
       setAnalysisMessage(message)
       setAnalysisMessageColor("#E8503A")
     } finally {
@@ -224,7 +224,7 @@ export default function DocumentosPage() {
         .download(doc.path)
 
       if (downloadError || !data) {
-        throw new Error(downloadError?.message || "No se pudo descargar el archivo")
+        throw new Error(downloadError?.message || "Could not download the file")
       }
 
       const url = URL.createObjectURL(data)
@@ -237,7 +237,7 @@ export default function DocumentosPage() {
       URL.revokeObjectURL(url)
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No se pudo descargar"
+        caughtError instanceof Error ? caughtError.message : "Could not download"
       setError(message)
     }
   }
@@ -259,7 +259,7 @@ export default function DocumentosPage() {
       setDocumentos((prev) => prev.filter((item) => item.path !== doc.path))
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "No se pudo eliminar"
+        caughtError instanceof Error ? caughtError.message : "Could not delete"
       setError(message)
     } finally {
       setDeletingPath(null)
@@ -293,7 +293,7 @@ export default function DocumentosPage() {
               color: "#0D0D0F",
             }}
           >
-            Documentos
+            Documents
           </h1>
           <p
             style={{
@@ -302,7 +302,7 @@ export default function DocumentosPage() {
               color: "rgba(13,13,15,0.5)",
             }}
           >
-            {documentos.length} {documentos.length === 1 ? "archivo" : "archivos"}
+            {documentos.length} {documentos.length === 1 ? "file" : "files"}
           </p>
         </div>
 
@@ -335,7 +335,7 @@ export default function DocumentosPage() {
                 event.currentTarget.style.transform = "translateY(0)"
               }}
             >
-              {analizando ? "Analizando..." : "✦ Actualizar análisis con IA"}
+              {analizando ? "Analyzing..." : "✦ Update analysis with AI"}
             </button>
           )}
 
@@ -354,7 +354,7 @@ export default function DocumentosPage() {
               opacity: refreshing ? 0.6 : 1,
             }}
           >
-            {refreshing ? "Actualizando..." : "Actualizar"}
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
         </div>
       </div>
@@ -411,7 +411,7 @@ export default function DocumentosPage() {
             color: "#0D0D0F",
           }}
         >
-          Hacé clic o arrastrá archivos acá
+          Click or drag files here
         </p>
         <p
           style={{
@@ -420,7 +420,7 @@ export default function DocumentosPage() {
             color: "rgba(13,13,15,0.4)",
           }}
         >
-          PDF, Word, Excel, CSV — máximo 20MB
+          PDF, Word, Excel, CSV — 20MB max
         </p>
         {uploading && (
           <p
@@ -431,7 +431,7 @@ export default function DocumentosPage() {
               color: "rgba(13,13,15,0.65)",
             }}
           >
-            Subiendo...
+            Uploading...
           </p>
         )}
         <input
@@ -503,7 +503,7 @@ export default function DocumentosPage() {
               color: "#0D0D0F",
             }}
           >
-            Todavía no subiste documentos
+            You haven't uploaded any documents yet
           </p>
           <p
             style={{
@@ -512,7 +512,7 @@ export default function DocumentosPage() {
               color: "rgba(13,13,15,0.5)",
             }}
           >
-            Podés subirlos desde el onboarding para analizarlos luego en Lexora.
+            You can upload them from the onboarding to analyze them later in Lexora.
           </p>
         </div>
       ) : (
@@ -538,10 +538,10 @@ export default function DocumentosPage() {
               background: "rgba(13,13,15,0.02)",
             }}
           >
-            <span>Archivo</span>
-            <span>Tamaño</span>
-            <span>Fecha</span>
-            <span style={{ textAlign: "right" }}>Acciones</span>
+            <span>File</span>
+            <span>Size</span>
+            <span>Date</span>
+            <span style={{ textAlign: "right" }}>Actions</span>
           </div>
 
           {documentos.map((doc, index) => (
@@ -616,7 +616,7 @@ export default function DocumentosPage() {
                     cursor: "pointer",
                   }}
                 >
-                  Descargar
+                  Download
                 </button>
 
                 <button
@@ -634,7 +634,7 @@ export default function DocumentosPage() {
                     opacity: deletingPath === doc.path ? 0.4 : 1,
                   }}
                 >
-                  Eliminar
+                  Delete
                 </button>
               </div>
             </div>

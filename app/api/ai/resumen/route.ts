@@ -14,7 +14,7 @@ interface AnalisisRow {
 }
 
 interface ResumenResult {
-  saludo: "Buenos días" | "Buenas tardes"
+  saludo: "Good morning" | "Good afternoon"
   titular: string
   resumen: string
   oportunidad: string
@@ -52,7 +52,7 @@ export async function POST() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -82,33 +82,37 @@ export async function POST() {
       messages: [
         {
           role: "system",
-          content: `Sos un consultor de negocios senior experto 
-      en pequeñas empresas. Escribís resúmenes ejecutivos 
-      claros, directos y útiles. Siempre en español.
-      Respondés SOLO en JSON válido, sin texto extra, 
-      sin markdown, sin backticks.`,
+          content: `You are a senior business consultant who is an 
+      expert in small companies. You write clear, direct and 
+      useful executive summaries. Always respond in English.
+      Reply ONLY with valid JSON, no extra text, 
+      no markdown, no backticks.`,
         },
         {
           role: "user",
-          content: `Generá un resumen ejecutivo breve y accionable 
-      para el dueño de esta empresa.
+          content: `Generate a brief, actionable executive summary 
+      for the owner of this company.
 
-      Datos de la empresa:
+      Company data:
       ${JSON.stringify(empresa_data)}
 
-      Análisis previo:
+      Previous analysis:
       ${JSON.stringify(ultimo_analisis)}
 
-      Respondé SOLO con este JSON exacto:
+      Write "titular", "resumen" and "oportunidad" in English, 
+      but keep the exact allowed values shown below for 
+      "saludo" and "estado".
+
+      Reply ONLY with this exact JSON:
       {
-        "saludo": "Buenos días" | "Buenas tardes" según hora,
-        "titular": "una oración impactante de máximo 10 palabras 
-                   sobre el estado actual de la empresa",
-        "resumen": "2 oraciones que describen el estado actual 
-                   de la empresa, sus fortalezas principales 
-                   y el mayor desafío",
-        "oportunidad": "1 oración sobre la mayor oportunidad 
-                       de mejora esta semana",
+        "saludo": "Good morning" | "Good afternoon" depending on the time of day,
+        "titular": "one impactful sentence in English, max 10 words, 
+                   about the company's current state",
+        "resumen": "2 sentences in English describing the company's 
+                   current state, its main strengths 
+                   and its biggest challenge",
+        "oportunidad": "1 sentence in English about the biggest 
+                       improvement opportunity this week",
         "estado": "critico" | "regular" | "bueno" | "excelente"
       }`,
         },
@@ -121,7 +125,7 @@ export async function POST() {
 
     return NextResponse.json({ ok: true, data: resultado })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

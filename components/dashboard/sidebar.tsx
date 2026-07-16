@@ -10,16 +10,15 @@ import { getSupabase } from "@/lib/supabase"
 
 const principalItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/mejoras", label: "Mejoras", icon: Wrench },
-  { href: "/dashboard/documentos", label: "Documentos", icon: FileText },
-  { href: "/dashboard/chat", label: "Chat IA", icon: Bot, isAI: true },
-  { href: "/dashboard/plan", label: "Plan", icon: ClipboardList, isAI: true },
+  { href: "/dashboard/mejoras", label: "Improvements", icon: Wrench },
+  { href: "/dashboard/documentos", label: "Documents", icon: FileText },
+  { href: "/dashboard/chat", label: "AI Chat", icon: Bot, isAI: true },
 ]
 
 const gestionItems = [
-  { href: "/dashboard/tareas", label: "Tareas", icon: ClipboardList },
-  { href: "/dashboard/reportes", label: "Reportes", icon: BarChart3 },
-  { href: "/dashboard/configuracion", label: "Configuración", icon: Settings },
+  { href: "/dashboard/tareas", label: "Tasks", icon: ClipboardList },
+  { href: "/dashboard/reportes", label: "Reports", icon: BarChart3 },
+  { href: "/dashboard/configuracion", label: "Settings", icon: Settings },
 ]
 
 export function Sidebar() {
@@ -63,10 +62,10 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-6">
-        {/* Principal Section */}
+        {/* Main Section */}
         <div>
           <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
-            Principal
+            Main
           </p>
           <div className="space-y-1">
             {principalItems.map((item) => {
@@ -102,10 +101,10 @@ export function Sidebar() {
           </div>
         </div>
 
-        {/* Gestión Section */}
+        {/* Management Section */}
         <div>
           <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
-            Gestión
+            Management
           </p>
           <div className="space-y-1">
             {gestionItems.map((item) => {
@@ -145,7 +144,7 @@ export function Sidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-text-primary truncate">
-              {companyName || "Tu empresa"}
+              {companyName || "Your company"}
             </p>
           </div>
         </div>

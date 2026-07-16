@@ -3,7 +3,7 @@
 import { AuthChangeEvent, Session } from "@supabase/supabase-js"
 import { getSupabase } from "./supabase"
 
-// Login con Google OAuth
+// Login with Google OAuth
 export async function signInWithGoogle() {
   const supabase = getSupabase()
 
@@ -15,55 +15,55 @@ export async function signInWithGoogle() {
   })
 
   if (error) {
-    console.error("Error al iniciar sesión con Google:", error.message)
+    console.error("Error signing in with Google:", error.message)
     throw error
   }
 
   return data
 }
 
-// Obtener sesión actual
+// Get current session
 export async function getSession() {
   const supabase = getSupabase()
   const { data, error } = await supabase.auth.getSession()
 
   if (error) {
-    console.error("Error al obtener sesión:", error.message)
+    console.error("Error getting session:", error.message)
     return null
   }
 
   return data.session
 }
 
-// Obtener usuario actual
+// Get current user
 export async function getUser() {
   const supabase = getSupabase()
   const { data, error } = await supabase.auth.getUser()
 
   if (error) {
-    console.error("Error al obtener usuario:", error.message)
+    console.error("Error getting user:", error.message)
     return null
   }
 
   if (data.user) {
-    console.log("Usuario autenticado:", data.user.email)
+    console.log("Authenticated user:", data.user.email)
   }
 
   return data.user
 }
 
-// Cerrar sesión
+// Sign out
 export async function signOut() {
   const supabase = getSupabase()
   const { error } = await supabase.auth.signOut()
 
   if (error) {
-    console.error("Error al cerrar sesión:", error.message)
+    console.error("Error signing out:", error.message)
     throw error
   }
 }
 
-// Escuchar cambios en la autenticación
+// Listen for authentication state changes
 export function onAuthStateChange(
   callback: (event: AuthChangeEvent, session: Session | null) => void
 ) {

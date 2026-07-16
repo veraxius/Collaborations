@@ -2,9 +2,9 @@ import Groq from "groq-sdk"
 import { SEOAnalysisResult } from "./seo"
 
 /**
- * Analiza los datos SEO usando Groq y genera recomendaciones
- * @param seoData - Datos del análisis SEO
- * @returns Recomendaciones SEO en texto generadas por IA
+ * Analyzes SEO data using Groq and generates recommendations
+ * @param seoData - SEO analysis data
+ * @returns AI-generated SEO recommendations as text
  */
 export async function analyzeSEOWithAI(
   seoData: SEOAnalysisResult
@@ -13,34 +13,34 @@ export async function analyzeSEOWithAI(
     const apiKey = process.env.GROQ_API_KEY
 
     if (!apiKey) {
-      throw new Error("GROQ_API_KEY no está configurada en las variables de entorno")
+      throw new Error("GROQ_API_KEY is not configured in the environment variables")
     }
 
     const client = new Groq({ apiKey })
 
-    // Crear el prompt con los datos SEO
-    const prompt = `Eres un experto en SEO. Analiza los siguientes datos de un sitio web y genera recomendaciones específicas y accionables para mejorar el SEO.
+    // Build the prompt with the SEO data
+    const prompt = `You are an SEO expert. Analyze the following data from a website and generate specific, actionable recommendations to improve its SEO.
 
-Datos del análisis SEO:
-- Título: "${seoData.title}" (${seoData.title.length} caracteres)
-- Meta Description: "${seoData.metaDescription}" (${seoData.metaDescription.length} caracteres)
-- Cantidad de H1: ${seoData.h1Count}
-- Cantidad de H2: ${seoData.h2Count}
-- Imágenes sin atributo alt: ${seoData.imagesWithoutAlt}
-- Enlaces internos: ${seoData.internalLinks}
+SEO analysis data:
+- Title: "${seoData.title}" (${seoData.title.length} characters)
+- Meta Description: "${seoData.metaDescription}" (${seoData.metaDescription.length} characters)
+- H1 count: ${seoData.h1Count}
+- H2 count: ${seoData.h2Count}
+- Images without alt attribute: ${seoData.imagesWithoutAlt}
+- Internal links: ${seoData.internalLinks}
 - SEO Score: ${seoData.seoScore}/10
 
-Genera recomendaciones SEO específicas y accionables basadas en estos datos. Incluye:
-1. Análisis del título (longitud óptima: 30-60 caracteres)
-2. Análisis de la meta description (longitud óptima: 120-160 caracteres)
-3. Recomendaciones sobre estructura de encabezados (H1, H2)
-4. Recomendaciones sobre imágenes y atributos alt
-5. Recomendaciones sobre enlaces internos
-6. Recomendaciones generales para mejorar el SEO Score
+Generate specific, actionable SEO recommendations based on this data. Include:
+1. Title analysis (optimal length: 30-60 characters)
+2. Meta description analysis (optimal length: 120-160 characters)
+3. Recommendations on heading structure (H1, H2)
+4. Recommendations on images and alt attributes
+5. Recommendations on internal links
+6. General recommendations to improve the SEO Score
 
-Responde en español, sé conciso pero específico. Formatea la respuesta con viñetas y sé práctico.`
+Respond in English, be concise but specific. Format the response with bullet points and be practical.`
 
-    // Llamar a la API
+    // Call the API
     const chatCompletion = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 1024,
@@ -52,16 +52,16 @@ Responde en español, sé conciso pero específico. Formatea la respuesta con vi
       ],
     })
 
-    // Extraer el texto de la respuesta
-    const recommendations = chatCompletion.choices[0]?.message?.content || "No se pudo generar recomendaciones."
+    // Extract the text from the response
+    const recommendations = chatCompletion.choices[0]?.message?.content || "Recommendations could not be generated."
 
     return recommendations
   } catch (error) {
-    console.error("Error generando recomendaciones con IA:", error)
+    console.error("Error generating AI recommendations:", error)
     
-    // En caso de error, devolver recomendaciones básicas
-    return `Error al generar recomendaciones con IA: ${
-      error instanceof Error ? error.message : "Error desconocido"
-    }. Por favor, revisa la configuración de GROQ_API_KEY.`
+    // On error, return a basic fallback message
+    return `Error generating AI recommendations: ${
+      error instanceof Error ? error.message : "Unknown error"
+    }. Please check the GROQ_API_KEY configuration.`
   }
 }

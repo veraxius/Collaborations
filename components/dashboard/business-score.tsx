@@ -13,7 +13,7 @@ interface BusinessScoreProps {
   }
 }
 
-const metricLabels = ["SEO", "Marketing", "Rendimiento Web", "Conversión"]
+const metricLabels = ["SEO", "Marketing", "Web Performance", "Conversion"]
 
 export function BusinessScore({ score, metrics }: BusinessScoreProps) {
   const getScoreColor = (s: number) => {
@@ -40,7 +40,7 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
         <CardDescription
           style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px" }}
         >
-          Indicador general del estado del negocio
+          Overall indicator of business health
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -72,7 +72,7 @@ export function BusinessScore({ score, metrics }: BusinessScoreProps) {
               className="mt-1"
               style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(13,13,15,0.5)" }}
             >
-              Basado en SEO, Marketing, Rendimiento Web y Conversión
+              Based on SEO, Marketing, Web Performance, and Conversion
             </p>
           </div>
 

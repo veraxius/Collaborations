@@ -21,11 +21,11 @@ function formatearFecha(fecha: string): string {
   const diffHoras = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDias = Math.floor(diffHoras / 24)
 
-  if (diffHoras < 1) return "Hace menos de 1 hora"
-  if (diffHoras < 24) return `Hace ${diffHoras} horas`
-  if (diffDias === 1) return "Ayer"
-  if (diffDias < 7) return `Hace ${diffDias} días`
-  return date.toLocaleDateString("es-AR", { day: "numeric", month: "short" })
+  if (diffHoras < 1) return "Less than 1 hour ago"
+  if (diffHoras < 24) return `${diffHoras} hours ago`
+  if (diffDias === 1) return "Yesterday"
+  if (diffDias < 7) return `${diffDias} days ago`
+  return date.toLocaleDateString("en-US", { day: "numeric", month: "short" })
 }
 
 export async function GET() {
@@ -52,7 +52,7 @@ export async function GET() {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const [documentosRes, analisisRes, tareasRes, analisisAnteriorRes] = await Promise.all([
@@ -64,7 +64,7 @@ export async function GET() {
         .order("created_at", { ascending: false })
         .limit(1)
         .single<AnalisisRow>(),
-      // Si la tabla no existe, devolveremos 0 más abajo
+      // If the table does not exist, we return 0 below
       supabase.from("tareas").select("id", { count: "exact" }).eq("user_id", user.id).eq("completada", false),
       supabase
         .from("analisis")
@@ -90,10 +90,10 @@ export async function GET() {
     const variacionScore = scoreActual - scoreAnterior
     const ultimoAnalisis = analisisRes.data?.created_at
       ? formatearFecha(analisisRes.data.created_at)
-      : "Sin análisis"
+      : "No analysis yet"
 
-    // Tareas: si la tabla no existe u ocurre error, devolver 0
-    // TODO: crear tabla tareas en Supabase cuando se implemente el módulo de tareas
+    // Tasks: if the table does not exist or an error occurs, return 0
+    // TODO: create the tareas table in Supabase when the tasks module is implemented
     const tareasPendientes =
       tareasRes.error || typeof tareasRes.count !== "number" ? 0 : Math.max(0, tareasRes.count)
 
@@ -106,12 +106,12 @@ export async function GET() {
 
     return NextResponse.json({ ok: true, data: payload })
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Error desconocido"
-    // En caso de falla, responder métricas con ceros para no romper el widget
+    const message = error instanceof Error ? error.message : "Unknown error"
+    // On failure, respond with zeroed metrics so the widget doesn't break
     const fallback: Metricas = {
       documentosAnalizados: 0,
       tareasPendientes: 0,
-      ultimoAnalisis: "Sin análisis",
+      ultimoAnalisis: "No analysis yet",
       variacionScore: 0,
     }
     return NextResponse.json({ ok: true, data: fallback, warning: message })

@@ -9,14 +9,14 @@ export default function CompetitorsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Competidores</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Competitors</h1>
           <p className="text-muted-foreground">
-            Análisis detallado de tus competidores
+            Detailed analysis of your competitors
           </p>
         </div>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Añadir Competidor
+          Add Competitor
         </Button>
       </div>
       <CompetitorsSection />

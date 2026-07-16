@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 import Groq from "groq-sdk"
 
-export const dynamic = "force-dynamic" // 👈 CLAVE
+export const dynamic = "force-dynamic" // 👈 KEY
 
 interface ChatMessage {
   role: "user" | "assistant"
@@ -20,7 +20,7 @@ interface AnalisisData {
 
 export async function POST(request: Request) {
   try {
-    // 🔐 Validación de API KEY en runtime
+    // 🔐 Runtime API KEY validation
     if (!process.env.GROQ_API_KEY) {
       return NextResponse.json(
         { error: "Missing GROQ_API_KEY" },
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
     if (!mensaje || typeof mensaje !== "string") {
       return NextResponse.json(
-        { error: "mensaje es requerido" },
+        { error: "message is required" },
         { status: 400 }
       )
     }
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
     const { data: profile } = await supabase
@@ -99,17 +99,18 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `Sos Lexora, el consultor de negocios con inteligencia artificial más avanzado para pequeñas empresas.
+          content: `You are Lexora, the most advanced AI-powered business consultant for small companies.
+Always respond in English.
 
-DATOS:
-Nombre: ${(empresa_data as any)?.nombre ?? "No disponible"}
-Rubro: ${(empresa_data as any)?.rubro ?? "No disponible"}
-Score: ${(ultimo_analisis as any)?.score ?? "Sin datos"}
+DATA:
+Name: ${(empresa_data as any)?.nombre ?? "Not available"}
+Industry: ${(empresa_data as any)?.rubro ?? "Not available"}
+Score: ${(ultimo_analisis as any)?.score ?? "No data"}
 
 ${
   esPrimerMensaje
-    ? "Presentate como Lexora y preguntá cómo ayudar."
-    : "Continuá la conversación naturalmente."
+    ? "Introduce yourself as Lexora and ask how you can help."
+    : "Continue the conversation naturally."
 }`,
         },
         ...historial,
@@ -122,7 +123,7 @@ ${
     })
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Error desconocido"
+      error instanceof Error ? error.message : "Unknown error"
 
     return NextResponse.json(
       { error: message },

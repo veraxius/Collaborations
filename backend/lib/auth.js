@@ -22,9 +22,3 @@ export function requireAuth(req, res, next) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 }
-
-export function hasAccess(company) {
-  if (company.subscriptionStatus === "active") return true;
-  if (company.subscriptionStatus === "past_due") return true;
-  return new Date(company.trialEndsAt).getTime() > Date.now();
-}

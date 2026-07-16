@@ -40,10 +40,10 @@ export default function OnboardingAnalizandoPage() {
           <div className="flex justify-center">
             <Loader2 className="h-10 w-10 animate-spin text-[var(--ink)]" />
           </div>
-          <CardTitle className="font-display text-3xl">Lexora está analizando tu empresa...</CardTitle>
+          <CardTitle className="font-display text-3xl">Lexora is analyzing your company...</CardTitle>
           <p className="text-sm text-[var(--ink-60)]">
-            Esto tarda unos segundos. Estamos leyendo tus documentos y preparando tus
-            primeras recomendaciones.
+            This takes a few seconds. We are reading your documents and preparing your
+            first recommendations.
           </p>
         </CardHeader>
         <CardContent className="space-y-2">

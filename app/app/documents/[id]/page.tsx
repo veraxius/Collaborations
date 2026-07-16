@@ -132,7 +132,7 @@ export default function EditDocumentPage() {
           Renewing sets a new expiry date, restarts the reminder cycle, and
           records whether the renewal was on time — it feeds your analytics.
         </p>
-        <form onSubmit={handleRenew} className="mt-4 flex items-center gap-2">
+        <form onSubmit={handleRenew} className="mt-4 flex flex-wrap items-center gap-2">
           <input
             className="input w-44"
             type="date"
@@ -148,7 +148,7 @@ export default function EditDocumentPage() {
         <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
 
-      <div className="card mt-6 flex items-center justify-between border-red-100">
+      <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 border-red-100">
         <div>
           <p className="font-medium text-red-600">Delete this document</p>
           <p className="text-sm text-neutral-400">This cannot be undone.</p>

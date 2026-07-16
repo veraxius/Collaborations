@@ -19,97 +19,97 @@ export function StepEmpresa({ data, onChange }: StepEmpresaProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="nombreEmpresa">Nombre de la empresa *</Label>
+        <Label htmlFor="nombreEmpresa">Company name *</Label>
         <Input
           id="nombreEmpresa"
           value={data.nombreEmpresa}
           onChange={(event) => updateField("nombreEmpresa", event.target.value)}
-          placeholder="Ej: Lexora SRL"
+          placeholder="E.g. Lexora LLC"
           required
         />
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="rubro">Rubro / industria *</Label>
+          <Label htmlFor="rubro">Industry / sector *</Label>
           <Select
             id="rubro"
             value={data.rubro}
             onChange={(event) => updateField("rubro", event.target.value)}
             required
           >
-            <option value="">Seleccionar</option>
-            <option value="Comercio/Retail">Comercio/Retail</option>
-            <option value="Manufactura">Manufactura</option>
-            <option value="Servicios profesionales">Servicios profesionales</option>
-            <option value="Logística">Logística</option>
-            <option value="Tecnología">Tecnología</option>
-            <option value="Salud">Salud</option>
-            <option value="Construcción">Construcción</option>
-            <option value="Gastronomía">Gastronomía</option>
-            <option value="Educación">Educación</option>
-            <option value="Finanzas">Finanzas</option>
-            <option value="Agropecuario">Agropecuario</option>
-            <option value="Otro">Otro</option>
+            <option value="">Select</option>
+            <option value="Commerce/Retail">Commerce/Retail</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Professional services">Professional services</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Technology">Technology</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Construction">Construction</option>
+            <option value="Hospitality">Hospitality</option>
+            <option value="Education">Education</option>
+            <option value="Finance">Finance</option>
+            <option value="Agribusiness">Agribusiness</option>
+            <option value="Other">Other</option>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="aniosMercado">Años en el mercado</Label>
+          <Label htmlFor="aniosMercado">Years in the market</Label>
           <Select
             id="aniosMercado"
             value={data.aniosMercado}
             onChange={(event) => updateField("aniosMercado", event.target.value)}
           >
-            <option value="">Seleccionar</option>
-            <option value="Menos de 1 año">Menos de 1 año</option>
-            <option value="1-3 años">1-3 años</option>
-            <option value="3-5 años">3-5 años</option>
-            <option value="5-10 años">5-10 años</option>
-            <option value="Más de 10 años">Más de 10 años</option>
+            <option value="">Select</option>
+            <option value="Less than 1 year">Less than 1 year</option>
+            <option value="1-3 years">1-3 years</option>
+            <option value="3-5 years">3-5 years</option>
+            <option value="5-10 years">5-10 years</option>
+            <option value="More than 10 years">More than 10 years</option>
           </Select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="pais">País *</Label>
+          <Label htmlFor="pais">Country *</Label>
           <Select
             id="pais"
             value={data.pais}
             onChange={(event) => updateField("pais", event.target.value)}
             required
           >
-            <option value="">Seleccionar</option>
+            <option value="">Select</option>
             <option value="Argentina">Argentina</option>
-            <option value="México">México</option>
+            <option value="Mexico">Mexico</option>
             <option value="Colombia">Colombia</option>
             <option value="Chile">Chile</option>
             <option value="Uruguay">Uruguay</option>
-            <option value="España">España</option>
+            <option value="Spain">Spain</option>
             <option value="United States">United States</option>
-            <option value="Otro">Otro</option>
+            <option value="Other">Other</option>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="sitioWeb">Sitio web</Label>
+          <Label htmlFor="sitioWeb">Website</Label>
           <Input
             id="sitioWeb"
             value={data.sitioWeb}
             onChange={(event) => updateField("sitioWeb", event.target.value)}
-            placeholder="https://tuempresa.com"
+            placeholder="https://yourcompany.com"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="descripcion">Descripción breve *</Label>
+        <Label htmlFor="descripcion">Short description *</Label>
         <Textarea
           id="descripcion"
           value={data.descripcion}
           onChange={(event) => updateField("descripcion", event.target.value)}
-          placeholder="Contanos qué hace tu empresa y su propuesta de valor."
+          placeholder="Tell us what your company does and its value proposition."
           required
         />
       </div>

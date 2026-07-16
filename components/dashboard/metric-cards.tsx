@@ -32,7 +32,7 @@ function MetricCard({ title, value, change, icon, description }: MetricCardProps
             {isPositive ? "+" : ""}{change}%
           </Badge>
           <p style={{ ...sans, fontSize: "12px", color: "rgba(13,13,15,0.5)" }}>
-            {description || "vs mes anterior"}
+            {description || "vs previous month"}
           </p>
         </div>
       </CardContent>
@@ -42,10 +42,10 @@ function MetricCard({ title, value, change, icon, description }: MetricCardProps
 
 export function MetricCards() {
   const metrics = [
-    { title: "Tráfico Estimado", value: "45.2K", change: 12.5, icon: <Users className="h-4 w-4 text-muted-foreground" />, description: "visitas mensuales" },
-    { title: "Crecimiento Mensual", value: "+18%", change: 8.2, icon: <TrendingUp className="h-4 w-4 text-muted-foreground" />, description: "vs mes anterior" },
-    { title: "Ranking SEO", value: "#24", change: -3, icon: <Search className="h-4 w-4 text-muted-foreground" />, description: "mejoró 3 posiciones" },
-    { title: "Performance del Sitio", value: "87", change: 5.1, icon: <Zap className="h-4 w-4 text-muted-foreground" />, description: "puntuación" },
+    { title: "Estimated Traffic", value: "45.2K", change: 12.5, icon: <Users className="h-4 w-4 text-muted-foreground" />, description: "monthly visits" },
+    { title: "Monthly Growth", value: "+18%", change: 8.2, icon: <TrendingUp className="h-4 w-4 text-muted-foreground" />, description: "vs previous month" },
+    { title: "SEO Ranking", value: "#24", change: -3, icon: <Search className="h-4 w-4 text-muted-foreground" />, description: "improved 3 positions" },
+    { title: "Site Performance", value: "87", change: 5.1, icon: <Zap className="h-4 w-4 text-muted-foreground" />, description: "score" },
   ]
 
   return (

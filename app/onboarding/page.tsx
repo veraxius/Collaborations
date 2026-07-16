@@ -16,11 +16,11 @@ import { LexoraLogo } from "@/components/ui/lexora-logo"
 import { useLanguage } from "@/components/providers/language-provider"
 
 const steps = [
-  { id: 1, title: "Empresa", description: "Información básica" },
-  { id: 2, title: "Equipo", description: "Tamaño y áreas" },
-  { id: 3, title: "Documentos", description: "Archivos y procesos" },
-  { id: 4, title: "Objetivos", description: "Metas y prioridades" },
-  { id: 5, title: "Confirmación", description: "Revisar y enviar" },
+  { id: 1, title: "Company", description: "Basic information" },
+  { id: 2, title: "Team", description: "Size and areas" },
+  { id: 3, title: "Documents", description: "Files and processes" },
+  { id: 4, title: "Goals", description: "Goals and priorities" },
+  { id: 5, title: "Confirmation", description: "Review and submit" },
 ]
 
 const initialData: OnboardingData = {
@@ -105,21 +105,21 @@ export default function OnboardingPage() {
         !data.empresa.pais ||
         !data.empresa.descripcion
       ) {
-        setError("Completá los campos obligatorios del paso Empresa.")
+        setError("Complete the required fields in the Company step.")
         return false
       }
     }
 
     if (currentStep === 2) {
       if (!data.equipo.empleados || data.equipo.areas.length === 0) {
-        setError("Seleccioná la cantidad de empleados y al menos un área.")
+        setError("Select the number of employees and at least one area.")
         return false
       }
     }
 
     if (currentStep === 4) {
       if (!data.objetivos.problemaPrincipal || data.objetivos.objetivos.length === 0) {
-        setError("Definí al menos un objetivo y el problema principal.")
+        setError("Define at least one goal and the main problem.")
         return false
       }
     }
@@ -151,13 +151,13 @@ export default function OnboardingPage() {
 
       const body = (await response.json()) as { ok?: boolean; error?: string }
       if (!response.ok || !body.ok) {
-        throw new Error(body.error || "No se pudo guardar el onboarding")
+        throw new Error(body.error || "Could not save your onboarding data")
       }
 
       router.push("/onboarding/analizando")
     } catch (caughtError) {
       const message =
-        caughtError instanceof Error ? caughtError.message : "Error inesperado"
+        caughtError instanceof Error ? caughtError.message : "Unexpected error"
       setError(message)
     } finally {
       setSubmitting(false)
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
-          <p className="text-text-secondary">Cargando... </p>
+          <p className="text-text-secondary">Loading... </p>
         </div>
       </div>
     )
@@ -183,7 +183,7 @@ export default function OnboardingPage() {
           <LexoraLogo size="small" theme="light" />
           <div className="flex items-center gap-4">
             <span className="text-sm text-text-secondary hidden sm:inline">
-              Paso {currentStep} de {steps.length}
+              Step {currentStep} of {steps.length}
             </span>
             <div className="w-32 sm:w-48">
               <Progress value={progressValue} className="h-2" />
@@ -201,7 +201,7 @@ export default function OnboardingPage() {
             className="lex-btn-secondary"
           >
             <Menu className="h-4 w-4 mr-2" />
-            {showSteps ? "Ocultar pasos" : "Ver pasos"}
+            {showSteps ? "Hide steps" : "View steps"}
           </Button>
         </div>
 
@@ -214,10 +214,10 @@ export default function OnboardingPage() {
           >
             <div className="lex-card p-6">
               <h2 className="font-display text-lg text-text-primary mb-1">
-                Configuración inicial
+                Initial setup
               </h2>
               <p className="text-sm text-text-secondary mb-6">
-                Completa estos pasos para personalizar tu experiencia
+                Complete these steps to personalize your experience
               </p>
 
               <div className="space-y-3">
@@ -334,7 +334,7 @@ export default function OnboardingPage() {
                   className="lex-btn-secondary"
                 >
                   <ChevronLeft className="w-4 h-4 mr-2" />
-                  Anterior
+                  Previous
                 </Button>
 
                 {currentStep < steps.length ? (
@@ -343,7 +343,7 @@ export default function OnboardingPage() {
                     onClick={nextStep}
                     className="lex-btn lex-btn-primary bg-primary-600 text-white hover:bg-primary-700"
                   >
-                    Siguiente
+                    Next
                     <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 ) : (
