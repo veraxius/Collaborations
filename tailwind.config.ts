@@ -10,6 +10,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /* ========================================
+           MARKETING SITE TOKENS (highway/DOT system)
+           ======================================== */
+        asphalt: "#101820",
+        chalk: "#F6F5F2",
+        "cab-white": "#FFFFFF",
+        "signal-amber": "#FFB100",
+        "compliance-green": "#1E9E6A",
+        "alert-red": "#D9482B",
+        line: "#E3E1DB",
+
         accent: {
           50: "#f0f7ff",
           100: "#e0efff",
@@ -222,6 +233,15 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         display: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        /* Marketing site fonts (variables set in app/(marketing)/layout.tsx) */
+        condensed: [
+          "var(--font-barlow-condensed)",
+          "Arial Narrow",
+          "Impact",
+          "sans-serif",
+        ],
+        barlow: ["var(--font-barlow)", "Arial", "Helvetica", "sans-serif"],
+        plex: ["var(--font-plex-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
       },
 
       /* ========================================

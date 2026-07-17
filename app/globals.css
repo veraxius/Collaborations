@@ -158,3 +158,147 @@
 @media (prefers-reduced-motion: reduce) {
   .liquid-blob { animation: none; }
 }
+
+/* ============================================================
+   MARKETING SITE (app/(marketing)/*)
+   Highway-signage design system: asphalt / chalk / signal-amber.
+   ============================================================ */
+
+.mk {
+  font-family: var(--font-barlow), Arial, Helvetica, sans-serif;
+  color: #101820;
+  background: #f6f5f2;
+}
+
+.mk ::selection {
+  background: #ffb100;
+  color: #101820;
+}
+
+/* Visible focus states across the marketing site */
+.mk a:focus-visible,
+.mk button:focus-visible,
+.mk input:focus-visible,
+.mk select:focus-visible,
+.mk textarea:focus-visible,
+.mk [tabindex]:focus-visible {
+  outline: 2px solid #ffb100;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@layer components {
+  .mk-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-3 text-[15px] font-semibold transition duration-200 ease-out hover:-translate-y-px motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+  }
+  .mk-btn-primary {
+    @apply bg-signal-amber text-asphalt hover:bg-[#e6a000] hover:shadow-[0_8px_20px_rgb(16_24_32/0.14)] active:bg-[#cc8f00];
+  }
+  .mk-btn-secondary {
+    @apply border-[1.5px] border-asphalt bg-transparent text-asphalt hover:bg-asphalt hover:text-chalk hover:shadow-[0_8px_20px_rgb(16_24_32/0.12)];
+  }
+  .mk-btn-secondary-dark {
+    @apply border-[1.5px] border-chalk bg-transparent text-chalk hover:bg-chalk hover:text-asphalt hover:shadow-[0_8px_20px_rgb(0_0_0/0.25)];
+  }
+  .mk-card {
+    @apply rounded-[18px] border border-line/60 bg-cab-white;
+    box-shadow: 0 8px 24px rgb(16 24 32 / 0.06);
+  }
+  .mk-card-hover {
+    @apply transition duration-200 ease-out hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+  }
+  .mk-card-hover:hover {
+    box-shadow: 0 14px 32px rgb(16 24 32 / 0.09);
+  }
+  /* Soft pill tag; background/text color set per light/dark context */
+  .mk-eyebrow {
+    @apply inline-flex items-center rounded-full px-3.5 py-1 text-[13px] font-semibold;
+  }
+  .mk-h1 {
+    @apply font-condensed font-bold;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+  .mk-h2 {
+    @apply font-condensed font-bold;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+  .mk-input {
+    @apply block w-full rounded-[12px] border border-line bg-cab-white px-4 py-2.5 text-[16px] text-asphalt outline-none transition placeholder:text-asphalt/40 focus:border-asphalt;
+  }
+  .mk-label {
+    @apply mb-1.5 block text-sm font-semibold text-asphalt;
+  }
+}
+
+/* ------------------------------------------------------------
+   Deadline Strip — hero animation (~1.2s total, runs once).
+   Sequence: strip draws in → chips pop with stagger → the amber
+   chip near "7" slides back past "30" and turns green.
+   ------------------------------------------------------------ */
+
+.mk-strip-line {
+  stroke-dasharray: 860;
+  stroke-dashoffset: 860;
+  animation: mk-strip-draw 0.45s ease-out forwards;
+}
+.mk-strip-tick {
+  opacity: 0;
+  animation: mk-fade-in 0.25s ease-out forwards;
+}
+.mk-strip-tick-1 { animation-delay: 0.1s; }
+.mk-strip-tick-2 { animation-delay: 0.18s; }
+.mk-strip-tick-3 { animation-delay: 0.26s; }
+.mk-strip-tick-4 { animation-delay: 0.34s; }
+.mk-strip-tick-5 { animation-delay: 0.42s; }
+
+.mk-chip {
+  opacity: 0;
+  transform-origin: center;
+  animation: mk-chip-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.mk-chip-1 { animation-delay: 0.45s; }
+.mk-chip-2 { animation-delay: 0.55s; }
+.mk-chip-3 { animation-delay: 0.65s; }
+
+/* The renewal chip: pops in amber near "7", then slides back past
+   "30" while its fill fades to green. */
+.mk-chip-renew {
+  animation:
+    mk-chip-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards,
+    mk-chip-slide 0.42s cubic-bezier(0.3, 1.25, 0.5, 1) 0.85s forwards;
+}
+.mk-chip-renew .mk-chip-fill {
+  animation: mk-chip-to-green 0.42s ease-out 0.85s forwards;
+}
+
+@keyframes mk-strip-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes mk-fade-in {
+  to { opacity: 1; }
+}
+@keyframes mk-chip-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.85); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes mk-chip-slide {
+  to { transform: translateX(-440px); }
+}
+@keyframes mk-chip-to-green {
+  to { fill: #1e9e6a; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-strip-line,
+  .mk-strip-tick,
+  .mk-chip,
+  .mk-chip-renew,
+  .mk-chip-renew .mk-chip-fill {
+    animation: none;
+  }
+  .mk-strip-line { stroke-dashoffset: 0; }
+  .mk-strip-tick,
+  .mk-chip { opacity: 1; }
+}
