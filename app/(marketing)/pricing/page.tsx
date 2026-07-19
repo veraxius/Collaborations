@@ -8,9 +8,9 @@ import {
 import { CtaBand } from "@/components/marketing/cta-band";
 
 export const metadata: Metadata = {
-  title: "Pricing — FleetGuard",
+  title: "FleetGuard — Price",
   description:
-    "Simple per-truck pricing for DOT compliance tracking: $5 per truck per month ($79 minimum) or $50 per truck per year with 2 months free. 14-day free trial, no credit card.",
+    "Simple pricing for DOT compliance tracking: $29 per month, everything included. Free to explore, no credit card.",
 };
 
 export default function PricingPage() {

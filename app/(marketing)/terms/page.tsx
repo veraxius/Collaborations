@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORT_EMAIL } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — FleetGuard",
+  title: "FleetGuard — Terms",
   description:
     "The terms that govern your use of FleetGuard: the 14-day trial, billing and cancellation, acceptable use, and what FleetGuard is (and isn't).",
 };
@@ -38,13 +38,11 @@ export default function TermsPage() {
                 Free trial, billing, and cancellation
               </h2>
               <p className="mt-3">
-                Every plan starts with a free 14-day trial; no credit card is
-                required to start. Paid plans are billed at $5 per truck per
-                month with a $79/month minimum, or $50 per truck per year with
-                a $790/year minimum. Monthly plans can be cancelled at any
-                time — there are no contracts and no cancellation fees. Annual
-                plans run for 12 months at the locked price. If you cancel,
-                you keep access until the end of the period you've paid for.
+                You can create an account and use FleetGuard without a credit
+                card. The paid plan is billed at $29 per month with everything
+                included. You can cancel at any time — there are no contracts
+                and no cancellation fees. If you cancel, you keep access until
+                the end of the period you&apos;ve paid for.
               </p>
             </section>
 

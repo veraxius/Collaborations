@@ -3,7 +3,7 @@ import { ContactForm } from "@/components/marketing/contact-form";
 import { SUPPORT_EMAIL } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "Contact — FleetGuard",
+  title: "FleetGuard — Contact",
   description:
     "Questions about pricing, setup, or moving your fleet's compliance tracking off a spreadsheet? Send us a message — we answer within one business day.",
 };

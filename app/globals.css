@@ -54,6 +54,154 @@
 }
 
 /* ============================================================
+   Dark mode (applied via .dark on <html>, only inside /app)
+   Same visual language as light mode: soft neutrals, one blue
+   accent, translucent status tints. Neutral scale is remapped
+   onto a near-black base instead of inverting colors.
+   ============================================================ */
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Page chrome */
+.dark body,
+.dark .bg-\[\#fbfbfd\] {
+  background-color: #0e0e11;
+}
+.dark .glass-header {
+  background: rgba(14, 14, 17, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.dark ::selection {
+  background: #0071e3;
+  color: #fff;
+}
+
+/* Surfaces */
+.dark .card {
+  background-color: #17171c;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+.dark .bg-white {
+  background-color: #17171c;
+}
+.dark .bg-white\/90 {
+  background-color: rgba(23, 23, 28, 0.9);
+}
+.dark .bg-neutral-50,
+.dark .hover\:bg-neutral-50:hover {
+  background-color: #1d1d23;
+}
+.dark .bg-neutral-100,
+.dark .bg-neutral-100\/80,
+.dark .hover\:bg-neutral-100:hover {
+  background-color: #23232a;
+}
+.dark .hover\:bg-neutral-200:hover {
+  background-color: #2c2c34;
+}
+.dark .shadow-soft {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+.dark .shadow-lift,
+.dark .hover\:shadow-lift:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+/* Text */
+.dark .text-neutral-900 { color: #f2f2f4; }
+.dark .text-neutral-800 { color: #e4e4e8; }
+.dark .text-neutral-700 { color: #d0d0d6; }
+.dark .text-neutral-600 { color: #b4b4bd; }
+.dark .text-neutral-500 { color: #98989f; }
+.dark .text-neutral-400 { color: #74747e; }
+.dark .text-neutral-300 { color: #55555f; }
+.dark .hover\:text-neutral-900:hover { color: #f2f2f4; }
+.dark .hover\:text-neutral-700:hover { color: #d0d0d6; }
+.dark .text-accent-600,
+.dark .text-accent-500 { color: #4da3ff; }
+
+/* Borders & dividers */
+.dark .border-neutral-200,
+.dark .border-neutral-200\/50,
+.dark .border-neutral-200\/70 { border-color: #2c2c34; }
+.dark .border-neutral-100 { border-color: #26262e; }
+.dark .divide-neutral-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #26262e;
+}
+.dark .border-white\/60 { border-color: rgba(255, 255, 255, 0.09); }
+
+/* Form controls */
+.dark .input {
+  background-color: #1b1b21;
+  border-color: #2c2c34;
+  color: #f2f2f4;
+}
+.dark .input::placeholder,
+.dark .placeholder\:text-neutral-400::placeholder { color: #6b6b76; }
+.dark .input:focus {
+  border-color: #0071e3;
+  --tw-ring-color: rgba(0, 113, 227, 0.25);
+}
+.dark .input:disabled,
+.dark .input[readonly] {
+  background-color: #17171c;
+  color: #74747e;
+}
+.dark .btn-secondary {
+  background-color: #26262e;
+  color: #f2f2f4;
+}
+.dark .btn-secondary:hover { background-color: #30303a; }
+
+/* Status tints: same hues, translucent on dark */
+.dark .bg-red-50,
+.dark .bg-red-50\/70 { background-color: rgba(239, 68, 68, 0.12); }
+.dark .bg-amber-50,
+.dark .bg-amber-50\/70 { background-color: rgba(245, 158, 11, 0.12); }
+.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.12); }
+.dark .bg-accent-50 { background-color: rgba(0, 113, 227, 0.14); }
+.dark .text-red-500, .dark .text-red-600, .dark .text-red-700 { color: #f87171; }
+.dark .text-red-900 { color: #fca5a5; }
+.dark .text-amber-500, .dark .text-amber-600 { color: #fbbf24; }
+.dark .text-amber-900 { color: #fcd34d; }
+.dark .text-emerald-500, .dark .text-emerald-600,
+.dark .text-emerald-700, .dark .text-emerald-800 { color: #34d399; }
+.dark .ring-red-100 { --tw-ring-color: rgba(239, 68, 68, 0.25); }
+.dark .ring-amber-100 { --tw-ring-color: rgba(245, 158, 11, 0.25); }
+.dark .ring-emerald-100 { --tw-ring-color: rgba(16, 185, 129, 0.25); }
+.dark .ring-accent-100 { --tw-ring-color: rgba(0, 113, 227, 0.3); }
+.dark .ring-neutral-200 { --tw-ring-color: #2c2c34; }
+.dark .border-red-100 { border-color: rgba(239, 68, 68, 0.25); }
+.dark .border-amber-100 { border-color: rgba(245, 158, 11, 0.25); }
+.dark .border-red-200 { border-color: rgba(239, 68, 68, 0.35); }
+.dark .hover\:bg-red-50:hover { background-color: rgba(239, 68, 68, 0.12); }
+
+/* Charts (SVG presentation attributes lose to CSS) */
+.dark svg [stroke="#ececec"] { stroke: #2c2c34; }
+.dark svg [stroke="#f0f0f0"] { stroke: #2c2c34; }
+.dark svg [fill="#171717"] { fill: #f2f2f4; }
+.dark svg [fill="#525252"] { fill: #b4b4bd; }
+
+/* Ambient background: dim the white light layer so it doesn't wash
+   the dark base; keep the colored blobs, slightly stronger. */
+.dark .liquid-light {
+  background:
+    radial-gradient(
+      52% 44% at var(--mx) var(--my),
+      rgba(120, 175, 255, 0.06) 0%,
+      rgba(120, 175, 255, 0.02) 45%,
+      rgba(0, 0, 0, 0) 100%
+    );
+}
+.dark .liquid-grain { opacity: 0.25; }
+.dark .liquid-blob { opacity: 0.55; }
+
+/* ============================================================
    Liquid glass background
    Blurred color fields whose silhouettes slowly morph (organic
    border-radius animation) + a seamless cursor-reactive light

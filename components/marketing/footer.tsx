@@ -5,7 +5,7 @@ import { SUPPORT_EMAIL } from "@/components/marketing/config";
 const SITE_LINKS = [
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#what-we-track", label: "What we track" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/pricing", label: "Price" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];

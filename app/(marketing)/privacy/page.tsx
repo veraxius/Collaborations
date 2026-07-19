@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORT_EMAIL } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — FleetGuard",
+  title: "FleetGuard — Privacy",
   description:
     "How FleetGuard collects, uses, and protects your account, fleet, and document data. We don't sell your data — your paperwork is your business.",
 };

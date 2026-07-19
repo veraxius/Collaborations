@@ -13,7 +13,7 @@ import { CtaBand } from "@/components/marketing/cta-band";
 import { SIGNUP_ROUTE } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "FleetGuard — DOT Compliance Tracking for Small Trucking Fleets",
+  title: "FleetGuard",
   description:
     "Track every CDL, medical card, insurance certificate, inspection, and permit — and get warned 30, 15, 7, and 1 day before anything expires. Built for fleets of 1–100 trucks.",
 };

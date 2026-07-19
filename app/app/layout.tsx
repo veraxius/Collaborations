@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/fleetguard-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { logout, useCompany } from "@/lib/auth-client";
 
 const nav = [
@@ -11,6 +12,7 @@ const nav = [
   { href: "/app/documents", label: "Documents" },
   { href: "/app/vehicles", label: "Vehicles" },
   { href: "/app/drivers", label: "Drivers" },
+  { href: "/app/price", label: "Price" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -56,7 +58,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
           </nav>
-          <div className="flex min-w-0 shrink-0 items-center gap-5">
+          <div className="flex min-w-0 shrink-0 items-center gap-3 sm:gap-4">
             <Link
               href="/app/settings"
               className="hidden max-w-40 truncate text-sm text-neutral-400 transition hover:text-neutral-700 md:inline"
@@ -70,6 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             >
               Log out
             </button>
+            <ThemeToggle />
           </div>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-4 pb-2.5 lg:hidden">

@@ -4,7 +4,7 @@ import { FAQ_ITEMS } from "@/components/marketing/faq-data";
 import { CtaBand } from "@/components/marketing/cta-band";
 
 export const metadata: Metadata = {
-  title: "FAQ — FleetGuard",
+  title: "FleetGuard — FAQ",
   description:
     "What FleetGuard tracks, how the 30/15/7/1-day reminders work, pricing and cancellation, New Entrant Safety Audit prep, and what happens to your documents.",
 };

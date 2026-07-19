@@ -64,7 +64,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "pricing-cancel",
     question: "What does it cost? Can I cancel anytime?",
     answer:
-      "$5 per truck per month with a $79/month minimum, or save two months with annual billing at $50 per truck per year ($790/year minimum, white-glove onboarding included). Every plan starts with a free 14-day trial, no credit card required. Monthly plans cancel anytime — no contracts, no cancellation fees.",
+      "One flat plan: $29 per month with everything included — unlimited trucks, drivers, documents, and reminders. You can create an account and explore for free, no credit card required, and cancel anytime — no contracts, no cancellation fees.",
   },
   {
     id: "install",

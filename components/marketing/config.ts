@@ -18,3 +18,12 @@ export const DASHBOARD_ROUTE = "/app";
 export const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "";
 
 export const SITE_NAME = "FleetGuard";
+
+/**
+ * Public LemonSqueezy checkout for the $29/month Fleet plan.
+ * Prefer NEXT_PUBLIC_LEMONSQUEEZY_BUY_LINK so it stays in sync with
+ * LEMONSQUEEZY_BUY_LINK in the backend .env.
+ */
+export const CHECKOUT_URL =
+  process.env.NEXT_PUBLIC_LEMONSQUEEZY_BUY_LINK ||
+  "https://fleetguard.lemonsqueezy.com/checkout/buy/bb3faca7-6051-4d2c-91d0-d557445dc9df";
