@@ -30,6 +30,16 @@ model Company {
   @@schema("fleetguard")
 }
 
+model Lead {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("web")
+  usdot     String?
+  createdAt DateTime @default(now())
+
+  @@schema("fleetguard")
+}
+
 model Vehicle {
   id         String   @id @default(cuid())
   companyId  String

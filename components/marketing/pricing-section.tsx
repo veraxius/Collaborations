@@ -12,11 +12,11 @@ export function PricingSection({
       <div className="text-center">
         <SectionEyebrow>Pricing</SectionEyebrow>
         <Heading className="mk-h2 mt-3 text-4xl text-asphalt sm:text-5xl">
-          One plan. $29 a month. No modules, no contracts.
+          Free for 3 trucks. $29 a month for everything.
         </Heading>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-asphalt/75">
-          Unlimited trucks, drivers, documents, and reminders — everything
-          included.
+          Start free, no credit card. Upgrade when your fleet grows — unlimited
+          trucks, drivers, documents, and reminders. No modules, no contracts.
         </p>
       </div>
       <PricingCalculator />

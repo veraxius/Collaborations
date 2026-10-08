@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { SUPPORT_EMAIL } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "FleetGuard — Terms",
+  title: "Terms of Service",
   description:
-    "The terms that govern your use of FleetGuard: the 14-day trial, billing and cancellation, acceptable use, and what FleetGuard is (and isn't).",
+    "The terms that govern your use of FleetGuard: free access, billing and cancellation, acceptable use, and what FleetGuard is (and isn't).",
 };
 
 const LAST_UPDATED = "July 17, 2026";
@@ -35,7 +35,7 @@ export default function TermsPage() {
 
             <section>
               <h2 className="font-condensed text-2xl font-semibold text-asphalt">
-                Free trial, billing, and cancellation
+                Free access, billing, and cancellation
               </h2>
               <p className="mt-3">
                 You can create an account and use FleetGuard without a credit

@@ -1,0 +1,13 @@
+{
+  "name": "fleetguard-marketing-videos",
+  "private": true,
+  "type": "module",
+  "description": "HTML-driven video renderer (Chrome frames -> ffmpeg) for LinkedIn clips",
+  "scripts": {
+    "stills": "node render.mjs problem-expired-documents.html out/stills --stills 1.5,5.5,7.5,11.5,13.5,15.6,18.8,23.5",
+    "render": "node render.mjs problem-expired-documents.html out/problem-expired-documents.mp4"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

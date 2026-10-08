@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/fleetguard-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { logout, useCompany } from "@/lib/auth-client";
+import { IS_PRIVATE } from "@/lib/brand";
 
 const nav = [
   { href: "/app", label: "Dashboard" },
@@ -12,7 +13,7 @@ const nav = [
   { href: "/app/documents", label: "Documents" },
   { href: "/app/vehicles", label: "Vehicles" },
   { href: "/app/drivers", label: "Drivers" },
-  { href: "/app/price", label: "Price" },
+  ...(IS_PRIVATE ? [] : [{ href: "/app/price", label: "Upgrade" }]),
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -92,6 +93,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </nav>
       </header>
 
+      {company.plan === "free" && company.limits && (
+        <div className="bg-amber-50 text-amber-900">
+          <p className="mx-auto max-w-6xl px-4 py-2 text-sm sm:px-6">
+            Free plan: up to {company.limits.vehicles} vehicles and {company.limits.drivers} drivers.{" "}
+            <Link href="/app/price" className="font-semibold underline">
+              Go unlimited for $29/month
+            </Link>
+          </p>
+        </div>
+      )}
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</main>
     </div>
   );

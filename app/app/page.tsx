@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ScoreRing } from "@/components/charts";
 import { FleetChat } from "@/components/fleet-chat";
 import { api } from "@/lib/api";
+import { useCompany } from "@/lib/auth-client";
 import {
   daysUntil,
   documentTypeLabel,
@@ -37,6 +38,7 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const { company } = useCompany(false);
 
   useEffect(() => {
     api<DashboardData>("/api/dashboard")
@@ -125,8 +127,54 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {(vehicleCount === 0 || driverCount === 0 || documents.length === 0) && (
+        <div className="card mt-6">
+          <h2 className="text-lg font-semibold tracking-tight">Get audit-ready in 3 steps</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            Reminders start the moment your first document has an expiry date.
+          </p>
+          <ol className="mt-4 space-y-2.5">
+            {[
+              { done: documents.length > 0, label: "Add your first document (try the DOT quick-start list)", href: "/app/documents/new" },
+              { done: driverCount > 0, label: "Add a driver", href: "/app/drivers" },
+              { done: vehicleCount > 0, label: "Add a vehicle", href: "/app/vehicles" },
+            ].map((step) => (
+              <li key={step.label} className="flex items-center gap-3 text-sm">
+                <span
+                  aria-hidden="true"
+                  className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${
+                    step.done ? "bg-emerald-500 text-white" : "border border-neutral-300 text-transparent"
+                  }`}
+                >
+                  ✓
+                </span>
+                {step.done ? (
+                  <span className="text-neutral-400 line-through">{step.label}</span>
+                ) : (
+                  <Link href={step.href} className="font-medium text-accent-600">
+                    {step.label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
       <div className="mt-10">
-        <FleetChat />
+        {company?.plan === "free" ? (
+          <div className="card flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-medium">Ask your fleet anything</p>
+              <p className="text-sm text-neutral-500">
+                &quot;What expires this month?&quot; The AI assistant is included in the Fleet plan.
+              </p>
+            </div>
+            <Link href="/app/price" className="btn-primary">Upgrade — $29/mo</Link>
+          </div>
+        ) : (
+          <FleetChat />
+        )}
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">

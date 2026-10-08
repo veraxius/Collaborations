@@ -64,7 +64,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "pricing-cancel",
     question: "What does it cost? Can I cancel anytime?",
     answer:
-      "One flat plan: $29 per month with everything included — unlimited trucks, drivers, documents, and reminders. You can create an account and explore for free, no credit card required, and cancel anytime — no contracts, no cancellation fees.",
+      "The Starter plan is free forever for up to 3 vehicles and 3 drivers, with all reminders included. The Fleet plan is $29 per month flat — unlimited trucks, drivers, documents, and reminders, with no per-truck fees. No credit card to start, and you can cancel anytime — no contracts, no cancellation fees.",
   },
   {
     id: "install",
@@ -76,7 +76,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "cancel-documents",
     question: "What happens to my documents if I cancel?",
     answer:
-      "They're yours. Cancel whenever you like, and if you want your records, contact us and we'll send you a complete export of your documents and expiration data. We don't hold your paperwork hostage.",
+      "They're yours. Cancel whenever you like, and export all your documents and expiration data to CSV yourself from the Documents page at any time. We don't hold your paperwork hostage.",
   },
 ];
 

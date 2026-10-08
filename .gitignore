@@ -24,6 +24,18 @@ out/
 .env
 .env.*
 !.env.example
+!.env.local.example
+!.env.fleetguard.example
+
+# Per-customer secrets for private installs
+customer.env
+customer-*.env
+
+# Rendered marketing videos and stills (regenerate with `npm run render` in marketing-videos/)
+marketing-videos/out/
+
+# User uploads must never be committed
+backend/uploads/
 
 # -------------------------
 # LOGS

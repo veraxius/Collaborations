@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { BRAND_NAME } from "@/lib/brand";
 
 function titleForPath(pathname: string): string {
   if (pathname === "/app" || pathname === "/app/") return "FleetGuard";
@@ -48,7 +49,13 @@ export function DocumentTitle() {
   const pathname = usePathname() || "/";
 
   useEffect(() => {
-    document.title = titleForPath(pathname);
+    // Public pages own their <title> through Next metadata (it is what search
+    // engines index). Only the signed-in app and auth screens are managed here.
+    const managed =
+      pathname.startsWith("/app") ||
+      ["/login", "/register", "/signup", "/forgot-password", "/reset-password"].includes(pathname);
+    if (!managed) return;
+    document.title = titleForPath(pathname).replace(/^FleetGuard/, BRAND_NAME);
   }, [pathname]);
 
   return null;

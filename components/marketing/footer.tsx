@@ -5,7 +5,10 @@ import { SUPPORT_EMAIL } from "@/components/marketing/config";
 const SITE_LINKS = [
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#what-we-track", label: "What we track" },
+  { href: "/tools/dot-compliance-calendar", label: "Free DOT calendar" },
+  { href: "/guides", label: "Guides" },
   { href: "/pricing", label: "Price" },
+  { href: "/enterprise", label: "Private installation" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];

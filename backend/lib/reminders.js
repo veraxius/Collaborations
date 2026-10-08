@@ -2,6 +2,8 @@ import prisma from "./prisma.js";
 import { sendEmail } from "./email.js";
 import { captureSnapshot } from "./analytics.js";
 import { daysUntil, documentTypeLabel } from "./expiry.js";
+import { escapeHtml } from "./security.js";
+import { BRAND_NAME } from "./brand.js";
 
 const REMINDER_OFFSETS = [30, 15, 7, 1];
 
@@ -41,16 +43,15 @@ export async function runReminderSweep() {
     try {
       await sendEmail(
         doc.company.email,
-        `[FleetGuard] ${subjectPrefix}: ${doc.title}`,
+        `[${BRAND_NAME}] ${subjectPrefix}: ${doc.title}`,
         `<div style="font-family:-apple-system,'Segoe UI',sans-serif;max-width:520px">
-          <p style="font-size:16px;font-weight:600;color:#171717;margin:0 0 16px">
-            <span style="color:#0071e3">&#10003;</span> FleetGuard
-          </p>
-          <h2 style="color:#171717;margin:0 0 12px">Document ${marker === "expired" ? "expired" : "expiring soon"}</h2>
-          <p><strong>${doc.title}</strong> (${documentTypeLabel(doc.type)})</p>
-          <p>${owner}</p>
+          <p style="font-size:16px;font-weight:700;color:#101820;margin:0 0 16px">${escapeHtml(BRAND_NAME)}</p>
+          <h2 style="color:${marker === "expired" ? "#c62828" : "#101820"};margin:0 0 12px">Document ${marker === "expired" ? "expired" : `expires in ${days} day${days === 1 ? "" : "s"}`}</h2>
+          <p><strong>${escapeHtml(doc.title)}</strong> (${escapeHtml(documentTypeLabel(doc.type))})</p>
+          <p>${escapeHtml(owner)}</p>
           <p>Expiry date: <strong>${dateStr}</strong></p>
-          <p><a href="${appUrl}/app" style="color:#0071e3">Open your FleetGuard dashboard</a></p>
+          <p><a href="${appUrl}/app/documents/${doc.id}" style="display:inline-block;background:#101820;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Renew or update it</a></p>
+          <p style="color:#888;font-size:12px">Once renewed, update the date in ${escapeHtml(BRAND_NAME)} and the countdown resets.</p>
         </div>`
       );
       await prisma.document.update({

@@ -5,11 +5,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/components/ui/fleetguard-logo";
 import { login } from "@/lib/auth-client";
+import { BRAND_NAME } from "@/lib/brand";
+import { usePublicConfig } from "@/lib/config";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const config = usePublicConfig();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,7 +45,12 @@ export default function LoginPage() {
           <input className="input" id="email" name="email" type="email" required placeholder="you@company.com" />
         </div>
         <div>
-          <label className="label" htmlFor="password">Password</label>
+          <div className="flex items-baseline justify-between">
+            <label className="label" htmlFor="password">Password</label>
+            <Link className="text-xs font-medium text-accent-600" href="/forgot-password">
+              Forgot password?
+            </Link>
+          </div>
           <input className="input" id="password" name="password" type="password" required placeholder="Your password" />
         </div>
 
@@ -55,12 +63,14 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-neutral-600">
-        New to FleetGuard?{" "}
-        <Link className="font-medium text-accent-600" href="/signup">
-          Sign up free
-        </Link>
-      </p>
+      {config.registrationOpen && (
+        <p className="mt-4 text-center text-sm text-neutral-600">
+          New to {BRAND_NAME}?{" "}
+          <Link className="font-medium text-accent-600" href="/signup">
+            {config.mode === "private" ? "Create the admin account" : "Sign up free"}
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

@@ -1,0 +1,55 @@
+/* FleetGuard video design tokens: same system as the marketing site. */
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap");
+
+:root {
+  --asphalt: #101820;
+  --chalk: #f6f5f2;
+  --amber: #ffb100;
+  --green: #1e9e6a;
+  --red: #d9482b;
+  --line: #e3e1db;
+  --blue: #0071e3;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1350px; overflow: hidden; background: #000; }
+body { font-family: "Barlow", Arial, sans-serif; color: var(--asphalt); -webkit-font-smoothing: antialiased; }
+
+#stage { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--asphalt); }
+.layer { position: absolute; inset: 0; }
+.abs { position: absolute; }
+.cond { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; line-height: 1; letter-spacing: 0; }
+.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 500; }
+.word { display: inline-block; will-change: transform, opacity, filter; }
+
+.pill-eyebrow {
+  display: inline-flex; align-items: center; padding: 10px 26px; border-radius: 999px;
+  font-family: "Barlow", sans-serif; font-weight: 600; font-size: 30px;
+  background: rgba(255, 177, 0, 0.16); color: var(--amber);
+}
+
+.btn-amber {
+  display: inline-flex; align-items: center; justify-content: center; padding: 30px 64px;
+  border-radius: 999px; background: var(--amber); color: var(--asphalt);
+  font-weight: 700; font-size: 46px;
+}
+
+/* --- Dashboard mock (mirrors components/marketing/product-preview.tsx) --- */
+.dash { width: 940px; background: #fff; border-radius: 40px; border: 2px solid var(--line); overflow: hidden;
+  box-shadow: 0 50px 120px rgba(16, 24, 32, 0.28); }
+.dash .bar { height: 56px; background: var(--chalk); border-bottom: 2px solid var(--line); display: flex; align-items: center; gap: 10px; padding-left: 26px; }
+.dash .dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(16, 24, 32, 0.15); }
+.dash .url { margin-left: 14px; font-size: 22px; color: rgba(16, 24, 32, 0.55); }
+.tile { position: absolute; top: 84px; height: 180px; border: 2px solid var(--line); border-radius: 30px; padding: 22px 26px; background: #fff; }
+.tile .lbl { font-size: 23px; font-weight: 500; color: rgba(16, 24, 32, 0.7); }
+.tile .num { margin-top: 6px; font-size: 100px; }
+.row { position: absolute; left: 0; width: 940px; height: 128px; border-top: 2px solid var(--line); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; background: #fff; }
+.row .t { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 46px; line-height: 1.05; }
+.row .o { font-size: 25px; color: rgba(16, 24, 32, 0.62); margin-top: 6px; }
+.status { display: inline-block; padding: 8px 22px; border-radius: 999px; font-weight: 700; font-size: 24px; }
+.status.red { background: #fdecea; color: #b3261e; }
+.status.amber { background: #fff3d6; color: #8a5a00; }
+.status.green { background: #e2f5ec; color: #12704b; }
+.days { text-align: right; font-size: 23px; color: rgba(16, 24, 32, 0.6); margin-top: 6px; }
+
+#grain { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: overlay; pointer-events: none; }

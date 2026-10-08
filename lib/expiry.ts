@@ -40,13 +40,59 @@ export const DOCUMENT_TYPES: Option[] = [
   { value: "insurance", label: "Insurance" },
   { value: "inspection", label: "Inspection" },
   { value: "license", label: "Driver license" },
+  { value: "medical_card", label: "DOT medical card" },
+  { value: "mvr", label: "MVR review" },
+  { value: "clearinghouse", label: "Clearinghouse query" },
+  { value: "drug_alcohol", label: "Drug & alcohol" },
   { value: "permit", label: "Permit" },
   { value: "registration", label: "Registration" },
   { value: "tax", label: "Tax / IFTA" },
+  { value: "ucr", label: "UCR" },
+  { value: "hvut", label: "HVUT (Form 2290)" },
+  { value: "mcs150", label: "MCS-150 update" },
   { value: "certification", label: "Certification" },
   { value: "maintenance", label: "Maintenance" },
   { value: "other", label: "Other" },
 ];
+
+/**
+ * Common DOT items with their regulatory validity, used to prefill the
+ * document form and auto-compute the expiry from the issue date.
+ * `scope` says who the document normally belongs to.
+ */
+export type DocPreset = {
+  id: string;
+  title: string;
+  type: string;
+  scope: "driver" | "vehicle" | "company";
+  months: number;
+  issuer?: string;
+};
+
+export const DOC_PRESETS: DocPreset[] = [
+  { id: "cdl", title: "CDL", type: "license", scope: "driver", months: 48, issuer: "State DMV" },
+  { id: "medical", title: "DOT medical card", type: "medical_card", scope: "driver", months: 24, issuer: "FMCSA medical examiner" },
+  { id: "mvr", title: "Annual MVR review", type: "mvr", scope: "driver", months: 12 },
+  { id: "clearinghouse", title: "Clearinghouse annual query", type: "clearinghouse", scope: "driver", months: 12, issuer: "FMCSA Clearinghouse" },
+  { id: "annual-inspection", title: "Annual DOT inspection", type: "inspection", scope: "vehicle", months: 12 },
+  { id: "registration", title: "Vehicle registration", type: "registration", scope: "vehicle", months: 12, issuer: "State DMV" },
+  { id: "hvut", title: "HVUT (Form 2290)", type: "hvut", scope: "vehicle", months: 12, issuer: "IRS" },
+  { id: "coi", title: "Insurance certificate (COI)", type: "insurance", scope: "company", months: 12 },
+  { id: "ucr", title: "UCR registration", type: "ucr", scope: "company", months: 12 },
+  { id: "mcs150", title: "MCS-150 biennial update", type: "mcs150", scope: "company", months: 24, issuer: "FMCSA" },
+  { id: "ifta", title: "IFTA license", type: "tax", scope: "company", months: 12 },
+  { id: "irp", title: "IRP apportioned registration", type: "registration", scope: "company", months: 12 },
+];
+
+/** Add whole calendar months to an ISO date (YYYY-MM-DD), clamping the day. */
+export function addMonthsISO(iso: string, months: number): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const target = new Date(Date.UTC(y, m - 1 + months, 1));
+  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
+  target.setUTCDate(Math.min(d, lastDay));
+  return target.toISOString().slice(0, 10);
+}
 
 export const VEHICLE_TYPES: Option[] = [
   { value: "truck", label: "Truck" },

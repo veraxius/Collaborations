@@ -1,6 +1,6 @@
 "use client";
 
-import { CURRENCIES, DOCUMENT_TYPES } from "@/lib/expiry";
+import { CURRENCIES, DOCUMENT_TYPES, DOC_PRESETS, addMonthsISO } from "@/lib/expiry";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,13 +36,36 @@ export function DocumentForm({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [title, setTitle] = useState(initial?.title ?? "");
+  const [type, setType] = useState(initial?.type ?? "insurance");
+  const [issuedAt, setIssuedAt] = useState(initial?.issuedAt ?? "");
+  const [expiresAt, setExpiresAt] = useState(initial?.expiresAt ?? "");
+  const [months, setMonths] = useState<number | null>(null);
+  const isEdit = Boolean(initial?.id);
+
+  function applyPreset(id: string) {
+    const preset = DOC_PRESETS.find((p) => p.id === id);
+    if (!preset) {
+      setMonths(null);
+      return;
+    }
+    setTitle(preset.title);
+    setType(preset.type);
+    setMonths(preset.months);
+    if (issuedAt) setExpiresAt(addMonthsISO(issuedAt, preset.months));
+  }
+
+  function changeIssued(value: string) {
+    setIssuedAt(value);
+    // Auto-compute the expiry from the regulatory validity of the chosen preset.
+    if (months && value) setExpiresAt(addMonthsISO(value, months));
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setPending(true);
     const fd = new FormData(e.currentTarget);
-    const isEdit = Boolean(initial?.id);
 
     try {
       if (isEdit) {
@@ -68,6 +91,32 @@ export function DocumentForm({
 
   return (
     <form onSubmit={handleSubmit} className="card mt-6 space-y-4">
+      {!isEdit && (
+        <div className="rounded-xl bg-neutral-50 p-4">
+          <label className="label" htmlFor="preset">Quick start: common DOT documents</label>
+          <select
+            className="input"
+            id="preset"
+            defaultValue=""
+            onChange={(e) => applyPreset(e.target.value)}
+          >
+            <option value="">Custom document…</option>
+            {(["driver", "vehicle", "company"] as const).map((scope) => (
+              <optgroup key={scope} label={scope[0].toUpperCase() + scope.slice(1)}>
+                {DOC_PRESETS.filter((p) => p.scope === scope).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.title} ({p.months >= 12 && p.months % 12 === 0 ? `${p.months / 12} yr` : `${p.months} mo`})
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <p className="mt-1.5 text-xs text-neutral-500">
+            Pick one, enter the issue date, and the expiry is filled in for you.
+          </p>
+        </div>
+      )}
+
       <div>
         <label className="label" htmlFor="title">Title</label>
         <input
@@ -75,7 +124,8 @@ export function DocumentForm({
           id="title"
           name="title"
           required
-          defaultValue={initial?.title ?? ""}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="Liability insurance policy"
         />
       </div>
@@ -83,7 +133,7 @@ export function DocumentForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="type">Type</label>
-          <select className="input" id="type" name="type" defaultValue={initial?.type ?? "insurance"}>
+          <select className="input" id="type" name="type" value={type} onChange={(e) => setType(e.target.value)}>
             {DOCUMENT_TYPES.map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
             ))}
@@ -116,7 +166,8 @@ export function DocumentForm({
             id="issuedAt"
             name="issuedAt"
             type="date"
-            defaultValue={initial?.issuedAt ?? ""}
+            value={issuedAt}
+            onChange={(e) => changeIssued(e.target.value)}
           />
         </div>
         <div>
@@ -127,7 +178,11 @@ export function DocumentForm({
             name="expiresAt"
             type="date"
             required
-            defaultValue={initial?.expiresAt ?? ""}
+            value={expiresAt}
+            onChange={(e) => {
+              setExpiresAt(e.target.value);
+              setMonths(null);
+            }}
           />
         </div>
         <div>

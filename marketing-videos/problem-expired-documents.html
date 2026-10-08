@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FleetGuard · The problem · LinkedIn video (1080x1350, 30fps, 24s)</title>
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div id="stage">
+
+  <!-- Ambient background -->
+  <div class="layer" id="glow"></div>
+  <div class="layer" id="bgChalk" style="background:var(--chalk);opacity:0"></div>
+
+  <!-- ============ SCENE 1: HOOK ============ -->
+  <div class="layer" id="s1">
+    <div class="abs" id="s1pill" style="left:0;right:0;top:250px;text-align:center"><span class="pill-eyebrow">DOT compliance for small fleets</span></div>
+    <div class="abs cond" id="s1h" style="left:60px;right:60px;top:380px;font-size:178px;color:var(--chalk);text-align:center;line-height:0.98">
+      <span class="word">One</span> <span class="word">expired</span><br>
+      <span class="word">document</span> <span class="word">can</span><br>
+      <span class="word" style="color:var(--amber)">park</span> <span class="word">a</span> <span class="word">truck.</span>
+    </div>
+    <div class="abs cond" id="stamp" style="left:0;right:0;top:1010px;text-align:center">
+      <span style="display:inline-block;border:10px solid var(--red);color:var(--red);padding:12px 54px;border-radius:18px;font-size:120px;letter-spacing:6px">EXPIRED</span>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 2: THE PROBLEM ============ -->
+  <div class="layer" id="s2">
+    <div class="abs mono" id="s2t" style="left:80px;right:80px;top:210px;font-size:36px;color:var(--amber)">Most small fleets track it in...</div>
+    <div id="cards"></div>
+    <div class="abs cond" id="s2p" style="left:60px;right:60px;top:1010px;text-align:center;font-size:132px;color:var(--chalk);line-height:1">
+      <span class="word">...until</span> <span class="word">one</span> <span class="word">date</span> <span class="word" style="color:var(--amber)">slips.</span>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 3: THE PRODUCT ============ -->
+  <div class="layer" id="s3">
+    <div class="layer" id="cam">
+      <div class="abs cond" id="s3t" style="left:70px;right:70px;top:64px;font-size:92px;color:var(--asphalt);text-align:left;line-height:1.02">
+        <span class="word">FleetGuard</span> <span class="word">watches</span><br><span class="word">every</span> <span class="word" style="color:#b87400">date.</span>
+      </div>
+      <div class="dash abs" id="dash" style="left:70px;top:330px;height:810px">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url mono">fleetguard · Dashboard</span></div>
+
+        <div class="tile" style="left:24px;width:262px;display:flex;align-items:center;gap:10px;padding:0 16px">
+          <svg width="96" height="96" viewBox="0 0 112 112" style="flex:none">
+            <circle cx="56" cy="56" r="46" fill="none" stroke="#efede7" stroke-width="12"/>
+            <circle id="ring" cx="56" cy="56" r="46" fill="none" stroke="#ffb100" stroke-width="12" stroke-linecap="round" transform="rotate(-90 56 56)" stroke-dasharray="289" stroke-dashoffset="81"/>
+            <text id="score" x="56" y="70" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="40" fill="#101820">72</text>
+          </svg>
+          <div style="white-space:nowrap"><div class="lbl" style="font-size:20px">Fleet health</div><div id="healthTxt" style="font-size:20px;font-weight:600;color:#101820;margin-top:2px">Needs action</div></div>
+        </div>
+        <div class="tile" style="left:314px;width:182px"><div class="lbl">Expired</div><div class="num cond" id="nExp" style="color:var(--red)">1</div></div>
+        <div class="tile" style="left:524px;width:182px"><div class="lbl">Expiring</div><div class="num cond" id="nSoon" style="color:#b87400">2</div></div>
+        <div class="tile" style="left:734px;width:182px"><div class="lbl">Up to date</div><div class="num cond" id="nOk" style="color:var(--green)">14</div></div>
+
+        <div class="row" style="top:292px" id="row1"><div><div class="t">Annual DOT inspection</div><div class="o">Truck 04 · 7XK-2291</div></div><div><span class="status red" id="st1">Expired</span><div class="days" id="d1">6 days ago</div></div></div>
+        <div class="row" style="top:420px"><div><div class="t">DOT medical card</div><div class="o">Marcus Reyes</div></div><div><span class="status amber">Expiring soon</span><div class="days">7 days left</div></div></div>
+        <div class="row" style="top:548px"><div><div class="t">Liability insurance (COI)</div><div class="o">Company</div></div><div><span class="status amber">Expiring soon</span><div class="days">23 days left</div></div></div>
+        <div class="row" style="top:676px"><div><div class="t">CDL</div><div class="o">Dana Whitfield</div></div><div><span class="status green">OK</span><div class="days">311 days left</div></div></div>
+      </div>
+    </div>
+
+    <!-- Depth-of-field overlay: blurs everything except a soft hole around the focus -->
+    <div class="layer" id="spot"></div>
+
+    <!-- Notification -->
+    <div class="abs" id="notif" style="left:70px;width:940px;top:0;background:#fff;border-radius:48px;padding:34px 40px;box-shadow:0 40px 100px rgba(16,24,32,.35);display:flex;gap:28px;align-items:center">
+      <svg width="104" height="104" viewBox="0 0 24 24" style="flex:none"><path d="M12 1.5 L21 4.8 V11 C21 16.6 17.2 20.9 12 22.8 C6.8 20.9 3 16.6 3 11 V4.8 Z" fill="#0071E3"/><path d="M7.6 11.8 L10.6 14.8 L16.4 8.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:26px;color:rgba(16,24,32,.55)"><span class="mono" style="font-size:24px">FLEETGUARD</span><span>now</span></div>
+        <div class="cond" style="font-size:50px;margin-top:6px;color:var(--asphalt);white-space:nowrap">DOT medical card expires in 7 days</div>
+        <div style="font-size:30px;color:rgba(16,24,32,.7);margin-top:6px">Marcus Reyes · Renew or update it</div>
+      </div>
+    </div>
+
+    <!-- Deadline strip card -->
+    <div class="abs" id="strip" style="left:70px;width:940px;top:440px;height:430px;background:#fff;border-radius:44px;box-shadow:0 40px 100px rgba(16,24,32,.35);padding:44px 52px">
+      <div class="mono" style="font-size:24px;color:rgba(16,24,32,.55)">REMINDER SCHEDULE</div>
+      <div class="abs" style="left:70px;right:70px;top:176px;height:6px;border-radius:3px;background:#d8d5cc"></div>
+      <div id="ticks"></div>
+      <div class="abs" id="chip" style="top:112px;left:0;width:200px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:34px;color:#101820;background:var(--amber)"><span id="chipTxt">Your date</span></div>
+      <div class="abs cond" id="stripCap" style="left:52px;right:52px;top:310px;font-size:68px;color:var(--asphalt)">Renew it. <span style="color:#b87400">The clock resets.</span></div>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 4: OFFER ============ -->
+  <div class="layer" id="s4">
+    <div class="abs cond" id="s4big" style="left:0;right:0;top:170px;text-align:center;font-size:430px;color:var(--amber);line-height:1">$0</div>
+    <div class="abs cond" id="s4sub" style="left:60px;right:60px;top:610px;text-align:center;font-size:92px;color:var(--chalk)">for up to 3 trucks</div>
+    <div class="abs mono" id="s4mid" style="left:60px;right:60px;top:735px;text-align:center;font-size:36px;color:rgba(246,245,242,.75)">Then $29/mo flat. Unlimited trucks.</div>
+    <div class="abs" id="chips" style="left:70px;width:940px;top:850px;display:flex;flex-wrap:wrap;gap:18px;justify-content:center"></div>
+    <div class="abs mono" id="s4end" style="left:60px;right:60px;top:1180px;text-align:center;font-size:36px;color:var(--amber)">Email alerts · 30 · 15 · 7 · 1 days</div>
+  </div>
+
+  <!-- ============ SCENE 5: CTA ============ -->
+  <div class="layer" id="s5">
+    <div class="abs" id="s5logo" style="left:0;right:0;top:170px;display:flex;align-items:center;justify-content:center;gap:26px">
+      <svg width="150" height="150" viewBox="0 0 24 24"><path d="M12 1.5 L21 4.8 V11 C21 16.6 17.2 20.9 12 22.8 C6.8 20.9 3 16.6 3 11 V4.8 Z" fill="#0071E3"/><path d="M7.6 11.8 L10.6 14.8 L16.4 8.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span class="cond" style="font-size:136px;color:var(--chalk)">FleetGuard</span>
+    </div>
+    <div class="abs cond" id="s5h" style="left:70px;right:70px;top:420px;text-align:center;font-size:150px;color:var(--chalk);line-height:1">
+      <span class="word">Never</span> <span class="word">get</span> <span class="word">caught</span> <span class="word">with</span> <span class="word">an</span> <span class="word" style="color:var(--amber)">expired</span> <span class="word">document</span> <span class="word">again.</span>
+    </div>
+    <div class="abs" id="s5btn" style="left:0;right:0;top:1030px;text-align:center"><span class="btn-amber">Start free — no credit card</span></div>
+    <div class="abs mono" id="s5link" style="left:0;right:0;top:1170px;text-align:center;font-size:34px;color:rgba(246,245,242,.7)">Link in the comments</div>
+  </div>
+
+  <div class="layer" id="grain"></div>
+  <div class="abs" id="progress" style="left:0;bottom:0;height:8px;width:0;background:var(--amber)"></div>
+</div>
+
+<script src="common.js"></script>
+<script>
+window.DURATION = 25;
+
+// ---- one-time DOM build ----
+const cardsEl = $("cards");
+const CARD_TEXT = ["A spreadsheet", "A glove box", "Somebody's memory"];
+CARD_TEXT.forEach((txt, i) => {
+  const c = document.createElement("div");
+  c.className = "abs";
+  c.id = "card" + i;
+  c.style.cssText = `left:80px;width:920px;top:${330 + i * 215}px;height:170px;border-radius:40px;border:2px solid rgba(246,245,242,.16);background:rgba(246,245,242,.07);display:flex;align-items:center;padding:0 48px;gap:36px;overflow:hidden`;
+  c.innerHTML = `<span class="mono" style="font-size:34px;color:var(--amber)">0${i + 1}</span>
+    <span class="cond" id="ct${i}" style="font-size:96px;color:var(--chalk);position:relative">${txt}<span id="strike${i}" style="position:absolute;left:0;top:52%;height:9px;width:0;background:var(--amber);border-radius:5px"></span></span>`;
+  cardsEl.appendChild(c);
+});
+
+const ticksEl = $("ticks");
+[["30", 70], ["15", 300], ["7", 530], ["1", 760]].forEach(([d, x]) => {
+  const k = document.createElement("div");
+  k.className = "abs";
+  k.style.cssText = `left:${x}px;top:150px;width:110px;text-align:center`;
+  k.innerHTML = `<div style="height:58px;width:6px;background:#9a978d;margin:0 auto;border-radius:3px"></div><div class="mono" style="font-size:28px;margin-top:14px;color:rgba(16,24,32,.7)">${d}d</div>`;
+  ticksEl.appendChild(k);
+});
+
+const chipsEl = $("chips");
+["CDL", "Medical cards", "MVR reviews", "Insurance (COI)", "Annual inspections", "IFTA", "UCR", "MCS-150"].forEach((t, i) => {
+  const c = document.createElement("div");
+  c.id = "chip" + i;
+  c.style.cssText = "padding:18px 38px;border-radius:999px;border:2px solid rgba(255,177,0,.55);background:rgba(255,177,0,.12);color:var(--chalk);font-weight:600;font-size:40px";
+  c.textContent = t;
+  chipsEl.appendChild(c);
+});
+
+const words = (id) => [...$(id).querySelectorAll(".word")];
+const w1 = words("s1h"), w2 = words("s2p"), w3 = words("s3t"), w5 = words("s5h");
+const mix = (a, b, p) => a.map((v, i) => Math.round(lerp(v, b[i], p)));
+const AMBER = [255, 177, 0], GREEN = [30, 158, 106];
+
+function sceneWindow(t, inA, inB, outA, outB) {
+  return eo3(prog(t, inA, inB)) * (1 - eo3(prog(t, outA, outB)));
+}
+
+// ---- the frame function ----
+window.renderFrame = function (t) {
+  // ambient glow drifts slowly
+  const gx = 540 + Math.sin(t * 0.5) * 260, gy = 560 + Math.cos(t * 0.4) * 200;
+  $("glow").style.background = `radial-gradient(900px 900px at ${gx}px ${gy}px, rgba(255,177,0,0.14), rgba(255,177,0,0) 60%), #101820`;
+  $("progress").style.width = (t / DURATION) * 1080 + "px";
+
+  // ===== S1 =====
+  const s1 = 1 - eo3(prog(t, 2.95, 3.45));
+  put($("s1"), { o: t < 3.5 ? 1 : 0, s: lerp(1, 1.14, eo3(prog(t, 2.95, 3.45))), b: eo3(prog(t, 2.95, 3.45)) * 16 });
+  $("s1").style.opacity = t < 3.5 ? s1 : 0;
+  put($("s1pill"), { o: eo3(prog(t, 0.05, 0.6)), y: (1 - eo3(prog(t, 0.05, 0.6))) * -30 });
+  revealWords(w1, t, 0.35, 0.11, 0.6, 80);
+  const st = prog(t, 1.9, 2.25);
+  const shake = t > 2.25 && t < 2.45 ? Math.sin(t * 90) * 7 * (1 - prog(t, 2.25, 2.45)) : 0;
+  put($("stamp"), { o: eo3(prog(t, 1.9, 2.05)), s: lerp(2.4, 1, eob(st)), r: lerp(-14, -6, eob(st)) + shake });
+
+  // ===== S2 =====
+  const s2 = sceneWindow(t, 3.2, 3.7, 8.1, 8.6);
+  put($("s2"), { o: s2, s: lerp(0.96, 1, eo3(prog(t, 3.2, 3.9))) * lerp(1, 1.1, eo3(prog(t, 8.1, 8.6))), b: eo3(prog(t, 8.1, 8.6)) * 14 });
+  put($("s2t"), { o: eo3(prog(t, 3.35, 3.85)), x: (1 - eo3(prog(t, 3.35, 3.85))) * -40 });
+  for (let i = 0; i < 3; i++) {
+    const p = eo5(prog(t, 3.6 + i * 0.28, 4.3 + i * 0.28));
+    put($("card" + i), { o: p, x: (1 - p) * 220, b: (1 - p) * 12 });
+    const sp = eio3(prog(t, 5.0 + i * 0.5, 5.45 + i * 0.5));
+    $("strike" + i).style.width = sp * 100 + "%";
+    $("ct" + i).style.opacity = lerp(1, 0.4, sp);
+  }
+  revealWords(w2, t, 6.55, 0.14, 0.6, 90);
+  // alert flash on the punchline
+  const flash = t > 7.3 && t < 7.7 ? Math.sin(prog(t, 7.3, 7.7) * Math.PI) * 0.22 : 0;
+  $("s2p").style.textShadow = flash ? `0 0 ${60 * flash * 4}px rgba(217,72,43,${flash * 3})` : "none";
+
+  // ===== S3 =====
+  const s3 = sceneWindow(t, 8.3, 8.9, 17.35, 17.85);
+  $("bgChalk").style.opacity = s3;
+  put($("s3"), { o: s3, s: lerp(1, 1.06, eo3(prog(t, 17.35, 17.85))), b: eo3(prog(t, 17.35, 17.85)) * 10 });
+  revealWords(w3, t, 8.7, 0.1, 0.55, 50);
+  const dp = eo5(prog(t, 8.9, 9.8));
+  put($("dash"), { o: eo3(prog(t, 8.9, 9.3)), y: (1 - dp) * 520, s: lerp(0.92, 1, dp) });
+
+  camera($("cam"), [
+    [0, 1, 540, 735], [9.9, 1, 540, 735],
+    [10.8, 1.5, 500, 575], [12.2, 1.5, 500, 575],
+    [13.0, 1.4, 540, 780], [14.4, 1.4, 540, 780],
+    [15.3, 1, 540, 735], [16.6, 1, 540, 735],
+    [17.5, 1.22, 540, 665], [40, 1.22, 540, 665],
+  ], t);
+  // the headline steps aside before the final push-in on the green dashboard
+  $("s3t").style.opacity = 1 - eo3(prog(t, 16.3, 16.8));
+
+  // depth of field overlay
+  const holeA = eo3(prog(t, 10.4, 11.1)) * (1 - eo3(prog(t, 12.0, 12.5)));
+  const fullB = eo3(prog(t, 12.2, 12.8)) * (1 - eo3(prog(t, 15.9, 16.4)));
+  const blurPx = Math.max(holeA * 15, fullB * 20);
+  const hole = holeA * (1 - fullB);
+  const rx = Math.max(1, hole * 620), ry = Math.max(1, hole * 420);
+  const spot = $("spot");
+  spot.style.backdropFilter = spot.style.webkitBackdropFilter = blurPx > 0.1 ? `blur(${blurPx}px)` : "none";
+  spot.style.background = `rgba(16,24,32,${Math.max(holeA * 0.18, fullB * 0.3)})`;
+  const mask = `radial-gradient(ellipse ${rx}px ${ry}px at 580px 650px, transparent 70%, #000 100%)`;
+  spot.style.webkitMaskImage = spot.style.maskImage = hole > 0.01 ? mask : "none";
+  spot.style.visibility = blurPx > 0.1 || holeA > 0.01 ? "visible" : "hidden";
+
+  // notification
+  const nIn = eob(prog(t, 12.3, 12.95)), nOut = eio3(prog(t, 14.35, 14.8));
+  put($("notif"), { o: eo3(prog(t, 12.3, 12.5)) * (1 - nOut), y: lerp(-320, 120, nIn) - nOut * 300, s: lerp(0.94, 1, nIn) });
+
+  // strip card + chip
+  const sIn = eob(prog(t, 14.7, 15.3)), sOut = eio3(prog(t, 16.0, 16.4));
+  put($("strip"), { o: eo3(prog(t, 14.7, 14.95)) * (1 - sOut), y: lerp(160, 0, sIn) + sOut * 60, s: lerp(0.9, 1, sIn) });
+  const slide = eio3(prog(t, 15.35, 15.95));
+  const chipX = lerp(530 - 45, 70 - 45 - 20, slide) + 52 - 52; // starts over the "7" tick, ends left of "30"
+  const chip = $("chip");
+  chip.style.left = chipX + "px";
+  const col = mix(AMBER, GREEN, slide);
+  chip.style.background = `rgb(${col.join(",")})`;
+  chip.style.color = slide > 0.5 ? "#fff" : "#101820";
+  $("chipTxt").textContent = slide > 0.5 ? "Renewed ✓" : "Your date";
+  chip.style.transform = `scale(${1 + Math.sin(slide * Math.PI) * 0.08})`;
+
+  // dashboard values update after renewal
+  const upd = eio3(prog(t, 16.0, 16.5));
+  $("score").textContent = Math.round(lerp(72, 96, upd));
+  $("ring").setAttribute("stroke-dashoffset", String(289 * (1 - lerp(0.72, 0.96, upd))));
+  $("ring").setAttribute("stroke", upd > 0.5 ? "#1e9e6a" : "#ffb100");
+  $("healthTxt").textContent = upd > 0.5 ? "All in order" : "Needs action";
+  $("nExp").textContent = upd > 0.5 ? "0" : "1";
+  $("nExp").style.color = upd > 0.5 ? "#1e9e6a" : "#d9482b";
+  $("nOk").textContent = upd > 0.5 ? "15" : "14";
+  $("st1").className = "status " + (upd > 0.5 ? "green" : "red");
+  $("st1").textContent = upd > 0.5 ? "OK" : "Expired";
+  $("d1").textContent = upd > 0.5 ? "364 days left" : "6 days ago";
+
+  // Scenes 4 and 5 are authored on their own clock, shifted by the extra second given to scene 3.
+  t = t - 1.0;
+
+  // ===== S4 =====
+  const s4 = sceneWindow(t, 16.6, 17.1, 20.4, 20.9);
+  put($("s4"), { o: s4, s: lerp(1, 1.08, eo3(prog(t, 20.4, 20.9))), b: eo3(prog(t, 20.4, 20.9)) * 12 });
+  const bigP = eob(prog(t, 16.95, 17.65));
+  put($("s4big"), { o: eo3(prog(t, 16.95, 17.2)), s: lerp(0.5, 1, bigP), b: (1 - eo3(prog(t, 16.95, 17.4))) * 20 });
+  put($("s4sub"), { o: eo3(prog(t, 17.4, 17.9)), y: (1 - eo3(prog(t, 17.4, 17.9))) * 40 });
+  put($("s4mid"), { o: eo3(prog(t, 17.9, 18.4)), y: (1 - eo3(prog(t, 17.9, 18.4))) * 30 });
+  for (let i = 0; i < 8; i++) {
+    const p = eob(prog(t, 18.3 + i * 0.12, 18.8 + i * 0.12));
+    put($("chip" + i), { o: eo3(prog(t, 18.3 + i * 0.12, 18.5 + i * 0.12)), y: (1 - p) * 60, s: lerp(0.7, 1, p) });
+  }
+  put($("s4end"), { o: eo3(prog(t, 19.7, 20.2)) });
+
+  // ===== S5 =====
+  const s5 = sceneWindow(t, 20.8, 21.2, 99, 100);
+  const zoom = lerp(1, 1.045, eo3(prog(t, 20.8, 24)));
+  // (t is already shifted here, so the end of the video is t = 24)
+  put($("s5"), { o: s5, s: zoom });
+  const lp = eob(prog(t, 21.0, 21.7));
+  put($("s5logo"), { o: eo3(prog(t, 21.0, 21.3)), s: lerp(0.7, 1, lp), y: (1 - lp) * 40 });
+  revealWords(w5, t, 21.45, 0.12, 0.6, 80);
+  const bp = eob(prog(t, 22.95, 23.5));
+  const pulse = t > 23.5 ? 1 + Math.sin((t - 23.5) * 6) * 0.025 : 1;
+  put($("s5btn"), { o: eo3(prog(t, 22.95, 23.2)), s: lerp(0.8, 1, bp) * pulse });
+  put($("s5link"), { o: eo3(prog(t, 23.3, 23.7)) });
+};
+
+document.fonts.ready.then(() => { window.__ready = true; renderFrame(0); });
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@ import {
 import { CtaBand } from "@/components/marketing/cta-band";
 
 export const metadata: Metadata = {
-  title: "FleetGuard — Price",
+  title: "Pricing: Free for 3 Trucks, $29/mo Unlimited",
   description:
     "Simple pricing for DOT compliance tracking: $29 per month, everything included. Free to explore, no credit card.",
 };

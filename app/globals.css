@@ -1,26 +1,42 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --accent: #0071e3;
+  --accent: #ffb100;
+  --accent-50: #fff7e0;
+  --accent-100: #ffebb8;
+  --accent-500: #ffb100;
+  --accent-600: #8f5f00;
+  --accent-700: #6e4a00;
+  --on-accent: #101820;
 }
 
 @layer base {
   ::selection {
-    background: #0071e3;
-    color: #fff;
+    background: #ffb100;
+    color: #101820;
   }
   body {
-    font-family: Inter, system-ui, sans-serif;
+    font-family: var(--font-barlow), system-ui, sans-serif;
+  }
+  :focus-visible {
+    outline: 2px solid #ffb100;
+    outline-offset: 2px;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-accent-500 px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-accent-600 active:opacity-80 disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-[color:var(--on-accent)] transition duration-200 hover:brightness-95 hover:shadow-[0_6px_16px_rgb(16_24_32/0.14)] active:brightness-90 disabled:opacity-50;
   }
   .btn-secondary {
     @apply inline-flex items-center justify-center rounded-full bg-neutral-100 px-5 py-2.5 text-sm font-medium text-neutral-900 transition-colors duration-200 hover:bg-neutral-200 active:opacity-80;
@@ -75,8 +91,8 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 .dark ::selection {
-  background: #0071e3;
-  color: #fff;
+  background: #ffb100;
+  color: #101820;
 }
 
 /* Surfaces */
@@ -123,7 +139,8 @@
 .dark .hover\:text-neutral-900:hover { color: #f2f2f4; }
 .dark .hover\:text-neutral-700:hover { color: #d0d0d6; }
 .dark .text-accent-600,
-.dark .text-accent-500 { color: #4da3ff; }
+.dark .text-accent-700,
+.dark .text-accent-500 { color: #ffc43d; }
 
 /* Borders & dividers */
 .dark .border-neutral-200,
@@ -144,8 +161,8 @@
 .dark .input::placeholder,
 .dark .placeholder\:text-neutral-400::placeholder { color: #6b6b76; }
 .dark .input:focus {
-  border-color: #0071e3;
-  --tw-ring-color: rgba(0, 113, 227, 0.25);
+  border-color: #ffb100;
+  --tw-ring-color: rgba(255, 177, 0, 0.25);
 }
 .dark .input:disabled,
 .dark .input[readonly] {
@@ -164,7 +181,7 @@
 .dark .bg-amber-50,
 .dark .bg-amber-50\/70 { background-color: rgba(245, 158, 11, 0.12); }
 .dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.12); }
-.dark .bg-accent-50 { background-color: rgba(0, 113, 227, 0.14); }
+.dark .bg-accent-50 { background-color: rgba(255, 177, 0, 0.14); }
 .dark .text-red-500, .dark .text-red-600, .dark .text-red-700 { color: #f87171; }
 .dark .text-red-900 { color: #fca5a5; }
 .dark .text-amber-500, .dark .text-amber-600 { color: #fbbf24; }
@@ -174,7 +191,7 @@
 .dark .ring-red-100 { --tw-ring-color: rgba(239, 68, 68, 0.25); }
 .dark .ring-amber-100 { --tw-ring-color: rgba(245, 158, 11, 0.25); }
 .dark .ring-emerald-100 { --tw-ring-color: rgba(16, 185, 129, 0.25); }
-.dark .ring-accent-100 { --tw-ring-color: rgba(0, 113, 227, 0.3); }
+.dark .ring-accent-100 { --tw-ring-color: rgba(255, 177, 0, 0.3); }
 .dark .ring-neutral-200 { --tw-ring-color: #2c2c34; }
 .dark .border-red-100 { border-color: rgba(239, 68, 68, 0.25); }
 .dark .border-amber-100 { border-color: rgba(245, 158, 11, 0.25); }

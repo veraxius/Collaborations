@@ -16,11 +16,23 @@ import {
   DRIVER_STATUSES,
   VEHICLE_STATUSES,
   VEHICLE_TYPES,
+  documentTypeLabel,
   expiryStatus,
   oneOf,
 } from "./lib/expiry.js";
 import { captureSnapshot, countStatuses, getAnalytics, healthScore, logEvent } from "./lib/analytics.js";
 import { runReminderSweep } from "./lib/reminders.js";
+import { sendEmail } from "./lib/email.js";
+import { ALLOW_REGISTRATION, BRAND_NAME, IS_PRIVATE } from "./lib/brand.js";
+import jwt from "jsonwebtoken";
+import {
+  escapeHtml,
+  parseFloatOrNull,
+  parseIntOrNull,
+  rateLimit,
+  safeEqual,
+  securityHeaders,
+} from "./lib/security.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "uploads");
@@ -43,9 +55,22 @@ const upload = multer({
   },
 });
 
+/** Delete an uploaded file from disk (best effort, never throws). */
+function removeUpload(name) {
+  if (!name || name.includes("..") || name.includes("/") || name.includes("\\")) return;
+  fs.promises.unlink(path.join(UPLOAD_DIR, name)).catch(() => {});
+}
+
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+app.use(securityHeaders);
+
+if (process.env.NODE_ENV === "production" && !process.env.FRONTEND_URL) {
+  console.warn("[security] FRONTEND_URL is not set: CORS is open to any origin.");
+}
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || true,
@@ -53,9 +78,30 @@ app.use(
   })
 );
 
-app.use(express.json());
+// Keep the raw body for webhook signature verification.
+app.use(
+  express.json({
+    limit: "1mb",
+    verify: (req, _res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
 
-app.get("/", (_req, res) => res.send("FleetGuard API"));
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, bucket: "auth" });
+const resetLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 5, bucket: "reset" });
+const leadLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 10, bucket: "lead" });
+
+app.get("/", (_req, res) => res.send(`${BRAND_NAME} API`));
+
+// Public runtime config so the UI can adapt to the deployment mode.
+app.get("/api/config", async (_req, res) => {
+  let registrationOpen = !IS_PRIVATE || ALLOW_REGISTRATION;
+  if (IS_PRIVATE && !ALLOW_REGISTRATION) {
+    registrationOpen = (await prisma.company.count()) === 0; // first admin only
+  }
+  res.json({ mode: IS_PRIVATE ? "private" : "saas", brandName: BRAND_NAME, registrationOpen });
+});
 
 app.get("/api/health", async (_req, res) => {
   const checks = {
@@ -74,13 +120,16 @@ app.get("/api/health", async (_req, res) => {
 });
 
 // ---------- Auth ----------
-app.post("/api/auth/register", async (req, res) => {
+app.post("/api/auth/register", authLimiter, async (req, res) => {
   try {
     const name = String(req.body.name ?? "").trim();
     const email = String(req.body.email ?? "").trim().toLowerCase();
     const password = String(req.body.password ?? "");
     if (!name || !email || password.length < 8) {
       return res.status(400).json({ error: "Fill all fields. Password min 8 characters." });
+    }
+    if (IS_PRIVATE && !ALLOW_REGISTRATION && (await prisma.company.count()) > 0) {
+      return res.status(403).json({ error: "Registration is closed for this installation." });
     }
     const existing = await prisma.company.findUnique({ where: { email } });
     if (existing) return res.status(400).json({ error: "An account with that email already exists." });
@@ -102,11 +151,11 @@ app.post("/api/auth/register", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: err.message || "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
-app.post("/api/auth/login", async (req, res) => {
+app.post("/api/auth/login", authLimiter, async (req, res) => {
   try {
     const email = String(req.body.email ?? "").trim().toLowerCase();
     const password = String(req.body.password ?? "");
@@ -117,8 +166,66 @@ app.post("/api/auth/login", async (req, res) => {
     return res.json({ token: signToken(company), company: publicCompany(company) });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: err.message || "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
+});
+
+// ---------- Password reset (stateless signed token, 1h, single use) ----------
+// The token is signed with JWT_SECRET + the current password hash, so it stops
+// working as soon as the password changes. No extra DB columns needed.
+function resetSecret(company) {
+  return `${process.env.JWT_SECRET}:${company.passwordHash}`;
+}
+
+app.post("/api/auth/forgot", resetLimiter, async (req, res) => {
+  const email = String(req.body.email ?? "").trim().toLowerCase();
+  // Always answer the same way so the endpoint can't be used to find accounts.
+  const generic = { ok: true };
+  try {
+    const company = email ? await prisma.company.findUnique({ where: { email } }) : null;
+    if (!company) return res.json(generic);
+    const token = jwt.sign({ companyId: company.id, purpose: "reset" }, resetSecret(company), {
+      expiresIn: "1h",
+    });
+    const base = process.env.FRONTEND_URL ?? "http://localhost:3000";
+    const link = `${base}/reset-password?token=${encodeURIComponent(token)}&id=${encodeURIComponent(company.id)}`;
+    await sendEmail(
+      company.email,
+      `[${BRAND_NAME}] Reset your password`,
+      `<div style="font-family:-apple-system,'Segoe UI',sans-serif;max-width:520px">
+        <h2 style="margin:0 0 12px">Reset your password</h2>
+        <p>We received a request to reset the password for ${escapeHtml(company.name)}.</p>
+        <p><a href="${link}" style="display:inline-block;background:#101820;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Choose a new password</a></p>
+        <p style="color:#666;font-size:13px">This link expires in 1 hour. If you didn't ask for it, you can ignore this email.</p>
+      </div>`
+    );
+  } catch (err) {
+    console.error("[forgot]", err);
+  }
+  return res.json(generic);
+});
+
+app.post("/api/auth/reset", resetLimiter, async (req, res) => {
+  const id = String(req.body.id ?? "");
+  const token = String(req.body.token ?? "");
+  const password = String(req.body.password ?? "");
+  if (password.length < 8) {
+    return res.status(400).json({ error: "Password must be at least 8 characters." });
+  }
+  const company = id ? await prisma.company.findUnique({ where: { id } }) : null;
+  const invalid = () => res.status(400).json({ error: "This reset link is invalid or has expired." });
+  if (!company) return invalid();
+  try {
+    const payload = jwt.verify(token, resetSecret(company));
+    if (payload.purpose !== "reset" || payload.companyId !== company.id) return invalid();
+  } catch {
+    return invalid();
+  }
+  await prisma.company.update({
+    where: { id: company.id },
+    data: { passwordHash: await bcrypt.hash(password, 10) },
+  });
+  return res.json({ token: signToken(company), company: publicCompany(company) });
 });
 
 app.get("/api/me", requireAuth, async (req, res) => {
@@ -157,8 +264,33 @@ app.post("/api/me/password", requireAuth, async (req, res) => {
   return res.json({ ok: true });
 });
 
+const FREE_LIMITS = { vehicles: 3, drivers: 3 };
+const PAID_STATUSES = ["active", "on_trial", "past_due"];
+
+function isPaid(c) {
+  // Private installs are licensed as a whole: no per-account limits.
+  return IS_PRIVATE || PAID_STATUSES.includes(c.subscriptionStatus);
+}
+
+/** Returns an error payload if the company can't add another vehicle/driver on the free plan. */
+async function checkPlanLimit(companyId, kind) {
+  const company = await prisma.company.findUnique({ where: { id: companyId } });
+  if (!company || isPaid(company)) return null;
+  const count =
+    kind === "vehicles"
+      ? await prisma.vehicle.count({ where: { companyId } })
+      : await prisma.driver.count({ where: { companyId } });
+  if (count < FREE_LIMITS[kind]) return null;
+  return {
+    code: "plan_limit",
+    error: `The free plan includes up to ${FREE_LIMITS[kind]} ${kind}. Upgrade to FleetGuard ($29/month) for unlimited.`,
+  };
+}
+
 function publicCompany(c) {
   return {
+    plan: isPaid(c) ? "pro" : "free",
+    limits: isPaid(c) ? null : FREE_LIMITS,
     id: c.id,
     name: c.name,
     email: c.email,
@@ -228,6 +360,8 @@ app.post("/api/vehicles", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   const plate = String(req.body.plate ?? "").trim();
   if (!name || !plate) return res.status(400).json({ error: "Name and plate required" });
+  const blocked = await checkPlanLimit(req.companyId, "vehicles");
+  if (blocked) return res.status(402).json(blocked);
   const vehicle = await prisma.vehicle.create({
     data: {
       companyId: req.companyId,
@@ -237,9 +371,9 @@ app.post("/api/vehicles", requireAuth, async (req, res) => {
       status: oneOf(String(req.body.status ?? "active"), VEHICLE_STATUSES, "active"),
       make: req.body.make || null,
       model: req.body.model || null,
-      year: req.body.year ? parseInt(req.body.year, 10) : null,
+      year: parseIntOrNull(req.body.year),
       vin: req.body.vin || null,
-      odometerKm: req.body.odometerKm ? parseInt(req.body.odometerKm, 10) : null,
+      odometerKm: parseIntOrNull(req.body.odometerKm),
       notes: req.body.notes || null,
     },
   });
@@ -260,9 +394,9 @@ app.patch("/api/vehicles/:id", requireAuth, async (req, res) => {
       status: oneOf(String(req.body.status ?? "active"), VEHICLE_STATUSES, "active"),
       make: req.body.make || null,
       model: req.body.model || null,
-      year: req.body.year ? parseInt(req.body.year, 10) : null,
+      year: parseIntOrNull(req.body.year),
       vin: req.body.vin || null,
-      odometerKm: req.body.odometerKm ? parseInt(req.body.odometerKm, 10) : null,
+      odometerKm: parseIntOrNull(req.body.odometerKm),
       notes: req.body.notes || null,
     },
   });
@@ -305,6 +439,8 @@ app.get("/api/drivers/:id", requireAuth, async (req, res) => {
 app.post("/api/drivers", requireAuth, async (req, res) => {
   const name = String(req.body.name ?? "").trim();
   if (!name) return res.status(400).json({ error: "Name required" });
+  const blocked = await checkPlanLimit(req.companyId, "drivers");
+  if (blocked) return res.status(402).json(blocked);
   const driver = await prisma.driver.create({
     data: {
       companyId: req.companyId,
@@ -423,7 +559,7 @@ app.post("/api/documents", requireAuth, upload.single("file"), async (req, res) 
         driverId,
         referenceNumber: req.body.referenceNumber || null,
         issuer: req.body.issuer || null,
-        cost: req.body.cost ? parseFloat(req.body.cost) : null,
+        cost: parseFloatOrNull(req.body.cost),
         currency: CURRENCIES.includes(currency) ? currency : "USD",
         notes: req.body.notes || null,
         fileName: req.file?.filename ?? null,
@@ -446,11 +582,24 @@ app.patch("/api/documents/:id", requireAuth, upload.single("file"), async (req, 
   const expiresAt = req.body.expiresAt ? new Date(`${req.body.expiresAt}T12:00:00`) : null;
   if (!title || !expiresAt) return res.status(400).json({ error: "Title and expiry required" });
 
+  // Ownership must be validated: otherwise a document could be attached to
+  // another company's vehicle/driver and leak its data through the includes.
   let vehicleId = null;
   let driverId = null;
   const owner = String(req.body.owner ?? "");
-  if (owner.startsWith("vehicle:")) vehicleId = owner.slice(8);
-  else if (owner.startsWith("driver:")) driverId = owner.slice(7);
+  if (owner.startsWith("vehicle:")) {
+    const v = await prisma.vehicle.findFirst({
+      where: { id: owner.slice(8), companyId: req.companyId },
+    });
+    if (!v) return res.status(400).json({ error: "Vehicle not found." });
+    vehicleId = v.id;
+  } else if (owner.startsWith("driver:")) {
+    const d = await prisma.driver.findFirst({
+      where: { id: owner.slice(7), companyId: req.companyId },
+    });
+    if (!d) return res.status(400).json({ error: "Driver not found." });
+    driverId = d.id;
+  }
 
   const currency = String(req.body.currency ?? "USD").toUpperCase();
   const document = await prisma.document.update({
@@ -464,13 +613,14 @@ app.patch("/api/documents/:id", requireAuth, upload.single("file"), async (req, 
       driverId,
       referenceNumber: req.body.referenceNumber || null,
       issuer: req.body.issuer || null,
-      cost: req.body.cost ? parseFloat(req.body.cost) : null,
+      cost: parseFloatOrNull(req.body.cost),
       currency: CURRENCIES.includes(currency) ? currency : "USD",
       notes: req.body.notes || null,
       ...(req.file ? { fileName: req.file.filename } : {}),
       ...(existing.expiresAt.getTime() !== expiresAt.getTime() ? { sentReminders: "" } : {}),
     },
   });
+  if (req.file && existing.fileName) removeUpload(existing.fileName);
   await logEvent(req.companyId, "document_updated", `Updated document "${title}"`);
   res.json({ document });
 });
@@ -508,8 +658,45 @@ app.delete("/api/documents/:id", requireAuth, async (req, res) => {
   });
   if (!doc) return res.status(404).json({ error: "Not found" });
   await prisma.document.delete({ where: { id: doc.id } });
+  if (doc.fileName) removeUpload(doc.fileName);
   await logEvent(req.companyId, "document_deleted", `Deleted document "${doc.title}"`);
   res.json({ ok: true });
+});
+
+// CSV export: self-serve data portability (a trust signal and a sales answer).
+app.get("/api/export/documents.csv", requireAuth, async (req, res) => {
+  const docs = await prisma.document.findMany({
+    where: { companyId: req.companyId },
+    include: { vehicle: true, driver: true },
+    orderBy: { expiresAt: "asc" },
+  });
+  // Prefix formula-triggering cells so spreadsheets don't execute them.
+  const cell = (v) => {
+    let s = String(v ?? "");
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+  const rows = [
+    ["Title", "Type", "Belongs to", "Issued", "Expires", "Status", "Reference", "Issuer", "Cost", "Currency", "Notes"],
+    ...docs.map((d) => [
+      d.title,
+      documentTypeLabel(d.type),
+      d.vehicle ? `${d.vehicle.name} (${d.vehicle.plate})` : d.driver ? d.driver.name : "Company",
+      d.issuedAt ? d.issuedAt.toISOString().slice(0, 10) : "",
+      d.expiresAt.toISOString().slice(0, 10),
+      expiryStatus(d.expiresAt),
+      d.referenceNumber,
+      d.issuer,
+      d.cost,
+      d.currency,
+      d.notes,
+    ]),
+  ];
+  res.set({
+    "Content-Type": "text/csv; charset=utf-8",
+    "Content-Disposition": 'attachment; filename="fleetguard-documents.csv"',
+  });
+  res.send("﻿" + rows.map((r) => r.map(cell).join(",")).join("\r\n"));
 });
 
 app.get("/api/files/:name", requireAuth, (req, res) => {
@@ -538,10 +725,72 @@ app.get("/api/meta", (_req, res) => {
   });
 });
 
+// ---------- Leads (free tools on the marketing site) ----------
+app.post("/api/leads", leadLimiter, async (req, res) => {
+  const email = String(req.body.email ?? "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 200) {
+    return res.status(400).json({ error: "Please enter a valid email." });
+  }
+  const source = String(req.body.source ?? "web").slice(0, 60);
+  const usdot = String(req.body.usdot ?? "").replace(/\D/g, "").slice(0, 10) || null;
+  try {
+    await prisma.lead.upsert({
+      where: { email },
+      update: { source, usdot },
+      create: { email, source, usdot },
+    });
+  } catch (err) {
+    console.error("[lead] could not store lead:", err);
+  }
+  if (process.env.CONTACT_TO_EMAIL) {
+    sendEmail(
+      process.env.CONTACT_TO_EMAIL,
+      `[FleetGuard lead] ${email}`,
+      `<p>New lead from <strong>${escapeHtml(source)}</strong>: ${escapeHtml(email)}${usdot ? ` (USDOT ${escapeHtml(usdot)})` : ""}</p>`
+    ).catch(() => {});
+  }
+  res.status(201).json({ ok: true });
+});
+
+// ---------- Billing (Lemon Squeezy webhook) ----------
+// Configure the webhook in Lemon Squeezy pointing to POST /api/billing/webhook
+// and set LEMONSQUEEZY_WEBHOOK_SECRET to the signing secret you chose there.
+app.post("/api/billing/webhook", async (req, res) => {
+  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+  if (!secret) return res.status(503).json({ error: "Webhook not configured" });
+  const signature = String(req.headers["x-signature"] ?? "");
+  const expected = crypto.createHmac("sha256", secret).update(req.rawBody ?? "").digest("hex");
+  if (!signature || !safeEqual(signature, expected)) {
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+  try {
+    const event = req.body?.meta?.event_name ?? "";
+    const attrs = req.body?.data?.attributes ?? {};
+    const email = String(attrs.user_email ?? "").toLowerCase();
+    if (event.startsWith("subscription_") && email) {
+      const status = String(attrs.status ?? "active"); // active, on_trial, past_due, cancelled, expired...
+      await prisma.company.updateMany({
+        where: { email },
+        data: {
+          subscriptionStatus: status,
+          lsCustomerId: attrs.customer_id ? String(attrs.customer_id) : undefined,
+          lsSubscriptionId: req.body?.data?.id ? String(req.body.data.id) : undefined,
+        },
+      });
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("[billing]", err);
+    res.status(500).json({ error: "Webhook failed" });
+  }
+});
+
 app.post("/api/cron/reminders", async (req, res) => {
   const secret = process.env.CRON_SECRET;
-  const auth = req.headers.authorization;
-  if (secret && auth !== `Bearer ${secret}`) return res.status(401).send("Unauthorized");
+  const auth = String(req.headers.authorization ?? "");
+  // Fail closed: without a secret anyone could trigger a sweep (email spam).
+  if (!secret) return res.status(503).send("CRON_SECRET is not configured");
+  if (!safeEqual(auth, `Bearer ${secret}`)) return res.status(401).send("Unauthorized");
   const result = await runReminderSweep();
   res.json({ ok: true, ...result });
 });
@@ -559,5 +808,5 @@ if (process.env.ENABLE_INTERNAL_CRON === "1") {
 }
 
 app.listen(port, () => {
-  console.log(`FleetGuard API on port ${port}`);
+  console.log(`${BRAND_NAME} API on port ${port} (${IS_PRIVATE ? "private instance" : "SaaS"})`);
 });

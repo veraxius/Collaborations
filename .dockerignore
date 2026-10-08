@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+backend
+marketing-videos
+customer.env
+.env*
+*.tsbuildinfo

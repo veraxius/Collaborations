@@ -21,13 +21,17 @@ const config: Config = {
         "alert-red": "#D9482B",
         line: "#E3E1DB",
 
+        /* App accent = brand signal amber (was Apple blue). 600/700 are dark
+           ambers that pass AA contrast for links on white/chalk. */
+        /* Backed by CSS variables (defaults in globals.css) so a white-label
+           install can re-brand the app with env vars, no rebuild of the CSS. */
         accent: {
-          50: "#f0f7ff",
-          100: "#e0efff",
-          500: "#0071e3",
-          600: "#0062c4",
-          700: "#0051a3",
-          950: "#0a1420",
+          50: "var(--accent-50)",
+          100: "var(--accent-100)",
+          500: "var(--accent-500)",
+          600: "var(--accent-600)",
+          700: "var(--accent-700)",
+          950: "#101820",
         },
         /* ========================================
            BASE COLORS
@@ -231,8 +235,8 @@ const config: Config = {
          FONTS
          ======================================== */
       fontFamily: {
-        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
-        display: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        sans: ["var(--font-barlow)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        display: ["var(--font-barlow-condensed)", "Arial Narrow", "sans-serif"],
         /* Marketing site fonts (variables set in app/(marketing)/layout.tsx) */
         condensed: [
           "var(--font-barlow-condensed)",

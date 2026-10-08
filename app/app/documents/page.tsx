@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { FileDownloadButton } from "@/components/file-download-button";
-import { api } from "@/lib/api";
+import { api, getApiBase, getToken } from "@/lib/api";
 import {
   DOCUMENT_TYPES,
   daysUntil,
@@ -73,6 +73,23 @@ function DocumentsContent() {
     }
   }
 
+  async function exportCsv() {
+    try {
+      const res = await fetch(`${getApiBase()}/api/export/documents.csv`, {
+        headers: { Authorization: `Bearer ${getToken() ?? ""}` },
+      });
+      if (!res.ok) throw new Error("Export failed");
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "fleetguard-documents.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Export failed");
+    }
+  }
+
   async function handleDelete(docId: string) {
     if (!confirm("Delete this document?")) return;
     try {
@@ -93,9 +110,14 @@ function DocumentsContent() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">Documents</h1>
-        <Link href="/app/documents/new" className="btn-primary">
-          Add document
-        </Link>
+        <div className="flex gap-2">
+          <button type="button" onClick={exportCsv} className="btn-secondary">
+            Export CSV
+          </button>
+          <Link href="/app/documents/new" className="btn-primary">
+            Add document
+          </Link>
+        </div>
       </div>
 
       <form

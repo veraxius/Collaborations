@@ -1,3 +1,5 @@
+import { BRAND_LOGO_URL, BRAND_NAME } from "@/lib/brand";
+
 type IconProps = {
   size?: number;
   className?: string;
@@ -5,6 +7,11 @@ type IconProps = {
 
 /** Shield + checkmark brand icon, flat, single accent color. */
 export function LogoIcon({ size = 24, className }: IconProps) {
+  if (BRAND_LOGO_URL) {
+    // White-label installs provide their own logo.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={BRAND_LOGO_URL} alt="" width={size} height={size} className={className} />;
+  }
   return (
     <svg
       width={size}
@@ -34,7 +41,7 @@ export function Logo({ size = 24, className }: IconProps) {
   return (
     <span className={`inline-flex items-center gap-2 ${className ?? ""}`}>
       <LogoIcon size={size} />
-      <span className="font-semibold tracking-tight text-neutral-900">FleetGuard</span>
+      <span className="font-semibold tracking-tight text-neutral-900">{BRAND_NAME}</span>
     </span>
   );
 }

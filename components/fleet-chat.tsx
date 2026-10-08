@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getToken } from "@/lib/api";
+import { BRAND_NAME } from "@/lib/brand";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -115,7 +116,7 @@ export function FleetChat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
             rows={1}
-            placeholder="Ask FleetGuard AI about your documents…"
+            placeholder={`Ask ${BRAND_NAME} AI about your documents…`}
             className="max-h-28 flex-1 resize-none bg-transparent px-3 py-2 text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
           />
           <button
@@ -161,7 +162,7 @@ export function FleetChat() {
         )}
       </div>
       <p className="mt-2 text-center text-xs text-neutral-400">
-        FleetGuard AI answers from your loaded documents, vehicles and drivers.
+        {BRAND_NAME} AI answers from your loaded documents, vehicles and drivers.
       </p>
     </section>
   );

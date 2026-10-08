@@ -11,6 +11,8 @@ export type Company = {
   contactName?: string | null;
   phone?: string | null;
   country?: string | null;
+  plan?: "free" | "pro";
+  limits?: { vehicles: number; drivers: number } | null;
 };
 
 export function useCompany(requireAuth = true) {
@@ -57,6 +59,19 @@ export async function register(name: string, email: string, password: string) {
   const data = await api<{ token: string; company: Company }>("/api/auth/register", {
     method: "POST",
     body: { name, email, password } as any,
+  });
+  setToken(data.token);
+  return data.company;
+}
+
+export async function requestPasswordReset(email: string) {
+  await api("/api/auth/forgot", { method: "POST", body: { email } as unknown as BodyInit });
+}
+
+export async function resetPassword(id: string, token: string, password: string) {
+  const data = await api<{ token: string; company: Company }>("/api/auth/reset", {
+    method: "POST",
+    body: { id, token, password } as unknown as BodyInit,
   });
   setToken(data.token);
   return data.company;

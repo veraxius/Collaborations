@@ -32,6 +32,21 @@ type DashboardData = {
   documents: Doc[];
 };
 
+const HOURLY_LIMIT = 40;
+const usage = new Map<string, number[]>();
+
+function allowRequest(companyId: string): boolean {
+  const now = Date.now();
+  const recent = (usage.get(companyId) ?? []).filter((t) => now - t < 3_600_000);
+  if (recent.length >= HOURLY_LIMIT) {
+    usage.set(companyId, recent);
+    return false;
+  }
+  recent.push(now);
+  usage.set(companyId, recent);
+  return true;
+}
+
 function getBackendBase() {
   return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 }
@@ -83,6 +98,31 @@ export async function POST(request: Request) {
 
     if (!message) {
       return NextResponse.json({ error: "message is required" }, { status: 400 });
+    }
+
+    // AI assistant is a Fleet-plan feature; also cap usage to protect the API budget.
+    const meRes = await fetch(`${getBackendBase()}/api/me`, {
+      headers: { Authorization: auth },
+      cache: "no-store",
+    });
+    if (meRes.status === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const me = meRes.ok ? ((await meRes.json()) as { company?: { id: string; plan?: string } }) : null;
+    if (!me?.company) {
+      return NextResponse.json({ error: "Could not verify your account" }, { status: 502 });
+    }
+    if (me.company.plan !== "pro") {
+      return NextResponse.json(
+        { error: "The AI assistant is included in the Fleet plan. Upgrade to use it." },
+        { status: 402 }
+      );
+    }
+    if (!allowRequest(me.company.id)) {
+      return NextResponse.json(
+        { error: "You've reached the hourly limit for the assistant. Try again soon." },
+        { status: 429 }
+      );
     }
 
     const dashRes = await fetch(`${getBackendBase()}/api/dashboard`, {

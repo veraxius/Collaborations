@@ -14,6 +14,8 @@ import {
 const NAV_LINKS = [
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#what-we-track", label: "What we track" },
+  { href: "/tools/dot-compliance-calendar", label: "Free tool" },
+  { href: "/guides", label: "Guides" },
   { href: "/pricing", label: "Price" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
@@ -100,7 +102,7 @@ export function MarketingNavbar() {
                 href={SIGNUP_ROUTE}
                 className="mk-btn mk-btn-primary px-5 py-2 text-sm"
               >
-                Start free trial
+                Start free
               </Link>
             </>
           )}
@@ -166,8 +168,8 @@ export function MarketingNavbar() {
                     onClick={() => setMenuOpen(false)}
                     className="mk-btn mk-btn-primary w-full"
                   >
-                    Start free trial
-                  </Link>
+                    Start free
+</Link>
                   <Link
                     href={SIGNIN_ROUTE}
                     onClick={() => setMenuOpen(false)}

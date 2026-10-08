@@ -2,16 +2,24 @@
 
 import { Check } from "lucide-react";
 import { CHECKOUT_URL } from "@/components/marketing/config";
+import { useCompany } from "@/lib/auth-client";
 
 const PLAN_BULLETS = [
-  "Unlimited trucks and drivers",
+  "Unlimited trucks and drivers (free plan: 3 + 3)",
   "Unlimited documents and files",
   "Email reminders at 30, 15, 7, and 1 day",
   "Traffic-light dashboard and analytics",
+  "AI assistant and CSV export",
   "Cancel anytime",
 ];
 
 export default function PricePage() {
+  const { company } = useCompany(false);
+  // Prefill the buyer's email so the Lemon Squeezy webhook can match the
+  // subscription to this account.
+  const checkoutUrl = company
+    ? `${CHECKOUT_URL}${CHECKOUT_URL.includes("?") ? "&" : "?"}checkout[email]=${encodeURIComponent(company.email)}`
+    : CHECKOUT_URL;
   return (
     <div className="mx-auto max-w-md">
       <h1 className="text-center text-2xl font-semibold tracking-tight">Price</h1>
@@ -20,7 +28,7 @@ export default function PricePage() {
       </p>
 
       <a
-        href={CHECKOUT_URL}
+        href={checkoutUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="card mt-8 block text-center transition hover:shadow-lift"

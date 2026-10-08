@@ -14,11 +14,11 @@ export function CtaBand() {
           </p>
           <div className="mt-8">
             <Link href={SIGNUP_ROUTE} className="mk-btn mk-btn-primary">
-              Start free 14-day trial
+              Start free — no credit card
             </Link>
           </div>
-          <p className="mt-4 font-plex text-sm text-chalk/60">
-            No credit card required.
+          <p className="mt-4 font-plex text-sm text-chalk/70">
+            Free for up to 3 trucks · $29/month for unlimited
           </p>
         </div>
       </div>

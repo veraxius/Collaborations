@@ -8,7 +8,7 @@ export async function sendEmail(to, subject, html) {
   }
   const resend = new Resend(apiKey);
   await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "FleetGuard <onboarding@resend.dev>",
+    from: process.env.EMAIL_FROM ?? `${process.env.BRAND_NAME || "FleetGuard"} <onboarding@resend.dev>`,
     to,
     subject,
     html,

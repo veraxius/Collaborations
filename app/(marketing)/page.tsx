@@ -10,12 +10,15 @@ import { PricingSection } from "@/components/marketing/pricing-section";
 import { FaqAccordion } from "@/components/marketing/faq-accordion";
 import { faqItemsById, HOME_FAQ_IDS } from "@/components/marketing/faq-data";
 import { CtaBand } from "@/components/marketing/cta-band";
+import { ProductPreview } from "@/components/marketing/product-preview";
+import { GUIDES } from "@/lib/guides";
 import { SIGNUP_ROUTE } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
-  title: "FleetGuard",
+  title: { absolute: "FleetGuard: DOT Compliance Software for Small Fleets" },
   description:
-    "Track every CDL, medical card, insurance certificate, inspection, and permit — and get warned 30, 15, 7, and 1 day before anything expires. Built for fleets of 1–100 trucks.",
+    "Track every CDL, DOT medical card, insurance certificate, inspection and permit, and get warned 30, 15, 7 and 1 day before anything expires. Free for up to 3 trucks. Built for fleets of 1–100 trucks.",
+  alternates: { canonical: "/" },
 };
 
 const PROBLEM_CARDS = [
@@ -105,6 +108,21 @@ const COMPARISON_CARDS = [
 export default function HomePage() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "FleetGuard",
+            applicationCategory: "BusinessApplication",
+            operatingSystem: "Web",
+            description:
+              "DOT compliance document tracker with expiry reminders for small trucking fleets.",
+            offers: { "@type": "Offer", price: "29", priceCurrency: "USD" },
+          }),
+        }}
+      />
       {/* 1. Hero */}
       <section className="pt-8 sm:pt-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -122,20 +140,51 @@ export default function HomePage() {
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               <Link href={SIGNUP_ROUTE} className="mk-btn mk-btn-primary">
-                Start free 14-day trial
+                Start free — no credit card
               </Link>
-              <a href="#pricing" className="mk-btn mk-btn-secondary-dark">
-                See pricing
-              </a>
+              <Link
+                href="/tools/dot-compliance-calendar"
+                className="mk-btn mk-btn-secondary-dark"
+              >
+                Find my MCS-150 &amp; UCR dates
+              </Link>
             </div>
               <p className="mt-5 font-plex text-sm text-chalk/60">
-                No credit card required · Cancel anytime · Set up in minutes
+                Free to start · $29/month when you&apos;re ready · Cancel anytime
               </p>
             </div>
             <div className="mx-auto mt-14 max-w-4xl">
               <DeadlineStripHero />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 1b. Product preview + trust facts */}
+      <section className="pt-4 pb-4 sm:pt-10">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
+            <SectionEyebrow>See it in action</SectionEyebrow>
+            <h2 className="mk-h2 mt-3 text-4xl text-asphalt sm:text-5xl">
+              Your whole fleet&apos;s status in five seconds.
+            </h2>
+          </div>
+          <div className="mt-10">
+            <ProductPreview />
+          </div>
+          <ul className="mx-auto mt-12 grid max-w-4xl gap-4 text-center sm:grid-cols-4">
+            {[
+              ["30 · 15 · 7 · 1", "day email alerts"],
+              ["< 1 hour", "to load a small fleet"],
+              ["CSV export", "your data, always yours"],
+              ["$0", "for up to 3 trucks"],
+            ].map(([big, small]) => (
+              <li key={big} className="rounded-2xl border border-line bg-white px-4 py-5">
+                <p className="font-condensed text-3xl font-bold text-asphalt">{big}</p>
+                <p className="mt-1 text-sm text-asphalt/70">{small}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -313,6 +362,53 @@ export default function HomePage() {
       </div>
       <section id="pricing" className="scroll-mt-24 py-20 sm:py-24">
         <PricingSection />
+      </section>
+
+      {/* 7b. Guides: internal links that feed SEO and educate buyers */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
+            <SectionEyebrow>Free guides and tools</SectionEyebrow>
+            <h2 className="mk-h2 mt-3 text-4xl text-asphalt sm:text-5xl">
+              Plain-English DOT compliance.
+            </h2>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <Link
+              href="/tools/dot-compliance-calendar"
+              className="mk-card mk-card-hover block bg-signal-amber/10 p-7"
+            >
+              <p className="font-plex text-xs text-asphalt/70">FREE TOOL</p>
+              <h3 className="mt-2 font-condensed text-2xl font-semibold text-asphalt">
+                DOT compliance calendar
+              </h3>
+              <p className="mt-2 text-asphalt/75">
+                Enter your USDOT number and download your MCS-150, UCR, IFTA and 2290 dates.
+              </p>
+            </Link>
+            {GUIDES.slice(0, 2).map((g) => (
+              <Link
+                key={g.slug}
+                href={`/guides/${g.slug}`}
+                className="mk-card mk-card-hover block p-7"
+              >
+                <p className="font-plex text-xs text-asphalt/70">GUIDE</p>
+                <h3 className="mt-2 font-condensed text-2xl font-semibold text-asphalt">
+                  {g.title}
+                </h3>
+                <p className="mt-2 text-asphalt/75">{g.summary}</p>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-8 text-center">
+            <Link
+              href="/guides"
+              className="font-medium text-asphalt underline decoration-signal-amber decoration-2 underline-offset-4"
+            >
+              All guides →
+            </Link>
+          </p>
+        </div>
       </section>
 
       {/* 8. FAQ preview */}

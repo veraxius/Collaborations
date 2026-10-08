@@ -1,0 +1,63 @@
+# One private installation per customer.
+#   cp customer.env.example customer.env   (then edit it)
+#   docker compose -f docker-compose.private.yml --env-file customer.env up -d --build
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: fleetguard
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@db:5432/fleetguard?schema=fleetguard
+      JWT_SECRET: ${JWT_SECRET}
+      FRONTEND_URL: ${APP_URL}
+      DEPLOYMENT_MODE: private
+      BRAND_NAME: ${BRAND_NAME}
+      EMAIL_FROM: ${EMAIL_FROM}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      CRON_SECRET: ${CRON_SECRET}
+      ENABLE_INTERNAL_CRON: "1"
+      UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+    ports:
+      - "3001:3001"
+
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_URL: ${API_URL}
+        NEXT_PUBLIC_SITE_URL: ${APP_URL}
+        NEXT_PUBLIC_DEPLOYMENT_MODE: private
+        NEXT_PUBLIC_BRAND_NAME: ${BRAND_NAME}
+        NEXT_PUBLIC_BRAND_LOGO_URL: ${BRAND_LOGO_URL:-}
+        NEXT_PUBLIC_BRAND_ACCENT: ${BRAND_ACCENT:-}
+        NEXT_PUBLIC_BRAND_ACCENT_DARK: ${BRAND_ACCENT_DARK:-}
+        NEXT_PUBLIC_BRAND_ON_ACCENT: ${BRAND_ON_ACCENT:-}
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      NEXT_PUBLIC_API_URL: ${API_URL}
+    ports:
+      - "3000:3000"
+
+volumes:
+  dbdata:
+  uploads:

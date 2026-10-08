@@ -120,7 +120,12 @@ export default function DriversPage() {
         </details>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+            {error}{" "}
+            {error.includes("Upgrade") && (
+              <Link href="/app/price" className="font-semibold underline">See plans</Link>
+            )}
+          </p>
         )}
 
         <button className="btn-primary" disabled={pending}>

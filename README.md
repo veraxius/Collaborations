@@ -59,6 +59,17 @@ Open **http://localhost:3000**.
 
 See `backend/.env.fleetguard.example` for a full template.
 
+## Plans and billing
+
+- **Starter (free)**: up to 3 vehicles and 3 drivers, all reminders. Enforced in the API (`402 plan_limit`).
+- **Fleet ($29/mo)**: unlimited + AI assistant. A company is "pro" when `subscriptionStatus` is `active`, `on_trial` or `past_due`.
+- Lemon Squeezy webhook: `POST /api/billing/webhook` (set `LEMONSQUEEZY_WEBHOOK_SECRET`). Checkout prefills the account email so purchases match accounts.
+- After pulling: `cd backend && npx prisma db push` (adds the `Lead` table).
+
+## Legacy code
+
+`/dashboard`, `/onboarding`, `/api/analyze`, `/api/translate`, `/api/ai-chat` and the other `/api/ai/*` routes (except `fleet-chat`) belong to a previous product. `middleware.ts` returns 404 for them. Delete those folders, `components/dashboard`, `components/onboarding`, `components/providers`, `lib/supabase.ts`, `lib/seo.ts`, `lib/aiAnalysis.ts`, `lib/analyzePerformance.ts`, `lib/auth.ts`, `hooks/`, `backend/auth-backend`, `backend/generated_backend` and `middleware.ts` when ready.
+
 ## Routes
 
 | Path | Description |
