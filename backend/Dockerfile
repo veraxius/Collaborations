@@ -13,4 +13,4 @@ COPY . .
 ENV NODE_ENV=production
 EXPOSE 3001
 # Create/upgrade tables, then start the API
-CMD ["sh", "-c", "npx prisma db push --skip-generate && node index.js"]
+CMD ["sh", "-c", "npx prisma db push && node index.js"]
