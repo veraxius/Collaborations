@@ -11,6 +11,7 @@ export type Company = {
   contactName?: string | null;
   phone?: string | null;
   country?: string | null;
+  vertical?: string;
   plan?: "free" | "pro";
   limits?: { vehicles: number; drivers: number } | null;
 };
@@ -55,10 +56,10 @@ export async function login(email: string, password: string) {
   return data.company;
 }
 
-export async function register(name: string, email: string, password: string) {
+export async function register(name: string, email: string, password: string, vertical = "trucking") {
   const data = await api<{ token: string; company: Company }>("/api/auth/register", {
     method: "POST",
-    body: { name, email, password } as any,
+    body: { name, email, password, vertical } as any,
   });
   setToken(data.token);
   return data.company;

@@ -2,14 +2,22 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/fleetguard-logo";
 import { register } from "@/lib/auth-client";
+import { VERTICALS } from "@/lib/expiry";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [vertical, setVertical] = useState("trucking");
+
+  // Niche landing pages link here with ?vertical=nemt (etc.) to preselect it.
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("vertical");
+    if (v && VERTICALS.some((o) => o.value === v)) setVertical(v);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,7 +25,7 @@ export default function RegisterPage() {
     setPending(true);
     const fd = new FormData(e.currentTarget);
     try {
-      await register(String(fd.get("name")), String(fd.get("email")), String(fd.get("password")));
+      await register(String(fd.get("name")), String(fd.get("email")), String(fd.get("password")), vertical);
       router.push("/app");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
@@ -40,6 +48,19 @@ export default function RegisterPage() {
         <div>
           <label className="label" htmlFor="name">Company name</label>
           <input className="input" id="name" name="name" required placeholder="Acme Logistics" />
+        </div>
+        <div>
+          <label className="label" htmlFor="vertical">What do you operate?</label>
+          <select
+            className="input"
+            id="vertical"
+            value={vertical}
+            onChange={(e) => setVertical(e.target.value)}
+          >
+            {VERTICALS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="label" htmlFor="email">Email</label>

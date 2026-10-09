@@ -19,8 +19,8 @@ type Doc = {
   title: string;
   type: string;
   expiresAt: string;
-  vehicle?: { name: string; plate: string } | null;
-  driver?: { name: string } | null;
+  vehicle?: { id?: string; name: string; plate: string } | null;
+  driver?: { id?: string; name: string } | null;
 };
 
 type Event = { id: string; label: string; createdAt: string };
@@ -63,6 +63,21 @@ export default function DashboardPage() {
   const attention = documents
     .filter((d) => expiryStatus(d.expiresAt) !== "ok")
     .slice(0, 8);
+
+  // People and vehicles with an expired document (not cleared) or one coming due.
+  function flagged(key: "driver" | "vehicle") {
+    const expired = new Set<string>();
+    const soon = new Set<string>();
+    for (const d of documents) {
+      const id = d[key]?.id;
+      if (!id) continue;
+      const s = expiryStatus(d.expiresAt);
+      if (s === "expired") expired.add(id);
+      else if (s === "expiring") soon.add(id);
+    }
+    expired.forEach((id) => soon.delete(id));
+    return { expired: expired.size, soon: soon.size };
+  }
 
   return (
     <div>
@@ -127,6 +142,36 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {(driverCount > 0 || vehicleCount > 0) && (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {[
+            { label: "Drivers cleared to drive", total: driverCount, ...flagged("driver"), href: "/app/drivers" },
+            { label: "Vehicles ready for service", total: vehicleCount, ...flagged("vehicle"), href: "/app/vehicles" },
+          ]
+            .filter((c) => c.total > 0)
+            .map((c) => (
+              <Link key={c.label} href={c.href} className="card transition hover:shadow-lift">
+                <p className="text-sm font-medium text-neutral-400">{c.label}</p>
+                <p className="mt-1 text-3xl font-semibold tabular-nums tracking-tight">
+                  {c.total - c.expired}
+                  <span className="text-xl font-normal text-neutral-400"> of {c.total}</span>
+                </p>
+                <p className="mt-1 text-sm text-neutral-500">
+                  {c.expired > 0 ? (
+                    <span className="font-medium text-red-600">
+                      {c.expired} with an expired document: liability exposure
+                    </span>
+                  ) : c.soon > 0 ? (
+                    <span className="font-medium text-amber-600">{c.soon} with a renewal coming up</span>
+                  ) : (
+                    "No expired documents"
+                  )}
+                </p>
+              </Link>
+            ))}
+        </div>
+      )}
+
       {(vehicleCount === 0 || driverCount === 0 || documents.length === 0) && (
         <div className="card mt-6">
           <h2 className="text-lg font-semibold tracking-tight">Get audit-ready in 3 steps</h2>
@@ -178,7 +223,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+        <div className="min-w-0 lg:col-span-2">
           <h2 className="text-lg font-semibold tracking-tight">Needs attention</h2>
           {attention.length === 0 ? (
             <div className="card mt-3 py-10 text-center text-neutral-400">
@@ -227,7 +272,7 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h2 className="text-lg font-semibold tracking-tight">Recent activity</h2>
           {events.length === 0 ? (
             <div className="card mt-3 py-10 text-center text-sm text-neutral-400">

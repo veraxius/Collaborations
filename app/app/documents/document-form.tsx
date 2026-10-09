@@ -1,6 +1,7 @@
 "use client";
 
-import { CURRENCIES, DOCUMENT_TYPES, DOC_PRESETS, addMonthsISO } from "@/lib/expiry";
+import { CURRENCIES, DOCUMENT_TYPES, DOC_PRESETS, VERTICALS, addMonthsISO } from "@/lib/expiry";
+import { useCompany } from "@/lib/auth-client";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -41,7 +42,17 @@ export function DocumentForm({
   const [issuedAt, setIssuedAt] = useState(initial?.issuedAt ?? "");
   const [expiresAt, setExpiresAt] = useState(initial?.expiresAt ?? "");
   const [months, setMonths] = useState<number | null>(null);
+  const [typicalNote, setTypicalNote] = useState(false);
+  const { company } = useCompany(false);
   const isEdit = Boolean(initial?.id);
+  // Niche items are extra: everyone sees the standard DOT list, and a company
+  // that runs NEMT, last-mile delivery or shuttles also gets its own group first.
+  const nicheItems = DOC_PRESETS.filter((p) => p.vertical && p.vertical === company?.vertical);
+  const standardItems = DOC_PRESETS.filter((p) => !p.vertical);
+  const presetLabel = (p: (typeof DOC_PRESETS)[number]) =>
+    p.months === 0
+      ? `${p.title} (enter the date)`
+      : `${p.title} (${p.months >= 12 && p.months % 12 === 0 ? `${p.months / 12} yr` : `${p.months} mo`}${p.typical ? ", typical" : ""})`;
 
   function applyPreset(id: string) {
     const preset = DOC_PRESETS.find((p) => p.id === id);
@@ -51,8 +62,9 @@ export function DocumentForm({
     }
     setTitle(preset.title);
     setType(preset.type);
-    setMonths(preset.months);
-    if (issuedAt) setExpiresAt(addMonthsISO(issuedAt, preset.months));
+    setMonths(preset.months || null);
+    setTypicalNote(Boolean(preset.typical));
+    if (issuedAt && preset.months > 0) setExpiresAt(addMonthsISO(issuedAt, preset.months));
   }
 
   function changeIssued(value: string) {
@@ -101,18 +113,24 @@ export function DocumentForm({
             onChange={(e) => applyPreset(e.target.value)}
           >
             <option value="">Custom document…</option>
+            {nicheItems.length > 0 && (
+              <optgroup label={`For your operation (${VERTICALS.find((v) => v.value === company?.vertical)?.label ?? ""})`}>
+                {nicheItems.map((p) => (
+                  <option key={p.id} value={p.id}>{presetLabel(p)}</option>
+                ))}
+              </optgroup>
+            )}
             {(["driver", "vehicle", "company"] as const).map((scope) => (
               <optgroup key={scope} label={scope[0].toUpperCase() + scope.slice(1)}>
-                {DOC_PRESETS.filter((p) => p.scope === scope).map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.title} ({p.months >= 12 && p.months % 12 === 0 ? `${p.months / 12} yr` : `${p.months} mo`})
-                  </option>
+                {standardItems.filter((p) => p.scope === scope).map((p) => (
+                  <option key={p.id} value={p.id}>{presetLabel(p)}</option>
                 ))}
               </optgroup>
             ))}
           </select>
           <p className="mt-1.5 text-xs text-neutral-500">
             Pick one, enter the issue date, and the expiry is filled in for you.
+            {typicalNote && " This validity is a typical default; adjust it to your state, broker or contract."}
           </p>
         </div>
       )}

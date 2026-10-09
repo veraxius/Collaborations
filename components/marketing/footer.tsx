@@ -9,6 +9,9 @@ const SITE_LINKS = [
   { href: "/guides", label: "Guides" },
   { href: "/pricing", label: "Price" },
   { href: "/enterprise", label: "Private installation" },
+  { href: "/for/nemt", label: "For NEMT" },
+  { href: "/for/last-mile", label: "For last-mile delivery" },
+  { href: "/for/shuttle", label: "For shuttle fleets" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];

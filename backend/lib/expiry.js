@@ -15,8 +15,19 @@ export const DOCUMENT_TYPES = [
   { value: "hvut", label: "HVUT (Form 2290)" },
   { value: "mcs150", label: "MCS-150 update" },
   { value: "certification", label: "Certification" },
+  { value: "background_check", label: "Background check" },
+  { value: "training", label: "Training" },
+  { value: "lift_inspection", label: "Lift / securement inspection" },
+  { value: "contract", label: "Contract / agreement" },
   { value: "maintenance", label: "Maintenance" },
   { value: "other", label: "Other" },
+];
+
+export const VERTICALS = [
+  { value: "trucking", label: "Trucking" },
+  { value: "nemt", label: "Non-emergency medical transportation" },
+  { value: "last-mile", label: "Contracted last-mile delivery" },
+  { value: "shuttle", label: "Independent shuttle fleet" },
 ];
 
 export const VEHICLE_TYPES = [

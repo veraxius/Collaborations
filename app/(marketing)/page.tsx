@@ -12,6 +12,7 @@ import { faqItemsById, HOME_FAQ_IDS } from "@/components/marketing/faq-data";
 import { CtaBand } from "@/components/marketing/cta-band";
 import { ProductPreview } from "@/components/marketing/product-preview";
 import { GUIDES } from "@/lib/guides";
+import { VERTICAL_PAGES } from "@/lib/verticals";
 import { SIGNUP_ROUTE } from "@/components/marketing/config";
 
 export const metadata: Metadata = {
@@ -362,6 +363,26 @@ export default function HomePage() {
       </div>
       <section id="pricing" className="scroll-mt-24 py-20 sm:py-24">
         <PricingSection />
+      </section>
+
+      {/* 7a. Same problem, other operators (additive; the core stays DOT compliance) */}
+      <section className="py-6 sm:py-10">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <p className="text-center text-lg text-asphalt/75">
+            Running medical rides, contracted deliveries or shuttles? The same tracking applies:{" "}
+            {VERTICAL_PAGES.map((v, i) => (
+              <span key={v.slug}>
+                <Link
+                  href={`/for/${v.slug}`}
+                  className="font-medium text-asphalt underline decoration-signal-amber decoration-2 underline-offset-4"
+                >
+                  {v.name}
+                </Link>
+                {i < VERTICAL_PAGES.length - 1 ? (i === VERTICAL_PAGES.length - 2 ? ", and " : ", ") : "."}
+              </span>
+            ))}
+          </p>
+        </div>
       </section>
 
       {/* 7b. Guides: internal links that feed SEO and educate buyers */}

@@ -291,6 +291,193 @@ export const GUIDES: Guide[] = [
       href: "https://www.ecfr.gov/current/title-49/section-396.17",
     },
   },
+  {
+    slug: "nemt-driver-credential-checklist",
+    title: "NEMT driver and vehicle credential checklist",
+    summary: "What non-emergency medical transportation providers typically have to keep current.",
+    description:
+      "A practical checklist of the driver screening, training, vehicle and insurance documents NEMT providers typically track, and why the exact list depends on your state and broker.",
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "The rules come from your state and your brokers",
+        paragraphs: [
+          "Non-emergency medical transportation is governed mostly by each state's Medicaid program and by the brokers that manage its rides. That is why two providers in different states can have different lists. In practice the broker's provider manual is often the strictest source, so start there.",
+        ],
+      },
+      {
+        heading: "Drivers: the people you put in front of patients",
+        bullets: [
+          "Valid driver's license and a motor vehicle record review.",
+          "Criminal background check and a drug screen.",
+          "CPR and First Aid certification.",
+          "Passenger assistance and sensitivity training (often called PASS).",
+          "Wheelchair securement training, and defensive driving where required.",
+          "Exclusion-list checks, which some brokers require on a recurring basis.",
+        ],
+      },
+      {
+        heading: "Vehicles",
+        bullets: [
+          "A safety inspection, usually before a vehicle joins a broker's network and then on a schedule.",
+          "Working accessibility equipment, such as lifts and securements, checked and documented.",
+          "Current registration and an insurance certificate.",
+        ],
+      },
+      {
+        heading: "Company paperwork",
+        bullets: [
+          "Medicaid provider enrollment and each broker's credentialing.",
+          "Insurance policies with limits that meet your state and broker contracts. Minimums vary, and brokers often ask for more than the state requires.",
+        ],
+      },
+      {
+        heading: "Why dates matter more than the checklist",
+        paragraphs: [
+          "Most of these items expire. A lapsed certification or insurance certificate puts a driver or vehicle out of compliance, which can pause trips and weaken your position if something goes wrong. Track each one with its date and get a reminder before it lapses. In FleetGuard, choose Non-emergency medical transportation in Settings and the NEMT quick-start items appear when you add a document.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Is CPR and First Aid required by law for NEMT drivers?",
+        a: "It is commonly a broker requirement rather than a state rule, and it varies. Check your broker's provider manual and your state Medicaid agency.",
+      },
+      {
+        q: "How often does training need to be renewed?",
+        a: "It depends on the certifying body and on your broker. Use the date on each certificate, and set the reminder from that.",
+      },
+    ],
+    related: ["driver-qualification-file-checklist", "annual-vehicle-inspection-requirement"],
+    source: {
+      label: "NEMT driver requirements overview (vendor guide; confirm with your state Medicaid agency)",
+      href: "https://mediroutes.com/blog/how-to-become-an-nemt-driver",
+    },
+  },
+  {
+    slug: "shuttle-van-16-passengers-rules",
+    title: "Shuttle fleets: CDL and insurance rules for 16+ passenger vehicles",
+    summary: "Seating capacity drives the driver license and the insurance minimum.",
+    description:
+      "How seating capacity changes the rules for shuttle operators: the CDL threshold at 16 passengers including the driver, and the federal insurance minimums for for-hire interstate passenger carriers.",
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "Seating capacity sets the rules",
+        paragraphs: [
+          "For federal purposes, a vehicle designed to carry 16 or more passengers, including the driver, is a commercial motor vehicle. Its driver needs a CDL and is subject to drug and alcohol testing. Compensation does not change this: a nonprofit shuttle is covered the same way.",
+        ],
+      },
+      {
+        heading: "Insurance minimums for for-hire interstate carriers",
+        paragraphs: [
+          "Under 49 CFR 387.33, for-hire interstate passenger carriers must carry minimum liability coverage based on the largest seating capacity in the fleet.",
+        ],
+        bullets: [
+          "Vehicles seating 16 or more (including the driver): $5,000,000.",
+          "Vehicles seating 15 or fewer: $1,500,000.",
+          "One larger vehicle sets the level for the whole fleet.",
+        ],
+      },
+      {
+        heading: "Other pieces to check for your operation",
+        bullets: [
+          "The passenger endorsement on the driver's CDL, and how your state tests for it.",
+          "Your USDOT number, operating authority and MCS-150 update.",
+          "State permits for carrying passengers.",
+          "DOT medical cards and the annual Clearinghouse query for CDL drivers.",
+        ],
+      },
+      {
+        heading: "Keep the dates in one place",
+        paragraphs: [
+          "Driver credentials, the insurance filing, permits and inspections all expire on different dates. Add each with its date in FleetGuard and get a reminder before it lapses. Choose Independent shuttle fleet in Settings to see a quick-start list for your operation.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Do smaller vans need a CDL?",
+        a: "The CDL threshold is 16 passengers including the driver. Vans with fewer seats follow different rules, and other requirements can still apply. Check federal and state rules for your vehicles.",
+      },
+      {
+        q: "Do these insurance minimums apply to every shuttle?",
+        a: "They apply to for-hire interstate passenger carriers. Intrastate and some exempt operations differ, so confirm with your insurer and state regulator.",
+      },
+    ],
+    related: ["dot-medical-card-expiration", "mcs-150-update-deadline"],
+    source: {
+      label: "eCFR: 49 CFR 387.33, Financial responsibility for passenger carriers",
+      href: "https://www.ecfr.gov/current/title-49/section-387.33",
+    },
+  },
+  {
+    slug: "last-mile-contractor-insurance-checklist",
+    title: "Last-mile delivery: contractor insurance and vetting checklist",
+    summary: "Contractor status does not remove your exposure. What to keep current.",
+    description:
+      "A checklist for contracted last-mile delivery businesses: the insurance layers to hold, how driver-owned vehicles change the policy, and the vetting records to keep current.",
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "Insurance usually comes in layers",
+        bullets: [
+          "Commercial auto for vehicles titled to the business.",
+          "General liability and cargo coverage.",
+          "Workers' compensation where it applies.",
+          "Hired and non-owned auto, when contractors drive their own vehicles.",
+        ],
+      },
+      {
+        heading: "Driver-owned vehicles change the policy",
+        paragraphs: [
+          "Personal auto policies typically exclude commercial delivery use. When contractors use their own cars or vans, hired and non-owned auto coverage can protect the business, and each driver's own policy should be checked and dated.",
+        ],
+      },
+      {
+        heading: "Contractor status does not remove liability",
+        paragraphs: [
+          "Companies that classify drivers as independent contractors can still be exposed to accidents and cargo loss during deliveries. Classification rules are also changing state by state, so confirm yours with counsel.",
+        ],
+      },
+      {
+        heading: "Your contract sets the real requirements",
+        paragraphs: [
+          "If you work under a retailer, carrier or 3PL agreement, that contract often dictates the coverage you must hold. Compare your policies with it line by line, and track each policy's renewal date so a gap never appears at claim time.",
+        ],
+      },
+      {
+        heading: "Vetting records worth keeping current",
+        bullets: [
+          "Driver license and motor vehicle record review.",
+          "Background check.",
+          "Signed contractor agreement.",
+          "Vehicle registration and, where required, an inspection.",
+        ],
+      },
+      {
+        heading: "Track it",
+        paragraphs: [
+          "Add each policy, contract and check with its date in FleetGuard and get a reminder before it lapses. Choose Contracted last-mile delivery in Settings to see a quick-start list for your operation.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Do I need commercial auto if my drivers use their own cars?",
+        a: "Often the business needs hired and non-owned auto coverage instead, because personal policies usually exclude delivery. Ask a licensed agent about your setup.",
+      },
+      {
+        q: "How often should driver checks be refreshed?",
+        a: "That depends on your contracts and insurer. Many businesses recheck motor vehicle records yearly. Follow the schedule in your agreements.",
+      },
+    ],
+    related: ["driver-qualification-file-checklist", "annual-vehicle-inspection-requirement"],
+    source: {
+      label: "Hub International: last-mile delivery insurance requirements (insurance broker FAQ)",
+      href: "https://www.hubinternational.com/en-us/faqs/transportation/last-mile-delivery-insurance-requirements/",
+    },
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {

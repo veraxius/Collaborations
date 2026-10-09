@@ -51,8 +51,19 @@ export const DOCUMENT_TYPES: Option[] = [
   { value: "hvut", label: "HVUT (Form 2290)" },
   { value: "mcs150", label: "MCS-150 update" },
   { value: "certification", label: "Certification" },
+  { value: "background_check", label: "Background check" },
+  { value: "training", label: "Training" },
+  { value: "lift_inspection", label: "Lift / securement inspection" },
+  { value: "contract", label: "Contract / agreement" },
   { value: "maintenance", label: "Maintenance" },
   { value: "other", label: "Other" },
+];
+
+export const VERTICALS: Option[] = [
+  { value: "trucking", label: "Trucking (DOT compliance)" },
+  { value: "nemt", label: "Non-emergency medical transportation" },
+  { value: "last-mile", label: "Contracted last-mile delivery" },
+  { value: "shuttle", label: "Independent shuttle fleet" },
 ];
 
 /**
@@ -65,8 +76,13 @@ export type DocPreset = {
   title: string;
   type: string;
   scope: "driver" | "vehicle" | "company";
+  /** Validity used to auto-fill the expiry. 0 = no fixed validity, the user enters the date. */
   months: number;
   issuer?: string;
+  /** Extra items for a niche. Absent = the standard DOT list shown to everyone. */
+  vertical?: "nemt" | "last-mile" | "shuttle";
+  /** True when the validity is a typical default that varies by state, broker or contract. */
+  typical?: boolean;
 };
 
 export const DOC_PRESETS: DocPreset[] = [
@@ -82,6 +98,27 @@ export const DOC_PRESETS: DocPreset[] = [
   { id: "mcs150", title: "MCS-150 biennial update", type: "mcs150", scope: "company", months: 24, issuer: "FMCSA" },
   { id: "ifta", title: "IFTA license", type: "tax", scope: "company", months: 12 },
   { id: "irp", title: "IRP apportioned registration", type: "registration", scope: "company", months: 12 },
+
+  // --- NEMT (rules vary by state Medicaid program and by broker) ---
+  { id: "nemt-background", title: "Driver background check", type: "background_check", scope: "driver", months: 12, typical: true, vertical: "nemt" },
+  { id: "nemt-cpr", title: "CPR / First Aid certification", type: "training", scope: "driver", months: 24, typical: true, vertical: "nemt" },
+  { id: "nemt-pass", title: "PASS (passenger assistance) training", type: "training", scope: "driver", months: 12, typical: true, vertical: "nemt" },
+  { id: "nemt-securement", title: "Wheelchair securement training", type: "training", scope: "driver", months: 12, typical: true, vertical: "nemt" },
+  { id: "nemt-lift", title: "Lift and securement inspection", type: "lift_inspection", scope: "vehicle", months: 12, typical: true, vertical: "nemt" },
+  { id: "nemt-broker", title: "Broker credentialing / Medicaid enrollment", type: "permit", scope: "company", months: 12, typical: true, vertical: "nemt" },
+
+  // --- Contracted last-mile delivery ---
+  { id: "lm-auto", title: "Commercial auto policy", type: "insurance", scope: "vehicle", months: 12, vertical: "last-mile" },
+  { id: "lm-gl", title: "General liability / cargo policy", type: "insurance", scope: "company", months: 12, vertical: "last-mile" },
+  { id: "lm-contract", title: "Delivery contract / contractor agreement", type: "contract", scope: "driver", months: 12, typical: true, vertical: "last-mile" },
+  { id: "lm-background", title: "Driver background check", type: "background_check", scope: "driver", months: 12, typical: true, vertical: "last-mile" },
+  { id: "lm-license", title: "Driver license", type: "license", scope: "driver", months: 0, vertical: "last-mile" },
+
+  // --- Independent shuttle fleets ---
+  { id: "sh-cdl", title: "CDL with passenger endorsement", type: "license", scope: "driver", months: 0, vertical: "shuttle" },
+  { id: "sh-insurance", title: "Passenger carrier insurance filing", type: "insurance", scope: "company", months: 12, vertical: "shuttle" },
+  { id: "sh-permit", title: "State passenger carrier permit", type: "permit", scope: "company", months: 12, typical: true, vertical: "shuttle" },
+  { id: "sh-training", title: "Driver safety training", type: "training", scope: "driver", months: 12, typical: true, vertical: "shuttle" },
 ];
 
 /** Add whole calendar months to an ISO date (YYYY-MM-DD), clamping the day. */

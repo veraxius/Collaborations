@@ -16,6 +16,7 @@ import {
   DRIVER_STATUSES,
   VEHICLE_STATUSES,
   VEHICLE_TYPES,
+  VERTICALS,
   documentTypeLabel,
   expiryStatus,
   oneOf,
@@ -139,6 +140,7 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
         name,
         email,
         passwordHash: await bcrypt.hash(password, 10),
+        vertical: oneOf(String(req.body.vertical ?? "trucking"), VERTICALS, "trucking"),
         // Column still exists in the schema; the product is free so the
         // value is never checked anywhere.
         trialEndsAt: new Date(),
@@ -244,6 +246,9 @@ app.patch("/api/me", requireAuth, async (req, res) => {
       contactName: String(req.body.contactName ?? "").trim() || null,
       phone: String(req.body.phone ?? "").trim() || null,
       country: String(req.body.country ?? "").trim() || null,
+      ...(req.body.vertical !== undefined
+        ? { vertical: oneOf(String(req.body.vertical), VERTICALS, "trucking") }
+        : {}),
     },
   });
   return res.json({ company: publicCompany(company) });
@@ -297,6 +302,7 @@ function publicCompany(c) {
     contactName: c.contactName,
     phone: c.phone,
     country: c.country,
+    vertical: c.vertical,
     createdAt: c.createdAt,
   };
 }

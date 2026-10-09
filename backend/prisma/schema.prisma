@@ -20,6 +20,9 @@ model Company {
   contactName        String?
   phone              String?
   country            String?
+  // What the company operates: trucking | nemt | last-mile | shuttle.
+  // Drives which quick-start documents and wording the app shows.
+  vertical           String   @default("trucking")
 
   vehicles  Vehicle[]
   drivers   Driver[]

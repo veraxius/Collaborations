@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { useCompany } from "@/lib/auth-client";
+import { VERTICALS } from "@/lib/expiry";
 
 export default function SettingsPage() {
   const { company, setCompany } = useCompany();
@@ -30,6 +31,7 @@ export default function SettingsPage() {
           contactName: fd.get("contactName"),
           phone: fd.get("phone"),
           country: fd.get("country"),
+          vertical: fd.get("vertical"),
         } as any,
       });
       setCompany(data.company);
@@ -113,6 +115,22 @@ export default function SettingsPage() {
               defaultValue={company.country ?? ""}
               placeholder="United States"
             />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="label" htmlFor="vertical">What do you operate?</label>
+            <select
+              className="input"
+              id="vertical"
+              name="vertical"
+              defaultValue={company.vertical ?? "trucking"}
+            >
+              {VERTICALS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-xs text-neutral-500">
+              Adds a quick-start list for your operation when you add documents.
+            </p>
           </div>
         </div>
         {profileError && (

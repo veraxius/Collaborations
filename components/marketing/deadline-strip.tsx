@@ -155,8 +155,10 @@ export function DeadlineStripHero() {
       ))}
 
       {/* Document chips */}
+      {/* The renewal chip ends its slide at cx=90, so this one sits on the "15"
+          marker, clear of it (chips are 150 wide). */}
       <Chip
-        cx={150}
+        cx={340}
         label="CDL — J. Ramirez"
         fill="#1E9E6A"
         textFill="#F6F5F2"

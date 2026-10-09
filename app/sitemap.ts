@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { GUIDES } from "@/lib/guides";
+import { VERTICAL_PAGES } from "@/lib/verticals";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -11,6 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/faq`, lastModified: now, priority: 0.8 },
     { url: `${BASE_URL}/tools/dot-compliance-calendar`, lastModified: now, priority: 0.9 },
     { url: `${BASE_URL}/enterprise`, lastModified: now, priority: 0.7 },
+    ...VERTICAL_PAGES.map((v) => ({
+      url: `${BASE_URL}/for/${v.slug}`,
+      lastModified: now,
+      priority: 0.7,
+    })),
     { url: `${BASE_URL}/guides`, lastModified: now, priority: 0.8 },
     ...GUIDES.map((g) => ({
       url: `${BASE_URL}/guides/${g.slug}`,
