@@ -13,6 +13,7 @@ import {
   formatDate,
 } from "@/lib/expiry";
 import { StatusBadge } from "../../status-badge";
+import { ReadOnlyFieldset, WriteOnly } from "@/components/write-only";
 
 type Doc = { id: string; title: string; type: string; expiresAt: string };
 
@@ -113,11 +114,14 @@ export default function VehicleDetailPage() {
           {vehicle.name}
           <span className="ml-3 text-lg font-normal text-neutral-400">{vehicle.plate}</span>
         </h1>
-        <Link href={`/app/documents/new?vehicle=${vehicle.id}`} className="btn-primary">
-          Add document
-        </Link>
+        <WriteOnly>
+          <Link href={`/app/documents/new?vehicle=${vehicle.id}`} className="btn-primary">
+            Add document
+          </Link>
+        </WriteOnly>
       </div>
 
+      <ReadOnlyFieldset>
       <form onSubmit={handleSave} className="card mt-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-4">
           <div>
@@ -176,6 +180,7 @@ export default function VehicleDetailPage() {
           {pending ? "Saving…" : "Save changes"}
         </button>
       </form>
+      </ReadOnlyFieldset>
 
       <h2 className="mt-10 text-lg font-semibold tracking-tight">
         Documents ({vehicle.documents.length})
@@ -212,7 +217,9 @@ export default function VehicleDetailPage() {
                         {days < 0 ? `${-days}d ago` : `${days}d left`}
                       </p>
                     </div>
-                    <RenewInline docId={doc.id} onRenew={handleRenew} />
+                    <WriteOnly>
+                      <RenewInline docId={doc.id} onRenew={handleRenew} />
+                    </WriteOnly>
                   </div>
                 </div>
               );
@@ -221,6 +228,7 @@ export default function VehicleDetailPage() {
         )}
       </div>
 
+      <WriteOnly>
       <div className="card mt-10 flex flex-wrap items-center justify-between gap-3 border-red-100">
         <div>
           <p className="font-medium text-red-600">Delete this vehicle</p>
@@ -237,6 +245,7 @@ export default function VehicleDetailPage() {
           Delete
         </button>
       </div>
+      </WriteOnly>
     </div>
   );
 }

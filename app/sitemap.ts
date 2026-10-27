@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(g.updated),
       priority: 0.8,
     })),
+    { url: `${BASE_URL}/security`, lastModified: now, priority: 0.5 },
     { url: `${BASE_URL}/contact`, lastModified: now, priority: 0.6 },
     { url: `${BASE_URL}/privacy`, lastModified: now, priority: 0.3 },
     { url: `${BASE_URL}/terms`, lastModified: now, priority: 0.3 },

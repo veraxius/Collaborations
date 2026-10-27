@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { FileDownloadButton } from "@/components/file-download-button";
+import { WriteOnly } from "@/components/write-only";
 import { api, getApiBase, getToken } from "@/lib/api";
 import {
   DOCUMENT_TYPES,
@@ -114,9 +115,11 @@ function DocumentsContent() {
           <button type="button" onClick={exportCsv} className="btn-secondary">
             Export CSV
           </button>
-          <Link href="/app/documents/new" className="btn-primary">
-            Add document
-          </Link>
+          <WriteOnly>
+            <Link href="/app/documents/new" className="btn-primary">
+              Add document
+            </Link>
+          </WriteOnly>
         </div>
       </div>
 
@@ -224,15 +227,17 @@ function DocumentsContent() {
                       </p>
                     </div>
 
-                    <RenewInline docId={doc.id} onRenew={handleRenew} />
+                    <WriteOnly>
+                      <RenewInline docId={doc.id} onRenew={handleRenew} />
 
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(doc.id)}
-                      className="text-sm font-medium text-red-500 hover:text-red-700"
-                    >
-                      Delete
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(doc.id)}
+                        className="text-sm font-medium text-red-500 hover:text-red-700"
+                      >
+                        Delete
+                      </button>
+                    </WriteOnly>
                   </div>
                 </div>
               );

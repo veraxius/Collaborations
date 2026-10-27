@@ -27,3 +27,16 @@ export const SITE_NAME = "FleetGuard";
 export const CHECKOUT_URL =
   process.env.NEXT_PUBLIC_LEMONSQUEEZY_BUY_LINK ||
   "https://fleetguard.lemonsqueezy.com/checkout/buy/bb3faca7-6051-4d2c-91d0-d557445dc9df";
+
+/**
+ * Checkout link for a signed-in account. It pre-fills the buyer's email and
+ * attaches the account id as custom data, which the billing webhook uses to
+ * activate the plan on the right account even if the email is edited.
+ */
+export function checkoutUrlFor(account: { id: string; email: string }, base: string = CHECKOUT_URL): string {
+  const join = base.includes("?") ? "&" : "?";
+  return (
+    `${base}${join}checkout[email]=${encodeURIComponent(account.email)}` +
+    `&checkout[custom][company_id]=${encodeURIComponent(account.id)}`
+  );
+}

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { CHECKOUT_URL, SIGNUP_ROUTE } from "@/components/marketing/config";
+import { SIGNUP_ROUTE } from "@/components/marketing/config";
+import { getToken } from "@/lib/api";
 
 const FREE_BULLETS = [
   "Up to 3 vehicles and 3 drivers",
@@ -40,6 +42,9 @@ function PlanBullets({ bullets }: { bullets: string[] }) {
 }
 
 export function PricingCalculator() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => setLoggedIn(Boolean(getToken())), []);
+
   return (
     <div className="mx-auto mt-10 grid max-w-3xl gap-6 md:grid-cols-2">
       <div className="mk-card flex flex-col p-8 text-center">
@@ -55,10 +60,10 @@ export function PricingCalculator() {
         </Link>
       </div>
 
-      <a
-        href={CHECKOUT_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      {/* The plan is tied to the account, so buyers go through their account first: it pre-fills the
+          checkout with their email and account id and the plan activates by itself. */}
+      <Link
+        href={loggedIn ? "/app/price" : `${SIGNUP_ROUTE}?plan=fleet`}
         className="mk-card flex flex-col p-8 text-center shadow-[0_14px_36px_rgb(16_24_32/0.10)] transition hover:shadow-[0_14px_36px_rgb(16_24_32/0.14)]"
       >
         <h3 className="font-condensed text-2xl font-semibold text-asphalt">Fleet</h3>
@@ -71,7 +76,10 @@ export function PricingCalculator() {
         </p>
         <PlanBullets bullets={PLAN_BULLETS} />
         <span className="mk-btn mk-btn-primary mt-8 w-full">Subscribe — $29/month</span>
-      </a>
+        <span className="mt-3 text-sm text-asphalt/60">
+          {loggedIn ? "Opens your plan page." : "You'll create your free account first, so your plan activates automatically."}
+        </span>
+      </Link>
       <p className="text-center text-[15px] text-asphalt/75 md:col-span-2">
         Large fleet, agency or consultant?{" "}
         <Link

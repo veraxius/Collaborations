@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // Authenticated product area + legacy internal routes
-        disallow: ["/app", "/dashboard", "/onboarding", "/api", "/login", "/register", "/reset-password"],
+        disallow: ["/app", "/dashboard", "/onboarding", "/api", "/login", "/register", "/reset-password", "/forgot-password", "/accept-invite", "/verify-email"],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,

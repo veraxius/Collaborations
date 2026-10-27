@@ -12,6 +12,7 @@ import {
   formatDate,
 } from "@/lib/expiry";
 import { StatusBadge } from "../../status-badge";
+import { ReadOnlyFieldset, WriteOnly } from "@/components/write-only";
 
 type Doc = { id: string; title: string; type: string; expiresAt: string };
 
@@ -108,11 +109,14 @@ export default function DriverDetailPage() {
       </Link>
       <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">{driver.name}</h1>
-        <Link href={`/app/documents/new?driver=${driver.id}`} className="btn-primary">
-          Add document
-        </Link>
+        <WriteOnly>
+          <Link href={`/app/documents/new?driver=${driver.id}`} className="btn-primary">
+            Add document
+          </Link>
+        </WriteOnly>
       </div>
 
+      <ReadOnlyFieldset>
       <form onSubmit={handleSave} className="card mt-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
@@ -175,6 +179,7 @@ export default function DriverDetailPage() {
           {pending ? "Saving…" : "Save changes"}
         </button>
       </form>
+      </ReadOnlyFieldset>
 
       <h2 className="mt-10 text-lg font-semibold tracking-tight">
         Documents ({driver.documents.length})
@@ -211,7 +216,9 @@ export default function DriverDetailPage() {
                         {days < 0 ? `${-days}d ago` : `${days}d left`}
                       </p>
                     </div>
-                    <RenewInline docId={doc.id} onRenew={handleRenew} />
+                    <WriteOnly>
+                      <RenewInline docId={doc.id} onRenew={handleRenew} />
+                    </WriteOnly>
                   </div>
                 </div>
               );
@@ -220,6 +227,7 @@ export default function DriverDetailPage() {
         )}
       </div>
 
+      <WriteOnly>
       <div className="card mt-10 flex flex-wrap items-center justify-between gap-3 border-red-100">
         <div>
           <p className="font-medium text-red-600">Delete this driver</p>
@@ -236,6 +244,7 @@ export default function DriverDetailPage() {
           Delete
         </button>
       </div>
+      </WriteOnly>
     </div>
   );
 }

@@ -31,6 +31,12 @@ const page = await browser.newPage();
 await page.goto(pathToFileURL(resolve(htmlArg)).href, { waitUntil: "networkidle0" });
 await page.waitForFunction("window.__ready === true", { timeout: 30000 });
 const duration = await page.evaluate("window.DURATION");
+// Videos can declare their own size (e.g. window.VIDEO_SIZE = [1920, 1080]); the default is 1080x1350.
+const size = await page.evaluate("window.VIDEO_SIZE || null");
+if (size) {
+  await page.setViewport({ width: size[0], height: size[1], deviceScaleFactor: 1 });
+  await page.evaluate(() => window.renderFrame(0));
+}
 
 if (flag === "--stills") {
   mkdirSync(outArg, { recursive: true });

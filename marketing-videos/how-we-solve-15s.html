@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FleetGuard · How we solve it · LinkedIn video (1080x1350, 30fps, 15s)</title>
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="glow"></div>
+  <div class="layer" id="bgChalk" style="background:var(--chalk);opacity:0"></div>
+
+  <!-- ===== S1: HOOK ===== -->
+  <div class="layer" id="s1">
+    <div class="abs" id="s1pill" style="left:0;right:0;top:300px;text-align:center"><span class="pill-eyebrow">DOT compliance for small fleets</span></div>
+    <div class="abs cond" id="s1h" style="left:60px;right:60px;top:470px;font-size:134px;color:var(--chalk);text-align:center;line-height:1.02">
+      <span class="word">Expired</span> <span class="word">documents</span><br>
+      <span class="word">don't</span> <span class="word">warn</span> <span class="word">you.</span><br>
+      <span class="word" style="color:var(--amber)">FleetGuard</span> <span class="word" style="color:var(--amber)">does.</span>
+    </div>
+  </div>
+
+  <!-- ===== S2: STEP 1 - ADD IT ONCE ===== -->
+  <div class="layer" id="s2">
+    <div class="layer" id="cam2">
+      <div class="abs mono" id="s2k" style="left:70px;top:110px;font-size:30px;color:#8F5F00;letter-spacing:2px">STEP 1</div>
+      <div class="abs cond" id="s2t" style="left:70px;right:70px;top:160px;font-size:130px;color:var(--asphalt);line-height:1">Add it once.</div>
+      <div class="abs" id="form" style="left:70px;top:390px;width:940px;height:700px;background:#fff;border:2px solid var(--line);border-radius:40px;box-shadow:0 50px 120px rgba(16,24,32,.22)">
+        <div class="abs" style="left:48px;top:44px;width:844px">
+          <div class="mono" style="font-size:24px;color:rgba(16,24,32,.55)">QUICK START</div>
+          <div id="f1" style="margin-top:12px;height:100px;border:2px solid var(--line);border-radius:22px;padding:0 30px;display:flex;align-items:center;font-size:40px;font-weight:600">DOT medical card <span style="margin-left:18px;font-weight:500;color:rgba(16,24,32,.55)">(2 yr)</span></div>
+        </div>
+        <div class="abs" style="left:48px;top:244px;width:844px">
+          <div class="mono" style="font-size:24px;color:rgba(16,24,32,.55)">ISSUE DATE</div>
+          <div id="f2" style="margin-top:12px;height:100px;border:2px solid var(--line);border-radius:22px;padding:0 30px;display:flex;align-items:center;font-size:40px;font-weight:600"><span id="f2v"></span></div>
+        </div>
+        <div class="abs" style="left:48px;top:444px;width:844px">
+          <div class="mono" style="font-size:24px;color:rgba(16,24,32,.55)">EXPIRY DATE</div>
+          <div id="f3" style="margin-top:12px;height:100px;border:3px solid var(--line);border-radius:22px;padding:0 30px;display:flex;align-items:center;justify-content:space-between;font-size:40px;font-weight:600"><span id="f3v" style="color:var(--asphalt)"></span><span id="tag" style="font-size:26px;font-weight:700;background:var(--amber);color:var(--asphalt);padding:8px 22px;border-radius:999px">Filled for you</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="layer" id="spot2"></div>
+  </div>
+
+  <!-- ===== S3: STEP 2 - WE WATCH ===== -->
+  <div class="layer" id="s3">
+    <div class="abs mono" id="s3k" style="left:70px;top:110px;font-size:30px;color:var(--amber);letter-spacing:2px">STEP 2</div>
+    <div class="abs cond" id="s3t" style="left:70px;right:70px;top:160px;font-size:130px;color:var(--chalk);line-height:1">We watch the date.</div>
+    <div class="abs" id="strip" style="left:70px;top:420px;width:940px;height:420px;background:#1A242E;border:2px solid #2B3744;border-radius:40px">
+      <div class="abs mono" style="left:48px;top:40px;font-size:26px;color:rgba(246,245,242,.6)">EMAIL ALERTS</div>
+      <div class="abs" style="left:90px;right:90px;top:230px;height:8px;border-radius:4px;background:#34424F"></div>
+      <div id="ticks"></div>
+    </div>
+    <div class="abs" id="notif" style="left:70px;width:940px;top:0;background:#fff;border-radius:48px;padding:34px 40px;box-shadow:0 40px 100px rgba(0,0,0,.45);display:flex;gap:28px;align-items:center">
+      <svg width="104" height="104" viewBox="0 0 24 24" style="flex:none"><path d="M12 1.5 L21 4.8 V11 C21 16.6 17.2 20.9 12 22.8 C6.8 20.9 3 16.6 3 11 V4.8 Z" fill="#0071E3"/><path d="M7.6 11.8 L10.6 14.8 L16.4 8.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:26px;color:rgba(16,24,32,.55)"><span class="mono" style="font-size:24px">FLEETGUARD</span><span>now</span></div>
+        <div class="cond" style="font-size:50px;margin-top:6px;color:var(--asphalt);white-space:nowrap">DOT medical card expires in 7 days</div>
+        <div style="font-size:30px;color:rgba(16,24,32,.7);margin-top:6px">Marcus Reyes · Renew or update it</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== S4: STEP 3 - RENEW ===== -->
+  <div class="layer" id="s4">
+    <div class="layer" id="cam4">
+      <div class="abs mono" id="s4k" style="left:70px;top:110px;font-size:30px;color:#8F5F00;letter-spacing:2px">STEP 3</div>
+      <div class="abs cond" id="s4t" style="left:70px;right:70px;top:160px;font-size:130px;color:var(--asphalt);line-height:1">Renew it.</div>
+      <div class="abs mono" id="s4s" style="left:70px;top:1100px;width:940px;font-size:32px;color:rgba(16,24,32,.65)">The countdown restarts by itself.</div>
+      <div class="abs" id="dash" style="left:70px;top:380px;width:940px;height:560px;background:#fff;border:2px solid var(--line);border-radius:40px;box-shadow:0 50px 120px rgba(16,24,32,.22)">
+        <div class="abs" style="left:32px;top:32px;width:440px;height:300px;border:2px solid var(--line);border-radius:30px;display:flex;align-items:center;gap:22px;padding:0 28px">
+          <svg width="180" height="180" viewBox="0 0 112 112" style="flex:none">
+            <circle cx="56" cy="56" r="46" fill="none" stroke="#efede7" stroke-width="12"/>
+            <circle id="ring" cx="56" cy="56" r="46" fill="none" stroke="#ffb100" stroke-width="12" stroke-linecap="round" transform="rotate(-90 56 56)" stroke-dasharray="289" stroke-dashoffset="81"/>
+            <text id="score" x="56" y="68" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="38" fill="#101820">72</text>
+          </svg>
+          <div><div style="font-size:28px;color:rgba(16,24,32,.7)">Fleet health</div><div id="healthTxt" style="font-size:30px;font-weight:700;margin-top:4px">Needs action</div></div>
+        </div>
+        <div class="abs" style="left:496px;top:32px;width:412px;height:300px;border:2px solid var(--line);border-radius:30px;padding:30px 34px">
+          <div style="font-size:30px;color:rgba(16,24,32,.7)">Expired</div>
+          <div id="nExp" class="cond" style="font-size:190px;margin-top:6px;color:var(--red)">1</div>
+        </div>
+        <div class="abs" style="left:0;top:360px;width:940px;height:200px;border-top:2px solid var(--line);padding:0 44px;display:flex;align-items:center;justify-content:space-between">
+          <div><div class="cond" style="font-size:56px">DOT medical card</div><div style="font-size:28px;color:rgba(16,24,32,.6);margin-top:6px">Marcus Reyes</div></div>
+          <div style="text-align:right"><span id="st" class="status amber" style="font-size:30px;padding:10px 28px">Expiring soon</span><div id="dd" class="days" style="font-size:28px">7 days left</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== S5: CTA ===== -->
+  <div class="layer" id="s5">
+    <div class="abs" id="s5logo" style="left:0;right:0;top:180px;display:flex;align-items:center;justify-content:center;gap:26px">
+      <svg width="150" height="150" viewBox="0 0 24 24"><path d="M12 1.5 L21 4.8 V11 C21 16.6 17.2 20.9 12 22.8 C6.8 20.9 3 16.6 3 11 V4.8 Z" fill="#0071E3"/><path d="M7.6 11.8 L10.6 14.8 L16.4 8.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span class="cond" style="font-size:136px;color:var(--chalk)">FleetGuard</span>
+    </div>
+    <div class="abs cond" id="s5h" style="left:70px;right:70px;top:430px;text-align:center;font-size:150px;color:var(--chalk);line-height:1">
+      <span class="word">Never</span> <span class="word">get</span> <span class="word">caught</span> <span class="word">with</span> <span class="word">an</span> <span class="word" style="color:var(--amber)">expired</span> <span class="word">document</span> <span class="word">again.</span>
+    </div>
+    <div class="abs" id="s5btn" style="left:0;right:0;top:1040px;text-align:center"><span class="btn-amber">Start free — no credit card</span></div>
+    <div class="abs mono" id="s5link" style="left:0;right:0;top:1180px;text-align:center;font-size:34px;color:rgba(246,245,242,.7)">Link in the comments</div>
+  </div>
+
+  <div class="layer" id="grain"></div>
+  <div class="abs" id="progress" style="left:0;bottom:0;height:8px;width:0;background:var(--amber)"></div>
+</div>
+
+<script src="common.js"></script>
+<script>
+window.DURATION = 15;
+
+const ticksEl = $("ticks");
+const TICKS = [["30", 90], ["15", 320], ["7", 550], ["1", 780]];
+TICKS.forEach(([d, x], i) => {
+  const k = document.createElement("div");
+  k.id = "tk" + i;
+  k.className = "abs";
+  k.style.cssText = `left:${x}px;top:150px;width:110px;text-align:center`;
+  k.innerHTML = `<div style="height:200px;display:flex;flex-direction:column;align-items:center"><div id="tc${i}" style="width:110px;height:84px;border-radius:42px;background:#34424F;color:#F6F5F2;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:38px">${d}d</div><div style="width:6px;height:70px;background:#6A7783;margin-top:16px;border-radius:3px"></div></div>`;
+  ticksEl.appendChild(k);
+});
+
+const words = (id) => [...$(id).querySelectorAll(".word")];
+const w1 = words("s1h"), w5 = words("s5h");
+const win = (t, a, b, c, d) => eo3(prog(t, a, b)) * (1 - eo3(prog(t, c, d)));
+const mix = (a, b, p) => a.map((v, i) => Math.round(lerp(v, b[i], p)));
+const typed = (str, t, a, b) => str.slice(0, Math.round(str.length * prog(t, a, b)));
+
+window.renderFrame = function (t) {
+  const gx = 540 + Math.sin(t * 0.7) * 260, gy = 560 + Math.cos(t * 0.5) * 200;
+  $("glow").style.background = `radial-gradient(900px 900px at ${gx}px ${gy}px, rgba(255,177,0,0.14), rgba(255,177,0,0) 60%), #101820`;
+  $("progress").style.width = (t / DURATION) * 1080 + "px";
+
+  // ===== S1: 0 - 2.6 =====
+  const out1 = eo3(prog(t, 2.1, 2.6));
+  put($("s1"), { o: t < 2.7 ? 1 - out1 : 0, s: lerp(1, 1.12, out1), b: out1 * 16 });
+  put($("s1pill"), { o: eo3(prog(t, 0.05, 0.5)), y: (1 - eo3(prog(t, 0.05, 0.5))) * -30 });
+  revealWords(w1, t, 0.2, 0.12, 0.55, 80);
+
+  // ===== S2: 2.4 - 6.3 =====
+  const s2 = win(t, 2.4, 2.8, 5.9, 6.3);
+  $("bgChalk").style.opacity = s2;
+  put($("s2"), { o: s2, b: eo3(prog(t, 5.9, 6.3)) * 12, s: lerp(0.97, 1, eo3(prog(t, 2.4, 3.1))) * lerp(1, 1.06, eo3(prog(t, 5.9, 6.3))) });
+  put($("s2k"), { o: eo3(prog(t, 2.6, 3.0)) });
+  put($("s2t"), { o: eo3(prog(t, 2.7, 3.2)) * (1 - eo3(prog(t, 4.9, 5.4))), y: (1 - eo3(prog(t, 2.7, 3.2))) * 50 });
+  const fp = eo5(prog(t, 2.9, 3.6));
+  put($("form"), { o: eo3(prog(t, 2.9, 3.3)), y: (1 - fp) * 420, s: lerp(0.93, 1, fp) });
+  $("f2v").textContent = typed("2026-10-08", t, 3.7, 4.3);
+  const filled = prog(t, 4.5, 4.8);
+  $("f3v").textContent = filled > 0 ? "2028-10-08" : "";
+  const pop = eob(prog(t, 4.5, 5.0));
+  $("f3").style.borderColor = filled > 0 ? "#ffb100" : "#e3e1db";
+  $("f3").style.boxShadow = filled > 0 ? `0 0 0 ${10 * (1 - eo3(prog(t, 4.8, 5.6))) + 4}px rgba(255,177,0,.25)` : "none";
+  $("f3").style.transform = `scale(${filled > 0 ? lerp(0.96, 1, pop) : 1})`;
+  put($("tag"), { o: eo3(prog(t, 4.8, 5.1)), s: lerp(0.8, 1, eob(prog(t, 4.8, 5.3))) });
+  camera($("cam2"), [[0, 1, 540, 675], [4.9, 1, 540, 675], [5.5, 1.12, 540, 860], [20, 1.12, 540, 860]], t);
+  const h2 = eo3(prog(t, 4.9, 5.4)) * (1 - eo3(prog(t, 5.7, 6.1)));
+  const sp = $("spot2");
+  sp.style.backdropFilter = sp.style.webkitBackdropFilter = h2 > 0.02 ? `blur(${h2 * 14}px)` : "none";
+  sp.style.background = `rgba(16,24,32,${h2 * 0.1})`;
+  sp.style.webkitMaskImage = sp.style.maskImage = `radial-gradient(ellipse ${Math.max(1, 560 * h2)}px ${Math.max(1, 190 * h2)}px at 540px 675px, transparent 70%, #000 100%)`;
+  sp.style.visibility = h2 > 0.02 ? "visible" : "hidden";
+
+  // ===== S3: 6.1 - 10.0 =====
+  const s3 = win(t, 6.1, 6.5, 9.6, 10.0);
+  put($("s3"), { o: s3, s: lerp(0.97, 1, eo3(prog(t, 6.1, 6.8))) * lerp(1, 1.08, eo3(prog(t, 9.6, 10.0))), b: eo3(prog(t, 9.6, 10.0)) * 12 });
+  put($("s3k"), { o: eo3(prog(t, 6.3, 6.7)) });
+  put($("s3t"), { o: eo3(prog(t, 6.4, 6.9)), y: (1 - eo3(prog(t, 6.4, 6.9))) * 50 });
+  const sIn = eo5(prog(t, 6.6, 7.2));
+  const dim = eo3(prog(t, 8.0, 8.5)) * (1 - eo3(prog(t, 9.3, 9.6)));
+  put($("strip"), { o: eo3(prog(t, 6.6, 6.9)) * lerp(1, 0.55, dim), y: (1 - sIn) * 300, b: dim * 9 });
+  TICKS.forEach((_, i) => {
+    const p = eob(prog(t, 7.1 + i * 0.14, 7.6 + i * 0.14));
+    put($("tk" + i), { o: eo3(prog(t, 7.1 + i * 0.14, 7.3 + i * 0.14)), y: (1 - p) * 40, s: lerp(0.7, 1, p) });
+  });
+  // the "7d" chip lights up amber when the alert fires
+  const lit = eo3(prog(t, 7.9, 8.2));
+  const c = mix([52, 66, 79], [255, 177, 0], lit);
+  $("tc2").style.background = `rgb(${c.join(",")})`;
+  $("tc2").style.color = lit > 0.5 ? "#101820" : "#F6F5F2";
+  $("tc2").style.transform = `scale(${1 + Math.sin(lit * Math.PI) * 0.18})`;
+  const nIn = eob(prog(t, 8.1, 8.75)), nOut = eio3(prog(t, 9.35, 9.7));
+  put($("notif"), { o: eo3(prog(t, 8.1, 8.3)) * (1 - nOut), y: lerp(-320, 760, nIn) - nOut * 200, s: lerp(0.94, 1, nIn) });
+
+  // ===== S4: 9.9 - 12.6 =====
+  const s4 = win(t, 9.9, 10.3, 12.2, 12.6);
+  $("bgChalk").style.opacity = Math.max(s2, s4);
+  put($("s4"), { o: s4, s: lerp(1, 1.06, eo3(prog(t, 12.2, 12.6))), b: eo3(prog(t, 12.2, 12.6)) * 10 });
+  put($("s4k"), { o: eo3(prog(t, 10.1, 10.5)) });
+  put($("s4t"), { o: eo3(prog(t, 10.2, 10.7)) * (1 - eo3(prog(t, 11.6, 12.0))), y: (1 - eo3(prog(t, 10.2, 10.7))) * 50 });
+  put($("s4s"), { o: eo3(prog(t, 11.5, 11.9)) * (1 - eo3(prog(t, 12.2, 12.5))) });
+  const dp = eo5(prog(t, 10.3, 10.9));
+  put($("dash"), { o: eo3(prog(t, 10.3, 10.6)), y: (1 - dp) * 380, s: lerp(0.94, 1, dp) });
+  const upd = eio3(prog(t, 10.9, 11.5));
+  $("score").textContent = Math.round(lerp(72, 96, upd));
+  $("ring").setAttribute("stroke-dashoffset", String(289 * (1 - lerp(0.72, 0.96, upd))));
+  $("ring").setAttribute("stroke", upd > 0.5 ? "#1e9e6a" : "#ffb100");
+  $("healthTxt").textContent = upd > 0.5 ? "All in order" : "Needs action";
+  $("nExp").textContent = upd > 0.5 ? "0" : "1";
+  $("nExp").style.color = upd > 0.5 ? "#1e9e6a" : "#d9482b";
+  $("st").className = "status " + (upd > 0.5 ? "green" : "amber");
+  $("st").textContent = upd > 0.5 ? "OK" : "Expiring soon";
+  $("dd").textContent = upd > 0.5 ? "730 days left" : "7 days left";
+  camera($("cam4"), [[0, 1, 540, 675], [11.6, 1, 540, 675], [12.4, 1.12, 540, 640], [30, 1.12, 540, 640]], t);
+
+  // ===== S5: 12.4 - 15 =====
+  const s5 = eo3(prog(t, 12.45, 12.8));
+  put($("s5"), { o: s5, s: lerp(1, 1.04, eo3(prog(t, 12.4, 15))) });
+  const lp = eob(prog(t, 12.55, 13.1));
+  put($("s5logo"), { o: eo3(prog(t, 12.55, 12.8)), s: lerp(0.7, 1, lp), y: (1 - lp) * 40 });
+  revealWords(w5, t, 12.85, 0.09, 0.5, 70);
+  const bp = eob(prog(t, 13.75, 14.25));
+  const pulse = t > 14.25 ? 1 + Math.sin((t - 14.25) * 7) * 0.025 : 1;
+  put($("s5btn"), { o: eo3(prog(t, 13.75, 14.0)), s: lerp(0.8, 1, bp) * pulse });
+  put($("s5link"), { o: eo3(prog(t, 14.1, 14.45)) });
+};
+
+document.fonts.ready.then(() => { window.__ready = true; renderFrame(0); });
+</script>
+</body>
+</html>

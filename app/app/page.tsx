@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ScoreRing } from "@/components/charts";
 import { FleetChat } from "@/components/fleet-chat";
+import { WriteOnly } from "@/components/write-only";
 import { api } from "@/lib/api";
-import { useCompany } from "@/lib/auth-client";
+import { canEdit, useCompany } from "@/lib/auth-client";
 import {
   daysUntil,
   documentTypeLabel,
@@ -23,7 +24,7 @@ type Doc = {
   driver?: { id?: string; name: string } | null;
 };
 
-type Event = { id: string; label: string; createdAt: string };
+type Event = { id: string; label: string; actor?: string | null; createdAt: string };
 
 type DashboardData = {
   counts: { expired: number; expiring: number; ok: number };
@@ -87,9 +88,11 @@ export default function DashboardPage() {
           <Link href="/app/analytics" className="btn-secondary">
             Analytics
           </Link>
-          <Link href="/app/documents/new" className="btn-primary">
-            Add document
-          </Link>
+          <WriteOnly>
+            <Link href="/app/documents/new" className="btn-primary">
+              Add document
+            </Link>
+          </WriteOnly>
         </div>
       </div>
 
@@ -172,7 +175,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {(vehicleCount === 0 || driverCount === 0 || documents.length === 0) && (
+      {canEdit(company) && (vehicleCount === 0 || driverCount === 0 || documents.length === 0) && (
         <div className="card mt-6">
           <h2 className="text-lg font-semibold tracking-tight">Get audit-ready in 3 steps</h2>
           <p className="mt-1 text-sm text-neutral-500">
@@ -282,7 +285,10 @@ export default function DashboardPage() {
             <div className="card mt-3 divide-y divide-neutral-100 p-0">
               {events.map((e) => (
                 <div key={e.id} className="px-5 py-3.5">
-                  <p className="text-sm leading-snug text-neutral-700">{e.label}</p>
+                  <p className="text-sm leading-snug text-neutral-700">
+                    {e.label}
+                    {e.actor && <span className="text-neutral-400"> · {e.actor}</span>}
+                  </p>
                   <p className="mt-0.5 text-xs text-neutral-400">{timeAgo(e.createdAt)}</p>
                 </div>
               ))}

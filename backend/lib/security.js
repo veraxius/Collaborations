@@ -60,7 +60,8 @@ export function parseFloatOrNull(value) {
 
 /** Constant-time string comparison. */
 export function safeEqual(a, b) {
-  const x = Buffer.from(String(a));
-  const y = Buffer.from(String(b));
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
   return x.length === y.length && crypto.timingSafeEqual(x, y);
 }

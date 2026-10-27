@@ -24,12 +24,47 @@ model Company {
   // Drives which quick-start documents and wording the app shows.
   vertical           String   @default("trucking")
 
+  // USDOT number (optional). Used to prefill the company and compute MCS-150.
+  usdot              String?
+  // New sign-ups start unverified; accounts created before this column existed count as verified.
+  emailVerified      Boolean  @default(true)
+  // Reminder settings. Offsets are days before expiry, comma separated.
+  reminderOffsets    String   @default("30,15,7,1")
+  // Extra recipients for reminders (comma separated emails), besides the owner.
+  reminderEmails     String   @default("")
+  // Also notify drivers about their own documents (email and SMS when configured).
+  notifyDrivers      Boolean  @default(false)
+  weeklyDigest       Boolean  @default(true)
+  nudgeSentAt        DateTime?
+  // Billing details received from the Lemon Squeezy webhook.
+  lsPortalUrl        String?
+  planRenewsAt       DateTime?
+  planEndsAt         DateTime?
+
   vehicles  Vehicle[]
   drivers   Driver[]
   documents Document[]
   events    ActivityEvent[]
   snapshots ComplianceSnapshot[]
+  team      TeamMember[]
 
+  @@schema("fleetguard")
+}
+
+/// Extra people who can sign in to a company's account. The owner is the Company itself.
+model TeamMember {
+  id           String   @id @default(cuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  email        String   @unique
+  name         String
+  // manager: can edit data. viewer: read only.
+  role         String   @default("viewer")
+  // Empty until the invitation is accepted.
+  passwordHash String   @default("")
+  createdAt    DateTime @default(now())
+
+  @@index([companyId])
   @@schema("fleetguard")
 }
 
@@ -118,6 +153,8 @@ model ActivityEvent {
   company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   kind      String
   label     String
+  // Who did it (email of the signed-in user).
+  actor     String?
   onTime    Boolean?
   daysDelta Int?
   createdAt DateTime @default(now())

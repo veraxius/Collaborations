@@ -1,17 +1,8 @@
 import prisma from "./prisma.js";
 import { daysUntil, documentTypeLabel, expiryStatus } from "./expiry.js";
+import { countStatuses, healthScore } from "./scoring.js";
 
-export function countStatuses(docs) {
-  const counts = { expired: 0, expiring: 0, ok: 0 };
-  for (const d of docs) counts[expiryStatus(d.expiresAt)]++;
-  return counts;
-}
-
-export function healthScore({ expired, expiring, ok }) {
-  const total = expired + expiring + ok;
-  if (total === 0) return 100;
-  return Math.round((100 * (ok + 0.5 * expiring)) / total);
-}
+export { countStatuses, healthScore };
 
 export async function captureSnapshot(companyId) {
   const docs = await prisma.document.findMany({
@@ -32,10 +23,17 @@ export async function captureSnapshot(companyId) {
   }
 }
 
-export async function logEvent(companyId, kind, label, extra = {}) {
+/**
+ * Record an activity event. `ctx` is the request (so the actor's email is
+ * stored) or just a company id for system events.
+ */
+export async function logEvent(ctx, kind, label, extra = {}) {
+  const companyId = typeof ctx === "string" ? ctx : ctx.companyId;
+  const actor = typeof ctx === "string" ? null : (ctx.email ?? null);
   await prisma.activityEvent.create({
     data: {
       companyId,
+      actor,
       kind,
       label,
       onTime: extra.onTime ?? null,
@@ -85,7 +83,7 @@ export async function getAnalytics(companyId) {
       where: { companyId },
       orderBy: { createdAt: "desc" },
       take: 12,
-      select: { id: true, label: true, createdAt: true },
+      select: { id: true, label: true, actor: true, createdAt: true },
     }),
   ]);
 

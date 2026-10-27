@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/fleetguard-logo";
 import { login } from "@/lib/auth-client";
 import { BRAND_NAME } from "@/lib/brand";
@@ -13,6 +13,11 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const config = usePublicConfig();
+  const [expired, setExpired] = useState(false);
+
+  useEffect(() => {
+    setExpired(new URLSearchParams(window.location.search).get("expired") === "1");
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,6 +43,11 @@ export default function LoginPage() {
         <h1 className="mt-5 text-2xl font-semibold tracking-tight">Welcome back</h1>
         <p className="mt-1.5 text-sm text-neutral-500">Log in to your compliance dashboard.</p>
       </div>
+      {expired && (
+        <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          Your session ended. Please log in again.
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>

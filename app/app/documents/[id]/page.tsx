@@ -7,6 +7,7 @@ import { FileDownloadButton } from "@/components/file-download-button";
 import { api } from "@/lib/api";
 import { formatDate } from "@/lib/expiry";
 import { DocumentForm } from "../document-form";
+import { ReadOnlyFieldset, WriteOnly } from "@/components/write-only";
 
 type Vehicle = { id: string; name: string; plate: string };
 type Driver = { id: string; name: string };
@@ -102,6 +103,7 @@ export default function EditDocumentPage() {
         )}
       </div>
 
+      <ReadOnlyFieldset>
       <DocumentForm
         vehicles={vehicles.map((v) => ({ id: v.id, label: `${v.name} (${v.plate})` }))}
         drivers={drivers.map((d) => ({ id: d.id, label: d.name }))}
@@ -125,7 +127,9 @@ export default function EditDocumentPage() {
         }}
         submitLabel="Save changes"
       />
+      </ReadOnlyFieldset>
 
+      <WriteOnly>
       <div className="card mt-6">
         <p className="font-medium">Renew</p>
         <p className="mt-1 text-sm text-neutral-400">
@@ -143,11 +147,13 @@ export default function EditDocumentPage() {
           <button type="submit" className="btn-primary">Renew</button>
         </form>
       </div>
+      </WriteOnly>
 
       {error && (
         <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
 
+      <WriteOnly>
       <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 border-red-100">
         <div>
           <p className="font-medium text-red-600">Delete this document</p>
@@ -161,6 +167,7 @@ export default function EditDocumentPage() {
           Delete
         </button>
       </div>
+      </WriteOnly>
     </div>
   );
 }

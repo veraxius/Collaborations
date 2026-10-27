@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
+
+      # Backend: unit and route tests (no database needed, Prisma is faked).
+      - name: Install backend
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build # only for `prisma generate`
+        run: npm ci
+      - name: Backend tests
+        working-directory: backend
+        run: npm test
+
+      # Frontend: types, unit tests and a production build.
+      - name: Install frontend
+        run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Frontend tests
+        run: npm test
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001
+        run: npm run build

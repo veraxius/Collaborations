@@ -19,6 +19,7 @@ function ResetPasswordForm() {
   const params = useSearchParams();
   const token = params.get("token") ?? "";
   const id = params.get("id") ?? "";
+  const kind = params.get("k") === "m" ? "m" : "c";
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -33,7 +34,7 @@ function ResetPasswordForm() {
     }
     setPending(true);
     try {
-      await resetPassword(id, token, password);
+      await resetPassword(id, token, password, kind);
       router.push("/app");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not reset password");

@@ -51,6 +51,14 @@ export function MarketingFooter() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
+                  href="/security"
+                  className="text-sm text-chalk/80 transition-colors hover:text-chalk"
+                >
+                  Security
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/privacy"
                   className="text-sm text-chalk/80 transition-colors hover:text-chalk"
                 >

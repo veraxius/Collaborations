@@ -31,11 +31,23 @@ export async function api<T = any>(
     if (typeof body !== "string") body = JSON.stringify(body);
   }
 
-  const res = await fetch(`${getApiBase()}${path}`, {
-    ...options,
-    headers,
-    body,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${getApiBase()}${path}`, {
+      ...options,
+      headers,
+      body,
+    });
+  } catch {
+    throw new Error("Can't reach the server. Check your connection and try again.");
+  }
+
+  // The session was revoked (password changed, removed from the team, account
+  // deleted). Send the person to sign in again instead of showing broken pages.
+  if (res.status === 401 && token && !path.startsWith("/api/auth/") && typeof window !== "undefined") {
+    setToken(null);
+    window.location.href = "/login?expired=1";
+  }
 
   const text = await res.text();
   let data: any = null;

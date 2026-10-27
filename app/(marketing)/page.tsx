@@ -25,18 +25,18 @@ export const metadata: Metadata = {
 const PROBLEM_CARDS = [
   {
     icon: TrafficCone,
-    title: "Roadside surprises",
-    body: "Expired documents surface at the worst possible time: at a weigh station, during an inspection, or mid-load.",
+    title: "Caught at the worst time",
+    body: "At a weigh station, in an inspection or mid-load. Never when it's convenient to fix.",
   },
   {
     icon: Banknote,
-    title: "Fines and downtime",
-    body: "A single violation can cost more than a year of FleetGuard — before you count the revenue a parked truck doesn't earn.",
+    title: "You pay twice",
+    body: "The fine, plus a parked truck earning nothing. One violation can cost more than a year of FleetGuard.",
   },
   {
     icon: FileSearch,
-    title: "A record that follows you",
-    body: "Compliance history shows up in your CSA profile and your next insurance renewal. Clean records are worth real money.",
+    title: "It stays on your record",
+    body: "Violations show up in your CSA profile and your next insurance renewal. A clean record saves you money.",
   },
 ];
 
@@ -192,21 +192,20 @@ export default function HomePage() {
       {/* 2. The problem */}
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="max-w-3xl">
+          <div className="mx-auto max-w-3xl text-center">
             <SectionEyebrow>The cost of one missed date</SectionEyebrow>
             <h2 className="mk-h2 mt-3 text-4xl text-asphalt sm:text-5xl">
-              One expired document can park a truck.
+              One expired document can park your truck.
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-asphalt/80">
-              An out-of-service order doesn&apos;t wait for a convenient week.
-              A lapsed medical card, an expired insurance certificate, or an
-              overdue annual inspection can take a truck off the road the same
-              day it&apos;s discovered — and the fine is only the beginning.
-              Violations follow your safety record, your safety record follows
-              your insurance premiums, and brokers check both. Most small
-              carriers track all of this in a spreadsheet, a glove box, and
-              somebody&apos;s memory. That works right up until the day it
-              doesn&apos;t.
+              An expired medical card, insurance certificate or inspection can
+              put a truck out of service the same day it&apos;s found. The
+              fine is just the start: violations hit your safety record, your
+              safety record raises your insurance, and brokers check both.
+            </p>
+            <p className="mt-4 text-lg font-medium leading-relaxed text-asphalt">
+              Tracking it all in a spreadsheet, a glove box and your memory?
+              Sooner or later, one date slips.
             </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">

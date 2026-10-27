@@ -59,6 +59,27 @@ Open **http://localhost:3000**.
 
 See `backend/.env.fleetguard.example` for a full template.
 
+## Quality and operations
+
+```bash
+npm run test:all   # type check + frontend tests + backend tests (no database needed)
+npm run build      # production build
+```
+
+- Backend tests run the real routes against an in-memory stand-in for the database (sign-up, sign-in, roles, reset, invitations, billing webhook, reminders).
+- CI runs the same checks on every push (`.github/workflows/ci.yml`).
+- **`docs/OPERATIONS.md`**: environment variables, deploy checklist, scheduled jobs, backups and restore, monitoring and a runbook.
+- **`PRIVATE-INSTALL.md`**: dedicated, branded installs for a single customer.
+
+## Features at a glance
+
+- Documents, vehicles and drivers with traffic-light status and a DOT quick-start list.
+- Reminders by email (and text to drivers when Twilio is set up), with per-company reminder days, extra recipients, a Monday summary and an onboarding nudge.
+- Team with roles: owner, manager (edit) and viewer (read only). Activity log shows who did what.
+- USDOT lookup at sign-up (needs `FMCSA_WEBKEY`) and an automatic MCS-150 reminder.
+- Email confirmation, password reset, session revocation on password change, account deletion and CSV export.
+- Plans: free up to 3 vehicles and 3 drivers; Fleet plan via Lemon Squeezy with a self-service portal link.
+
 ## Plans and billing
 
 - **Starter (free)**: up to 3 vehicles and 3 drivers, all reminders. Enforced in the API (`402 plan_limit`).

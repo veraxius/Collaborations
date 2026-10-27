@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Barlow, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
 import { DocumentTitle } from "@/components/document-title";
 import { BRAND_NAME, IS_PRIVATE, brandCssVars } from "@/lib/brand";
@@ -96,6 +97,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
         <DocumentTitle />
+        {/* Privacy-friendly analytics (no cookies). Off unless NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set. */}
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && !IS_PRIVATE && (
+          <Script defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" strategy="afterInteractive" />
+        )}
         {children}
       </body>
     </html>

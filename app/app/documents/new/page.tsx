@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { DocumentForm } from "../document-form";
+import { ReadOnlyFieldset } from "@/components/write-only";
 
 type Vehicle = { id: string; name: string; plate: string };
 type Driver = { id: string; name: string };
@@ -49,12 +50,14 @@ function NewDocumentContent() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="text-2xl font-semibold tracking-tight">Add document</h1>
+      <ReadOnlyFieldset>
       <DocumentForm
         vehicles={vehicles.map((v) => ({ id: v.id, label: `${v.name} (${v.plate})` }))}
         drivers={drivers.map((d) => ({ id: d.id, label: d.name }))}
         initial={{ owner }}
         submitLabel="Save document"
       />
+      </ReadOnlyFieldset>
     </div>
   );
 }

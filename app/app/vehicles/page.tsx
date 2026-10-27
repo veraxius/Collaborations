@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WriteOnly } from "@/components/write-only";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import {
@@ -71,6 +72,7 @@ export default function VehiclesPage() {
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Vehicles</h1>
 
+      <WriteOnly>
       <form onSubmit={handleAdd} className="card mt-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-4">
           <div>
@@ -144,6 +146,7 @@ export default function VehiclesPage() {
           {pending ? "Adding…" : "Add vehicle"}
         </button>
       </form>
+      </WriteOnly>
 
       <div className="card mt-6 p-0">
         {vehicles.length === 0 ? (

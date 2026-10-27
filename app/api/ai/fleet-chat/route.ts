@@ -47,6 +47,54 @@ function allowRequest(companyId: string): boolean {
   return true;
 }
 
+type Msg = { role: "system" | "user" | "assistant"; content: string };
+
+/**
+ * Models to try, in order. Groq retires models from time to time, so the
+ * first one that works is remembered and the others are only tried when a
+ * model is reported as missing. Set GROQ_MODEL to force a specific one.
+ */
+const MODELS = [process.env.GROQ_MODEL, "openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"].filter(
+  (m): m is string => Boolean(m)
+);
+let workingModel: string | null = null;
+
+function isModelUnavailable(err: unknown): boolean {
+  const e = err as { status?: number; message?: string } | null;
+  return e?.status === 404 || /model_not_found|model_decommissioned|decommissioned|does not exist/i.test(e?.message ?? "");
+}
+
+async function completeWithFallback(groq: Groq, messages: Msg[]): Promise<string> {
+  const order = workingModel ? [workingModel, ...MODELS.filter((m) => m !== workingModel)] : MODELS;
+  let lastError: unknown;
+  for (const model of order) {
+    try {
+      // gpt-oss models "think" before answering: keep that short so replies stay fast.
+      const params = {
+        model,
+        messages,
+        temperature: 0.3,
+        max_completion_tokens: 2048,
+        ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
+      };
+      const completion = await groq.chat.completions.create(params as unknown as Parameters<typeof groq.chat.completions.create>[0]);
+      const text = (completion as { choices: { message?: { content?: string | null } }[] }).choices[0]?.message?.content ?? "";
+      workingModel = model;
+      // Some models return their reasoning inline: never show it to the customer.
+      return text
+        .replace(/<think>[\s\S]*?<\/think>/g, "")
+        .replace(/[   ]/g, " ") // non-breaking spaces some models emit
+        .replace(/[‐‑‒]/g, "-") // non-breaking hyphens
+        .trim();
+    } catch (err) {
+      lastError = err;
+      if (!isModelUnavailable(err)) throw err; // a real problem: do not hide it behind a retry
+      if (model === workingModel) workingModel = null;
+    }
+  }
+  throw lastError ?? new Error("No AI model is available");
+}
+
 function getBackendBase() {
   return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 }
@@ -142,11 +190,7 @@ export async function POST(request: Request) {
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      max_tokens: 1024,
-      temperature: 0.3,
-      messages: [
+    const reply = await completeWithFallback(groq, [
         {
           role: "system",
           content: `You are FleetGuard AI, the compliance assistant built into the FleetGuard dashboard. You answer questions about the company's fleet documents: insurance policies, inspections, licenses, permits, their expiry dates, costs, issuers, vehicles and drivers.
@@ -171,14 +215,15 @@ RULES:
         },
         ...history,
         { role: "user", content: message },
-      ],
-    });
+    ]);
 
-    return NextResponse.json({
-      reply: completion.choices[0]?.message?.content ?? "",
-    });
+    return NextResponse.json({ reply });
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    // The provider's raw error can name models and accounts: log it, show something friendly.
+    console.error("[fleet-chat]", error instanceof Error ? error.message : error);
+    return NextResponse.json(
+      { error: "The assistant is unavailable right now. Please try again in a moment." },
+      { status: 502 }
+    );
   }
 }

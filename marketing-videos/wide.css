@@ -1,0 +1,2 @@
+/* 16:9 canvas (1920x1080). Load after common.css. */
+html, body, #stage { width: 1920px; height: 1080px; }

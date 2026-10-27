@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WriteOnly } from "@/components/write-only";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import {
@@ -67,6 +68,7 @@ export default function DriversPage() {
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Drivers</h1>
 
+      <WriteOnly>
       <form onSubmit={handleAdd} className="card mt-6 space-y-4">
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
@@ -132,6 +134,7 @@ export default function DriversPage() {
           {pending ? "Adding…" : "Add driver"}
         </button>
       </form>
+      </WriteOnly>
 
       <div className="card mt-6 p-0">
         {drivers.length === 0 ? (

@@ -55,12 +55,13 @@ export const CURRENCIES = [
   "USD", "EUR", "GBP", "CAD", "AUD", "MXN", "BRL", "ARS", "CLP", "COP", "PEN", "UYU",
 ];
 
-export function daysUntil(date) {
-  return Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+export function daysUntil(date, now = Date.now()) {
+  const at = typeof now === "number" ? now : now.getTime();
+  return Math.ceil((new Date(date).getTime() - at) / (1000 * 60 * 60 * 24));
 }
 
-export function expiryStatus(expiresAt) {
-  const days = daysUntil(expiresAt);
+export function expiryStatus(expiresAt, now = Date.now()) {
+  const days = daysUntil(expiresAt, now);
   if (days < 0) return "expired";
   if (days <= EXPIRING_WINDOW_DAYS) return "expiring";
   return "ok";
