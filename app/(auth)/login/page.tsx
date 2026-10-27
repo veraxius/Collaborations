@@ -35,12 +35,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="card w-full max-w-md">
+    <div className="card w-full">
       <div className="text-center">
-        <Link href="/" className="inline-block text-[15px]">
-          <Logo size={28} />
+        <Link href="/" className="inline-block text-2xl">
+          <Logo size={48} />
         </Link>
-        <h1 className="mt-5 text-2xl font-semibold tracking-tight">Welcome back</h1>
+        <h1 className="mt-6 text-2xl font-semibold tracking-tight">Welcome back</h1>
         <p className="mt-1.5 text-sm text-neutral-500">Log in to your compliance dashboard.</p>
       </div>
       {expired && (
@@ -55,13 +55,11 @@ export default function LoginPage() {
           <input className="input" id="email" name="email" type="email" required placeholder="you@company.com" />
         </div>
         <div>
-          <div className="flex items-baseline justify-between">
-            <label className="label" htmlFor="password">Password</label>
-            <Link className="text-xs font-medium text-accent-600" href="/forgot-password">
-              Forgot password?
-            </Link>
-          </div>
+          <label className="label" htmlFor="password">Password</label>
           <input className="input" id="password" name="password" type="password" required placeholder="Your password" />
+          <Link className="mt-2 inline-block text-xs font-medium text-accent-600" href="/forgot-password">
+            Forgot password?
+          </Link>
         </div>
 
         {error && (

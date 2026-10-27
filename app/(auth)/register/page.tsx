@@ -59,12 +59,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="card w-full max-w-md">
-      <div className="text-center">
-        <Link href="/" className="inline-block text-[15px]">
+    <div className="card w-full">
+      <div>
+        <Link href="/" className="inline-block text-[15px] lg:hidden">
           <Logo size={28} />
         </Link>
-        <h1 className="mt-5 text-2xl font-semibold tracking-tight">Create your account</h1>
+        <h1 className="mt-5 text-2xl lg:mt-0 font-semibold tracking-tight">Create your account</h1>
         <p className="mt-1.5 text-sm text-neutral-500">Free to start. No credit card required.</p>
       </div>
 
